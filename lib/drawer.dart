@@ -1,12 +1,12 @@
 
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurants_panel/provider.dart';
 
-import 'LanguageProvider.dart';
+import 'languageProvider.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -14,19 +14,6 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  ListTile listTile(String title, icon, route, BuildContext ctx) {
-    return ListTile(
-      onTap: () => Navigator.of(ctx).pushReplacementNamed(route),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 25),
-      ),
-      leading: Icon(
-        icon,
-        color: Colors.blueAccent,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +21,20 @@ class _MyDrawerState extends State<MyDrawer> {
     double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
+
+    Widget listTile(String title, icon, route) {
+      return ListTile(
+        onTap: () => Navigator.of(context).pushReplacementNamed(route),
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 25),
+        ),
+        leading: Icon(
+          icon,
+          color: Colors.blueAccent,
+        ),
+      );
+    }
     dialog(title) {
       return showDialog(
           context: context,
@@ -123,11 +124,26 @@ class _MyDrawerState extends State<MyDrawer> {
         child: ListView(
           children: [
             const SizedBox(height: 20),
-            listTile(lanProvider.texts('Drawer1'), Icons.home, 'admin',
-                context),
+        ListTile(
+          onTap: (){
+            if (provider.authData['type']=="shawarma")
+            Navigator.of(context).pushReplacementNamed('admin');
+            else if (provider.authData['type']=="homos")
+              Navigator.of(context).pushReplacementNamed('adminHomos');
+            else
+              Navigator.of(context).pushReplacementNamed('adminSweets');
+          }, 
+          title: Text(
+            lanProvider.texts('Drawer1'),
+            style: const TextStyle(fontSize: 25),
+          ),
+          leading: Icon(
+            Icons.home,
+            color: Colors.blueAccent,
+          ),
+        ),
             const Divider(thickness: 0.1,),
-            listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings',
-                context),
+            listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings'),
             const Divider(thickness: 0.1),
             ListTile(
               onTap: logOutFun,

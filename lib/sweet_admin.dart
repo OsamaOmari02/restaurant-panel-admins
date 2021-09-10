@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurants_panel/drawer.dart';
 import 'package:restaurants_panel/provider.dart';
 
+import 'provider.dart';
 import 'languageProvider.dart';
 
 class AdminSweets extends StatefulWidget {
@@ -19,7 +21,10 @@ class _AdminSweetsState extends State<AdminSweets> {
   void initState() {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).tabIndex = "kunafeh";
-      Provider.of<MyProvider>(context, listen: false).fetchMealsSweets("Nafesa");
+      Provider.of<MyProvider>(context,listen: false).fetch();
+      Provider.of<MyProvider>(context, listen: false).fetchMealsSweets(
+          Provider.of<MyProvider>(context, listen: false).authData['name']
+      );
     });
     super.initState();
   }
@@ -33,6 +38,7 @@ class _AdminSweetsState extends State<AdminSweets> {
         child: DefaultTabController(
           length: 3,
           child: Scaffold(
+            drawer: MyDrawer(),
             appBar: AppBar(
               backgroundColor: Colors.redAccent,
               actions: [
@@ -42,7 +48,7 @@ class _AdminSweetsState extends State<AdminSweets> {
                 ),
               ],
               centerTitle: true,
-              title: Text('restaurant\'s name'),
+              title: Text(provider.authData['name']!),
               bottom: TabBar(
                 tabs: [
                   Tab(text: lanProvider.texts('tab4')),
@@ -489,7 +495,7 @@ class _FirstAdminState extends State<FirstAdmin> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('/sweets/Nafesa/kunafeh')
+            .collection('/sweets/${provider.authData['name']}/kunafeh')
             .snapshots(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState==ConnectionState.waiting)
@@ -706,7 +712,7 @@ class _SecondAdminState extends State<SecondAdmin> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('/sweets/Nafesa/cake')
+            .collection('/sweets/${provider.authData['name']}/cake')
             .snapshots(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState==ConnectionState.waiting)
@@ -820,9 +826,18 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                         resData[index].id;
                                                     provider.isLoading = true;
                                                   });
+                                                  Navigator.of(context).pop();
                                                   await provider
                                                       .deleteMeal('sweets','cake');
-                                                  Navigator.of(context).pop();
+                                                  Fluttertoast.showToast(
+                                                      msg: lanProvider
+                                                          .texts('Meal Deleted'),
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      backgroundColor:
+                                                      Colors.grey,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
@@ -914,7 +929,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('/sweets/Nafesa/others')
+            .collection('/sweets/${provider.authData['name']}/others')
             .snapshots(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState==ConnectionState.waiting)
@@ -1028,9 +1043,18 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                         resData[index].id;
                                                     provider.isLoading = true;
                                                   });
+                                                  Navigator.of(context).pop();
                                                   await provider
                                                       .deleteMeal('sweets',"others");
-                                                  Navigator.of(context).pop();
+                                                  Fluttertoast.showToast(
+                                                      msg: lanProvider
+                                                          .texts('Meal Deleted'),
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      backgroundColor:
+                                                      Colors.grey,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });

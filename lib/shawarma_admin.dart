@@ -14,13 +14,14 @@ class Admin extends StatefulWidget {
   _AdminState createState() => _AdminState();
 }
 
-
 class _AdminState extends State<Admin> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).tabIndex = "shawarma";
-      Provider.of<MyProvider>(context, listen: false).fetchMealsShawarma("Grill House");
+      Provider.of<MyProvider>(context, listen: false).fetch();
+      Provider.of<MyProvider>(context, listen: false).fetchMealsShawarma(
+          Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
     super.initState();
   }
@@ -34,6 +35,7 @@ class _AdminState extends State<Admin> {
         child: DefaultTabController(
           length: 3,
           child: Scaffold(
+            drawer: MyDrawer(),
             appBar: AppBar(
               backgroundColor: Colors.redAccent,
               actions: [
@@ -43,7 +45,7 @@ class _AdminState extends State<Admin> {
                 ),
               ],
               centerTitle: true,
-              title: Text('restaurant\'s name'),
+              title: Text(provider.authData['name']!),
               bottom: TabBar(
                 tabs: [
                   Tab(text: lanProvider.texts('tab1')),
@@ -60,7 +62,6 @@ class _AdminState extends State<Admin> {
                 },
               ),
             ),
-            drawer: MyDrawer(),
             body: Stack(children: [
               TabBarView(
                 children: <Widget>[
@@ -114,7 +115,7 @@ class _EditState extends State<Edit> {
                     child: Text(
                       title,
                       textAlign:
-                      lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                          lanProvider.isEn ? TextAlign.start : TextAlign.end,
                       style: const TextStyle(fontSize: 23),
                     ),
                   ),
@@ -187,7 +188,7 @@ class _EditState extends State<Edit> {
                             provider.isLoading = true;
                           });
                           await provider.editMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma',provider.tabIndex);
+                              _description.text, 'shawarma', provider.tabIndex);
                           Navigator.of(context).pop();
                           setState(() {
                             provider.isLoading = false;
@@ -254,7 +255,7 @@ class _AddMealState extends State<AddMeal> {
                   Text(
                     title,
                     textAlign:
-                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -338,7 +339,7 @@ class _AddMealState extends State<AddMeal> {
                           provider.isLoading = true;
                         });
                         await provider.addMeal(_mealName.text, _price.text,
-                            _description.text,'shawarma',"shawarma");
+                            _description.text, 'shawarma', "shawarma");
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
                             msg: lanProvider.texts('Meal Added'),
@@ -382,7 +383,7 @@ class _AddMealState extends State<AddMeal> {
                             provider.isLoading = true;
                           });
                           await provider.addMeal(_mealName.text, _price.text,
-                              _description.text,'shawarma', "snacks");
+                              _description.text, 'shawarma', "snacks");
                           Navigator.of(context).pop();
                           setState(() {
                             provider.isLoading = false;
@@ -419,7 +420,7 @@ class _AddMealState extends State<AddMeal> {
                             provider.isLoading = true;
                           });
                           await provider.addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma',"others");
+                              _description.text, 'shawarma', "others");
                           Navigator.of(context).pop();
                           setState(() {
                             provider.isLoading = false;
@@ -493,10 +494,10 @@ class _FirstAdminState extends State<FirstAdmin> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('/shawarma/Grill House/shawarma')
+            .collection('/shawarma/${provider.authData['name']}/shawarma')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState==ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting)
             return Center(child: CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
@@ -517,12 +518,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  Navigator.of(context).pushNamed('editShawarma');
+                                  Navigator.of(context)
+                                      .pushNamed('editShawarma');
                                 },
                                 icon: const Icon(Icons.edit),
                                 color: Colors.blue,
                               ),
-
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -573,14 +574,15 @@ class _FirstAdminState extends State<FirstAdmin> {
                                     builder: (BuildContext ctx) {
                                       return AlertDialog(
                                         title: Text(
-                                          lanProvider.texts('delete this meal?'),
+                                          lanProvider
+                                              .texts('delete this meal?'),
                                           textAlign: lanProvider.isEn
                                               ? TextAlign.start
                                               : TextAlign.end,
                                           style: const TextStyle(fontSize: 23),
                                         ),
                                         contentPadding:
-                                        EdgeInsets.symmetric(vertical: 7),
+                                            EdgeInsets.symmetric(vertical: 7),
                                         elevation: 24,
                                         content: Container(
                                           height: 30,
@@ -591,7 +593,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                           if (provider.isLoading)
                                             Center(
                                                 child:
-                                                const CircularProgressIndicator()),
+                                                    const CircularProgressIndicator()),
                                           if (!provider.isLoading)
                                             InkWell(
                                               child: Text(
@@ -607,15 +609,15 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                         resData[index].id;
                                                   });
                                                   Navigator.of(context).pop();
-                                                  await provider
-                                                      .deleteMeal("shawarma",'shawarma');
+                                                  await provider.deleteMeal(
+                                                      "shawarma", 'shawarma');
                                                   Fluttertoast.showToast(
-                                                      msg: lanProvider
-                                                          .texts('Meal Deleted'),
+                                                      msg: lanProvider.texts(
+                                                          'Meal Deleted'),
                                                       toastLength:
-                                                      Toast.LENGTH_SHORT,
+                                                          Toast.LENGTH_SHORT,
                                                       backgroundColor:
-                                                      Colors.grey,
+                                                          Colors.grey,
                                                       textColor: Colors.white,
                                                       fontSize: 16.0);
                                                   setState(() {
@@ -625,14 +627,16 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
-                                                  return dialog(e.message);
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
+                                                  print(e.message);
                                                 } catch (e) {
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
                                                   print(e);
-                                                  dialog(lanProvider
-                                                      .texts('Error occurred !'));
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
                                                 }
                                               },
                                             ),
@@ -640,11 +644,13 @@ class _FirstAdminState extends State<FirstAdmin> {
                                           if (!provider.isLoading)
                                             InkWell(
                                                 child: Text(
-                                                    lanProvider.texts('cancel?'),
+                                                    lanProvider
+                                                        .texts('cancel?'),
                                                     style: const TextStyle(
                                                         fontSize: 19)),
                                                 onTap: () =>
-                                                    Navigator.of(context).pop()),
+                                                    Navigator.of(context)
+                                                        .pop()),
                                         ],
                                       );
                                     }),
@@ -710,10 +716,10 @@ class _SecondAdminState extends State<SecondAdmin> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('/shawarma/Grill House/snacks')
+            .collection('/shawarma/${provider.authData['name']}/snacks')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState==ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting)
             return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
@@ -734,7 +740,8 @@ class _SecondAdminState extends State<SecondAdmin> {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  Navigator.of(context).pushNamed('editShawarma');
+                                  Navigator.of(context)
+                                      .pushNamed('editShawarma');
                                 },
                                 icon: const Icon(Icons.edit),
                                 color: Colors.blue,
@@ -789,15 +796,16 @@ class _SecondAdminState extends State<SecondAdmin> {
                                     builder: (BuildContext ctx) {
                                       return AlertDialog(
                                         title: Text(
-                                          lanProvider.texts('delete this meal?'),
+                                          lanProvider
+                                              .texts('delete this meal?'),
                                           textAlign: lanProvider.isEn
                                               ? TextAlign.start
                                               : TextAlign.end,
                                           style: const TextStyle(fontSize: 23),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(
-                                            vertical: 7),
+                                            const EdgeInsets.symmetric(
+                                                vertical: 7),
                                         elevation: 24,
                                         content: Container(
                                           height: 30,
@@ -808,7 +816,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                           if (provider.isLoading)
                                             Center(
                                                 child:
-                                                const CircularProgressIndicator()),
+                                                    const CircularProgressIndicator()),
                                           if (!provider.isLoading)
                                             InkWell(
                                               child: Text(
@@ -822,11 +830,19 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                   setState(() {
                                                     provider.mealID =
                                                         resData[index].id;
-                                                    provider.isLoading = true;
                                                   });
-                                                  await provider
-                                                      .deleteMeal('shawarma','snacks');
                                                   Navigator.of(context).pop();
+                                                  await provider.deleteMeal(
+                                                      "shawarma", 'snacks');
+                                                  Fluttertoast.showToast(
+                                                      msg: lanProvider.texts(
+                                                          'Meal Deleted'),
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      backgroundColor:
+                                                          Colors.grey,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
@@ -834,13 +850,16 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
-                                                  return dialog(e.message);
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
+                                                  print(e.message);
                                                 } catch (e) {
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
-                                                  dialog(lanProvider
-                                                      .texts('Error occurred !'));
+                                                  print(e);
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
                                                 }
                                               },
                                             ),
@@ -848,11 +867,13 @@ class _SecondAdminState extends State<SecondAdmin> {
                                           if (!provider.isLoading)
                                             InkWell(
                                                 child: Text(
-                                                    lanProvider.texts('cancel?'),
+                                                    lanProvider
+                                                        .texts('cancel?'),
                                                     style: const TextStyle(
                                                         fontSize: 19)),
                                                 onTap: () =>
-                                                    Navigator.of(context).pop()),
+                                                    Navigator.of(context)
+                                                        .pop()),
                                         ],
                                       );
                                     }),
@@ -918,10 +939,10 @@ class _ThirdAdminState extends State<ThirdAdmin> {
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('/shawarma/Grill House/others')
+            .collection('/shawarma/${provider.authData['name']}/others')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState==ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting)
             return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
@@ -942,7 +963,8 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                   setState(() {
                                     provider.mealID = resData[index].id;
                                   });
-                                  Navigator.of(context).pushNamed('editShawarma');
+                                  Navigator.of(context)
+                                      .pushNamed('editShawarma');
                                 },
                                 icon: const Icon(Icons.edit),
                                 color: Colors.blue,
@@ -997,15 +1019,16 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                     builder: (BuildContext ctx) {
                                       return AlertDialog(
                                         title: Text(
-                                          lanProvider.texts('delete this meal?'),
+                                          lanProvider
+                                              .texts('delete this meal?'),
                                           textAlign: lanProvider.isEn
                                               ? TextAlign.start
                                               : TextAlign.end,
                                           style: const TextStyle(fontSize: 23),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(
-                                            vertical: 7),
+                                            const EdgeInsets.symmetric(
+                                                vertical: 7),
                                         elevation: 24,
                                         content: Container(
                                           height: 30,
@@ -1016,7 +1039,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                           if (provider.isLoading)
                                             Center(
                                                 child:
-                                                const CircularProgressIndicator()),
+                                                    const CircularProgressIndicator()),
                                           if (!provider.isLoading)
                                             InkWell(
                                               child: Text(
@@ -1030,11 +1053,19 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                   setState(() {
                                                     provider.mealID =
                                                         resData[index].id;
-                                                    provider.isLoading = true;
                                                   });
-                                                  await provider
-                                                      .deleteMeal('shawarma',"others");
                                                   Navigator.of(context).pop();
+                                                  await provider.deleteMeal(
+                                                      "shawarma", 'others');
+                                                  Fluttertoast.showToast(
+                                                      msg: lanProvider.texts(
+                                                          'Meal Deleted'),
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      backgroundColor:
+                                                          Colors.grey,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
@@ -1042,13 +1073,16 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
-                                                  return dialog(e.message);
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
+                                                  print(e.message);
                                                 } catch (e) {
                                                   setState(() {
                                                     provider.isLoading = false;
                                                   });
-                                                  dialog(lanProvider
-                                                      .texts('Error occurred !'));
+                                                  print(e);
+                                                  dialog(lanProvider.texts(
+                                                      'Error occurred !'));
                                                 }
                                               },
                                             ),
@@ -1056,11 +1090,13 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                           if (!provider.isLoading)
                                             InkWell(
                                                 child: Text(
-                                                    lanProvider.texts('cancel?'),
+                                                    lanProvider
+                                                        .texts('cancel?'),
                                                     style: const TextStyle(
                                                         fontSize: 19)),
                                                 onTap: () =>
-                                                    Navigator.of(context).pop()),
+                                                    Navigator.of(context)
+                                                        .pop()),
                                         ],
                                       );
                                     }),
@@ -1071,7 +1107,6 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 );

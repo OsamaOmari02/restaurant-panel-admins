@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurants_panel/provider.dart';
+import 'package:restaurants_panel/shawarma_admin.dart';
+import 'package:restaurants_panel/sweet_admin.dart';
+
+import 'homos_admin.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -13,6 +18,7 @@ class _LoginViewState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _typeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,6 +32,7 @@ class _LoginViewState extends State<Login> {
     _emailController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+    _typeController.dispose();
     super.dispose();
   }
 
@@ -73,7 +80,7 @@ class _LoginViewState extends State<Login> {
     }
 
     final nameField = TextFormField(
-      controller: _emailController,
+      controller: _nameController,
       keyboardType: TextInputType.text,
       style: const TextStyle(
         color: Colors.white,
@@ -87,6 +94,30 @@ class _LoginViewState extends State<Login> {
           ),
         ),
         labelText: "Name",
+        labelStyle: const TextStyle(
+          color: Colors.white,
+        ),
+        hintStyle: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+
+    final typeField = TextFormField(
+      controller: _typeController,
+      keyboardType: TextInputType.text,
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+      cursorColor: Colors.white,
+      decoration: InputDecoration(
+        icon: const Icon(Icons.restaurant, color: Colors.white),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(
+            color: Colors.white,
+          ),
+        ),
+        labelText: "Type",
         labelStyle: const TextStyle(
           color: Colors.white,
         ),
@@ -150,12 +181,12 @@ class _LoginViewState extends State<Login> {
       ],
     );
 
-
     final fields = Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          typeField,
           nameField,
           emailField,
           passwordField,
@@ -184,7 +215,7 @@ class _LoginViewState extends State<Login> {
             setState(() {
               provider.authState = authStatus.Authenticating;
             });
-            if (_nameController.text.isEmpty)
+            if (_nameController.text.isEmpty || _typeController.text.isEmpty)
               return dialog('Empty field !');
             var auth = (await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: _emailController.text.trim(),
@@ -194,11 +225,27 @@ class _LoginViewState extends State<Login> {
             if (auth != null) {
               if (!mounted) return;
               setState(() {
-                provider.fetch();
-                provider.restaurantName = _nameController.text;
+                provider.authData['name'] = _nameController.text;
+                provider.authData['email'] = _emailController.text.trim();
+                provider.authData['password'] = _passwordController.text;
+                provider.authData['type'] = _typeController.text.trim().toLowerCase();
                 provider.authState = authStatus.Authenticated;
               });
-              Navigator.of(context).pushReplacementNamed('admin');
+              await FirebaseFirestore.instance
+                  .collection('admins')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .set({
+                'email':_emailController.text.trim(),
+                'password':_passwordController.text,
+                'name':_nameController.text,
+                'type':_typeController.text.trim().toLowerCase(),
+              });
+              if (provider.authData['type'] == "shawarma")
+                Navigator.of(context).pushReplacementNamed('admin');
+              else if (provider.authData['type']== "homos")
+                Navigator.of(context).pushReplacementNamed('adminHomos');
+              else if (provider.authData['type'] == "sweet")
+                Navigator.of(context).pushReplacementNamed('adminSweets');
             }
           } on FirebaseAuthException catch (e) {
             e.message == 'Given String is empty or null'
@@ -254,7 +301,9 @@ class _LoginViewState extends State<Login> {
               const SizedBox(height: 40),
               fields,
               const SizedBox(height: 80),
-              loginButton,
+              provider.authState == authStatus.Authenticating
+                  ? Center(child: CircularProgressIndicator())
+                  : loginButton,
             ],
           ),
         ),

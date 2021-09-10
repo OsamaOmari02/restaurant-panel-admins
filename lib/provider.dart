@@ -1,14 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
-
-import 'languageProvider.dart';
 
 enum authStatus { Authenticating, unAuthenticated, Authenticated }
 
@@ -27,22 +21,7 @@ class Meals {
         required this.id});
 }
 
-//-----------------------------------------------------------
 class MyProvider with ChangeNotifier {
-  bool isDark = false;
-
-  getDarkMode() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    isDark = pref.getBool('darkMode')!;
-    notifyListeners();
-  }
-
-  setDarkMode(value) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool('darkMode', value);
-    isDark = value;
-    notifyListeners();
-  }
 
   //-----------------------things----------------------------
   bool admin = false;
@@ -59,7 +38,6 @@ class MyProvider with ChangeNotifier {
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
-  var restaurantName;
 
 
   //-----------------------admin----------------------------
@@ -187,20 +165,20 @@ class MyProvider with ChangeNotifier {
     isLoading = true;
     var uuid = Uuid().v4();
     await FirebaseFirestore.instance
-        .collection('$type/$restaurantName/$tab')
+        .collection('$type/${authData['name']}/$tab')
         .doc(uuid)
         .set({
       'meal name': mealName,
       'meal price': price,
       'description': desc,
-      'resName': restaurantName,
+      'resName': authData['name'],
     }).then((value) {
       mealIDs.add(Meals(
           id: uuid,
           mealPrice: price,
           mealName: mealName,
           description: desc,
-          resName: restaurantName));
+          resName: authData['name']!));
     });
     notifyListeners();
   }
@@ -209,7 +187,7 @@ class MyProvider with ChangeNotifier {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     await FirebaseFirestore.instance
-        .collection('$type/$restaurantName/$tab')
+        .collection('$type/${authData['name']}/$tab')
         .doc(mealID)
         .delete()
         .then((value) {
@@ -222,7 +200,7 @@ class MyProvider with ChangeNotifier {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     await FirebaseFirestore.instance
-        .collection('$type/$restaurantName/$tab')
+        .collection('$type/${authData['name']}/$tab')
         .doc(mealID)
         .update({
       'meal name': mealName,
@@ -239,22 +217,23 @@ class MyProvider with ChangeNotifier {
   //------------------------auth----------------------
   authStatus authState = authStatus.Authenticated;
   Map<String, String> authData = {
-    'email': '',
-    'password': '',
-    'name': '',
+    'email': ' ',
+    'password': ' ',
+    'name': ' ',
+    'type':' ',
   };
 
   fetch() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user != null)
       await FirebaseFirestore.instance
           .collection('admins')
-          .doc(user.uid)
+          .doc(user!.uid)
           .get()
           .then((val) {
-        authData['email'] = val.data()?['email'];
-        authData['password'] = val.data()?['password'];
-        authData['name'] = val.data()?['name'];
+        authData['email'] = val.data()!['email'];
+        authData['password'] = val.data()!['password'];
+        authData['name'] = val.data()!['name'];
+        authData['type'] = val.data()!['type'];
         notifyListeners();
       });
   }

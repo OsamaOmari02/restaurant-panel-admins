@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurants_panel/drawer.dart';
 import 'package:restaurants_panel/provider.dart';
 import 'languageProvider.dart';
 
@@ -17,7 +18,10 @@ class _AdminHomosState extends State<AdminHomos> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<MyProvider>(context, listen: false).fetchMealsSweets("hon wa bs");
+        Provider.of<MyProvider>(context,listen: false).fetch();
+      Provider.of<MyProvider>(context, listen: false).fetchMealsHomos(
+          Provider.of<MyProvider>(context, listen: false).authData['name']
+      );
     });
     super.initState();
   }
@@ -71,6 +75,7 @@ class _AdminHomosState extends State<AdminHomos> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
+        drawer: MyDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.redAccent,
           actions: [
@@ -79,12 +84,12 @@ class _AdminHomosState extends State<AdminHomos> {
               icon: const Icon(Icons.add),
             ),
           ],
-          title: Text("restaurant\'s name"),
+          title: Text(provider.authData['name']!),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('/homos/hon wa bs/meals')
+              .collection('/homos/${provider.authData['name']}/meals')
               .snapshots(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState==ConnectionState.waiting)

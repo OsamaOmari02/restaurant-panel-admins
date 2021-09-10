@@ -5,8 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LanProvider with ChangeNotifier{
 
-  bool isEn = true;
-
+  bool isEn = false;
 
   Map<String,Object> arabic ={
     'order ur food..':'اطلب اكلك واستمتع !',
@@ -161,6 +160,8 @@ class LanProvider with ChangeNotifier{
     'tab1':'Shawarma',
     'tab2':'Snacks',
     'tab3':'Others',
+    'tab4':'Kunafeh',
+    'tab5':'Cake',
     'food cart':'Food Cart',
     'total':'Total :',
     'jd':'JD',

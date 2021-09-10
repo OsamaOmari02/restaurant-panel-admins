@@ -1,12 +1,15 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurants_panel/main.dart';
 import 'package:restaurants_panel/provider.dart';
 import 'package:restaurants_panel/shawarma_admin.dart';
+import 'package:restaurants_panel/sweet_admin.dart';
 
-import 'LanguageProvider.dart';
+import 'homos_admin.dart';
+import 'languageProvider.dart';
 import 'logIn.dart';
 
 class UserState extends StatelessWidget {
@@ -21,7 +24,12 @@ class UserState extends StatelessWidget {
           if (snapshot.data == null) {
             return Login();
           } else if (snapshot.hasData) {
+            if (provider.authData['type']!.trim().toLowerCase()=="shawarma")
               return Admin();
+            else if (provider.authData['type']!.trim().toLowerCase()=="homos")
+              return AdminHomos();
+            else if (provider.authData['type']!.trim().toLowerCase()=="sweet")
+              return AdminSweets();
           }
           if (snapshot.hasError) {
             return Center(
