@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
       home: UserState(),
       themeMode: ThemeMode.light,
       theme: ThemeData(
-        appBarTheme: AppBarTheme(color: Colors.orangeAccent),
+        // appBarTheme: AppBarTheme(color: Colors.orangeAccent),
         brightness: Brightness.light,
         canvasColor: Colors.white,
         accentColor: Colors.orangeAccent,

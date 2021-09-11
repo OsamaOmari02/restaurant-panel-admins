@@ -41,7 +41,7 @@ class UserState extends StatelessWidget {
               body: Center(
                   child: Text(lanProvider.texts("something went wrong !"),
                       style:
-                      const TextStyle(fontSize: 20, color: Colors.red))));
+                      const TextStyle(fontSize: 23, color: Colors.red))));
         });
   }
 }

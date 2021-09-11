@@ -229,7 +229,6 @@ class _LoginViewState extends State<Login> {
                 provider.authData['email'] = _emailController.text.trim();
                 provider.authData['password'] = _passwordController.text;
                 provider.authData['type'] = _typeController.text.trim().toLowerCase();
-                provider.authState = authStatus.Authenticated;
               });
               await FirebaseFirestore.instance
                   .collection('admins')
@@ -239,6 +238,9 @@ class _LoginViewState extends State<Login> {
                 'password':_passwordController.text,
                 'name':_nameController.text,
                 'type':_typeController.text.trim().toLowerCase(),
+              });
+              setState(() {
+                provider.authState = authStatus.Authenticated;
               });
               if (provider.authData['type'] == "shawarma")
                 Navigator.of(context).pushReplacementNamed('admin');
