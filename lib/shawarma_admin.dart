@@ -9,12 +9,12 @@ import 'package:restaurants_panel/provider.dart';
 import 'drawer.dart';
 import 'languageProvider.dart';
 
-class Admin extends StatefulWidget {
+class AdminShawarma extends StatefulWidget {
   @override
-  _AdminState createState() => _AdminState();
+  _AdminShawarmaState createState() => _AdminShawarmaState();
 }
 
-class _AdminState extends State<Admin> {
+class _AdminShawarmaState extends State<AdminShawarma> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
@@ -77,12 +77,12 @@ class _AdminState extends State<Admin> {
 }
 
 //--------------------------Edit-----------------------------------
-class Edit extends StatefulWidget {
+class EditShawarma extends StatefulWidget {
   @override
-  _EditState createState() => _EditState();
+  _EditShawarmaState createState() => _EditShawarmaState();
 }
 
-class _EditState extends State<Edit> {
+class _EditShawarmaState extends State<EditShawarma> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();
@@ -216,12 +216,12 @@ class _EditState extends State<Edit> {
 }
 
 //-------------------------addMeal-----------------------------
-class AddMeal extends StatefulWidget {
+class AddMealShawarma extends StatefulWidget {
   @override
-  _AddMealState createState() => _AddMealState();
+  _AddMealShawarmaState createState() => _AddMealShawarmaState();
 }
 
-class _AddMealState extends State<AddMeal> {
+class _AddMealShawarmaState extends State<AddMealShawarma> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();

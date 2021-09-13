@@ -24,17 +24,17 @@ class Meals {
 class MyProvider with ChangeNotifier {
 
   //-----------------------things----------------------------
-  bool admin = false;
-  setAdmin(val) async{
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool('admin', val);
-    notifyListeners();
-  }
-  getAdmin() async{
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    admin = pref.getBool('admin')!;
-    notifyListeners();
-  }
+  // bool admin = false;
+  // setAdmin(val) async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setBool('admin', val);
+  //   notifyListeners();
+  // }
+  // getAdmin() async{
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   admin = pref.getBool('admin')!;
+  //   notifyListeners();
+  // }
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
@@ -95,6 +95,42 @@ class MyProvider with ChangeNotifier {
   Future<void> fetchMealsHomos(title) async {
     await FirebaseFirestore.instance
         .collection('homos/$title/meals')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    notifyListeners();
+  }
+  Future<void> fetchMealsDrinks(title) async {
+    await FirebaseFirestore.instance
+        .collection('drinks/$title/meals')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    notifyListeners();
+  }
+  Future<void> fetchMealsMain(title) async {
+    await FirebaseFirestore.instance
+        .collection('mainRes/$title/meals')
         .get()
         .then((value) {
       value.docs.forEach((element) {

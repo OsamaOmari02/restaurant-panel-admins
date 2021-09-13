@@ -127,11 +127,15 @@ class _MyDrawerState extends State<MyDrawer> {
         ListTile(
           onTap: (){
             if (provider.authData['type']=="shawarma")
-            Navigator.of(context).pushReplacementNamed('admin');
+            Navigator.of(context).pushReplacementNamed('adminShawarma');
             else if (provider.authData['type']=="homos")
               Navigator.of(context).pushReplacementNamed('adminHomos');
-            else
+            else if (provider.authData['type']=="drinks")
+              Navigator.of(context).pushReplacementNamed('adminDrinks');
+            else if (provider.authData['type']=="sweets")
               Navigator.of(context).pushReplacementNamed('adminSweets');
+            else if (provider.authData['type']=="mainRes")
+              Navigator.of(context).pushReplacementNamed('adminRes');
           }, 
           title: Text(
             lanProvider.texts('Drawer1'),

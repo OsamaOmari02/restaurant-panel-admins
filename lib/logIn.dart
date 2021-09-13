@@ -22,12 +22,6 @@ class _LoginViewState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    Provider.of<MyProvider>(context, listen: false).getAdmin();
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -228,7 +222,7 @@ class _LoginViewState extends State<Login> {
                 provider.authData['name'] = _nameController.text;
                 provider.authData['email'] = _emailController.text.trim();
                 provider.authData['password'] = _passwordController.text;
-                provider.authData['type'] = _typeController.text.trim().toLowerCase();
+                provider.authData['type'] = _typeController.text.trim();
               });
               await FirebaseFirestore.instance
                   .collection('admins')
@@ -237,7 +231,8 @@ class _LoginViewState extends State<Login> {
                 'email':_emailController.text.trim(),
                 'password':_passwordController.text,
                 'name':_nameController.text,
-                'type':_typeController.text.trim().toLowerCase(),
+                'type':_typeController.text.trim(),
+                'isAdmin':true,
               });
               setState(() {
                 provider.authState = authStatus.Authenticated;
@@ -248,6 +243,10 @@ class _LoginViewState extends State<Login> {
                 Navigator.of(context).pushReplacementNamed('adminHomos');
               else if (provider.authData['type'] == "sweet")
                 Navigator.of(context).pushReplacementNamed('adminSweets');
+              else if (provider.authData['type'] == "drinks")
+                Navigator.of(context).pushReplacementNamed('adminDrinks');
+              else if (provider.authData['type'] == "mainRes")
+                Navigator.of(context).pushReplacementNamed('adminRes');
             }
           } on FirebaseAuthException catch (e) {
             e.message == 'Given String is empty or null'
