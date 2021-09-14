@@ -84,7 +84,7 @@ class _AdminResState extends State<AdminRes> {
               icon: const Icon(Icons.add),
             ),
           ],
-          title: Text(provider.authData['name']!),
+          title: Text(provider.authData['name']??""),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -92,11 +92,11 @@ class _AdminResState extends State<AdminRes> {
               .collection('/mainRes/${provider.authData['name']}/meals')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState==ConnectionState.waiting)
-              return Center(child: CircularProgressIndicator());
+            // if (snapshot.connectionState==ConnectionState.waiting)
+            //   return Center(child: CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
-                itemCount: snapshot.data!.docs.length,
+                itemCount: snapshot.data?.docs.length??0,
                 itemBuilder: (context, int index) {
                   var resData = snapshot.data!.docs;
                   if (resData.isEmpty)

@@ -2,10 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurants_panel/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'drawer.dart';
 import 'languageProvider.dart';
@@ -87,8 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(lanProvider.texts('call us'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () =>
-                    FlutterPhoneDirectCaller.callNumber(0789259915.toString()),
+                onTap: () => launch('tel://${0789259915}'),
               ),
             ),
           ],

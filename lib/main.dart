@@ -27,12 +27,19 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
 
+  @override
+  void initState() {
+    Provider.of<LanProvider>(context, listen: false).getLanguage();
+    Provider.of<MyProvider>(context, listen: false).fetch();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);

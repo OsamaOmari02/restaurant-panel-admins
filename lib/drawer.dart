@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +14,21 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
 
   @override
+  void initState() {
+    Provider.of<MyProvider>(context, listen: false).fetch();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
@@ -85,21 +95,27 @@ class _MyDrawerState extends State<MyDrawer> {
                       lanProvider.texts('yes?'),
                       style: const TextStyle(fontSize: 19, color: Colors.red),
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
                           provider.authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
-                          Provider.of<MyProvider>(context,listen: false).authData.clear();
-                          Provider.of<MyProvider>(context,listen: false).mealIDs.clear();
+                          Provider
+                              .of<MyProvider>(context, listen: false)
+                              .authData
+                              .clear();
+                          Provider
+                              .of<MyProvider>(context, listen: false)
+                              .mealIDs
+                              .clear();
                         });
-                      } on FirebaseException catch (e){
+                      } on FirebaseException catch (e) {
                         dialog(e.message);
                         setState(() {
                           provider.authState = authStatus.unAuthenticated;
                         });
-                      } catch (e){
+                      } catch (e) {
                         dialog(lanProvider.texts('Error occurred !'));
                         print(e);
                         setState(() {
@@ -124,28 +140,31 @@ class _MyDrawerState extends State<MyDrawer> {
         child: ListView(
           children: [
             const SizedBox(height: 20),
-        ListTile(
-          onTap: (){
-            if (provider.authData['type']=="shawarma")
-            Navigator.of(context).pushReplacementNamed('adminShawarma');
-            else if (provider.authData['type']=="homos")
-              Navigator.of(context).pushReplacementNamed('adminHomos');
-            else if (provider.authData['type']=="drinks")
-              Navigator.of(context).pushReplacementNamed('adminDrinks');
-            else if (provider.authData['type']=="sweets")
-              Navigator.of(context).pushReplacementNamed('adminSweets');
-            else if (provider.authData['type']=="mainRes")
-              Navigator.of(context).pushReplacementNamed('adminRes');
-          }, 
-          title: Text(
-            lanProvider.texts('Drawer1'),
-            style: const TextStyle(fontSize: 25),
-          ),
-          leading: Icon(
-            Icons.home,
-            color: Colors.blueAccent,
-          ),
-        ),
+            ListTile(
+              onTap: () {
+                if (provider.authData['type'] == "shawarma")
+                  Navigator.of(context).pushReplacementNamed('adminShawarma');
+                else if (provider.authData['type'] == "homos")
+                  Navigator.of(context).pushReplacementNamed('adminHomos');
+                else if (provider.authData['type'] == "drinks")
+                  Navigator.of(context).pushReplacementNamed('adminDrinks');
+                else if (provider.authData['type'] == "mainRes")
+                  Navigator.of(context).pushReplacementNamed('adminRes');
+                else if (provider.authData['type']=="sweet")
+                  Navigator.of(context).pushReplacementNamed('adminSweets');
+                print(provider.authData['name']! + '\n' +
+                    provider.authData['type']! + '\n' +
+                    provider.authData['email']!);
+              },
+              title: Text(
+                lanProvider.texts('Drawer1'),
+                style: const TextStyle(fontSize: 25),
+              ),
+              leading: Icon(
+                Icons.home,
+                color: Colors.blueAccent,
+              ),
+            ),
             const Divider(thickness: 0.1,),
             listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings'),
             const Divider(thickness: 0.1),

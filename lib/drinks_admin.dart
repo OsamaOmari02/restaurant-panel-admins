@@ -92,15 +92,13 @@ class _AdminDrinksState extends State<AdminDrinks> {
               .collection('/drinks/${provider.authData['name']}/meals')
               .snapshots(),
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState==ConnectionState.waiting)
-              return Center(child: CircularProgressIndicator());
+            // if (snapshot.connectionState==ConnectionState.waiting)
+            //   return Center(child: CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
-                itemCount: snapshot.data?.docs.length,
+                itemCount: snapshot.data?.docs.length??0,
                 itemBuilder: (context, int index) {
-                  var resData = snapshot.data?.docs;
-                  if (resData!.isEmpty)
-                    return Center(child: Text("فارغ!"));
+                  var resData = snapshot.data!.docs;
                   return Card(
                     elevation: 2.5,
                     child: Row(

@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +26,16 @@ class UserState extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return Login();
-          } else if (snapshot.hasData) {
-            if (provider.authData['type']!.trim()=="shawarma")
+          } else if (snapshot.hasData){
+            if (provider.authData['type']=="shawarma")
               return AdminShawarma();
-            else if (provider.authData['type']!.trim()=="homos")
+            else if (provider.authData['type']=="homos")
               return AdminHomos();
-            else if (provider.authData['type']!.trim()=="sweet")
+            else if ( provider.authData['type']=="sweet")
               return AdminSweets();
-            else if (provider.authData['type']!.trim()=="mainRes")
+            else if (provider.authData['type']=="mainRes")
               return AdminRes();
-            else if (provider.authData['type']!.trim()=="drinks")
+            else if (provider.authData['type']=="drinks")
               return AdminDrinks();
           }
           if (snapshot.hasError) {
@@ -43,11 +44,12 @@ class UserState extends StatelessWidget {
                   style: const TextStyle(fontSize: 20, color: Colors.red)),
             );
           }
-          return Scaffold(
-              body: Center(
-                  child: Text(lanProvider.texts("something went wrong !"),
-                      style:
-                      const TextStyle(fontSize: 23, color: Colors.blue))));
+          return Login();
+          // return Scaffold(
+          //     body: Center(
+          //         child: Text(lanProvider.texts("something went wrong !"),
+          //             style:
+          //             const TextStyle(fontSize: 23, color: Colors.blue))));
         });
   }
 }

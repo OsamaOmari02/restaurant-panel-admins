@@ -48,7 +48,7 @@ class _AdminSweetsState extends State<AdminSweets> {
                 ),
               ],
               centerTitle: true,
-              title: Text(provider.authData['name']!),
+              title: Text(provider.authData['name']??""),
               bottom: TabBar(
                 tabs: [
                   Tab(text: lanProvider.texts('tab4')),
@@ -498,11 +498,11 @@ class _FirstAdminState extends State<FirstAdmin> {
             .collection('/sweets/${provider.authData['name']}/kunafeh')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState==ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
+          // if (snapshot.connectionState==ConnectionState.waiting)
+          //   return Center(child: CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: snapshot.data?.docs.length??0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -715,11 +715,11 @@ class _SecondAdminState extends State<SecondAdmin> {
             .collection('/sweets/${provider.authData['name']}/cake')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState==ConnectionState.waiting)
-            return Center(child: const CircularProgressIndicator());
+          // if (snapshot.connectionState==ConnectionState.waiting)
+          //   return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: snapshot.data?.docs.length??0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -932,11 +932,11 @@ class _ThirdAdminState extends State<ThirdAdmin> {
             .collection('/sweets/${provider.authData['name']}/others')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState==ConnectionState.waiting)
-            return Center(child: const CircularProgressIndicator());
+          // if (snapshot.connectionState==ConnectionState.waiting)
+          //   return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: snapshot.data?.docs.length??0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
