@@ -14,21 +14,9 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
 
   @override
-  void initState() {
-    Provider.of<MyProvider>(context, listen: false).fetch();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
@@ -45,6 +33,7 @@ class _MyDrawerState extends State<MyDrawer> {
         ),
       );
     }
+
     dialog(title) {
       return showDialog(
           context: context,
@@ -72,6 +61,7 @@ class _MyDrawerState extends State<MyDrawer> {
             );
           });
     }
+
     logOutFun() {
       return showDialog(
           context: context,
@@ -101,12 +91,10 @@ class _MyDrawerState extends State<MyDrawer> {
                         setState(() {
                           provider.authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
-                          Provider
-                              .of<MyProvider>(context, listen: false)
+                          Provider.of<MyProvider>(context, listen: false)
                               .authData
                               .clear();
-                          Provider
-                              .of<MyProvider>(context, listen: false)
+                          Provider.of<MyProvider>(context, listen: false)
                               .mealIDs
                               .clear();
                         });
@@ -122,8 +110,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           provider.authState = authStatus.unAuthenticated;
                         });
                       }
-                    }
-                ),
+                    }),
                 const SizedBox(width: 11),
                 InkWell(
                     child: Text(lanProvider.texts('cancel?'),
@@ -150,11 +137,8 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.of(context).pushReplacementNamed('adminDrinks');
                 else if (provider.authData['type'] == "mainRes")
                   Navigator.of(context).pushReplacementNamed('adminRes');
-                else if (provider.authData['type']=="sweet")
+                else if (provider.authData['type'] == "sweet")
                   Navigator.of(context).pushReplacementNamed('adminSweets');
-                print(provider.authData['name']! + '\n' +
-                    provider.authData['type']! + '\n' +
-                    provider.authData['email']!);
               },
               title: Text(
                 lanProvider.texts('Drawer1'),
@@ -165,7 +149,9 @@ class _MyDrawerState extends State<MyDrawer> {
                 color: Colors.blueAccent,
               ),
             ),
-            const Divider(thickness: 0.1,),
+            const Divider(
+              thickness: 0.1,
+            ),
             listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings'),
             const Divider(thickness: 0.1),
             ListTile(

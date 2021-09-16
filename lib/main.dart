@@ -37,7 +37,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     Provider.of<LanProvider>(context, listen: false).getLanguage();
-    Provider.of<MyProvider>(context, listen: false).fetch();
     super.initState();
   }
   @override

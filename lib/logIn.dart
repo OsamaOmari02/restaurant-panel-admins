@@ -17,16 +17,12 @@ class Login extends StatefulWidget {
 class _LoginViewState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _typeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _nameController.dispose();
-    _typeController.dispose();
     super.dispose();
   }
 
@@ -73,53 +69,53 @@ class _LoginViewState extends State<Login> {
           });
     }
 
-    final nameField = TextFormField(
-      controller: _nameController,
-      keyboardType: TextInputType.text,
-      style: const TextStyle(
-        color: Colors.white,
-      ),
-      cursorColor: Colors.white,
-      decoration: InputDecoration(
-        icon: const Icon(Icons.person, color: Colors.white),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        labelText: "Name",
-        labelStyle: const TextStyle(
-          color: Colors.white,
-        ),
-        hintStyle: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    );
-
-    final typeField = TextFormField(
-      controller: _typeController,
-      keyboardType: TextInputType.text,
-      style: const TextStyle(
-        color: Colors.white,
-      ),
-      cursorColor: Colors.white,
-      decoration: InputDecoration(
-        icon: const Icon(Icons.restaurant, color: Colors.white),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(
-            color: Colors.white,
-          ),
-        ),
-        labelText: "Type",
-        labelStyle: const TextStyle(
-          color: Colors.white,
-        ),
-        hintStyle: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    );
+    // final nameField = TextFormField(
+    //   controller: _nameController,
+    //   keyboardType: TextInputType.text,
+    //   style: const TextStyle(
+    //     color: Colors.white,
+    //   ),
+    //   cursorColor: Colors.white,
+    //   decoration: InputDecoration(
+    //     icon: const Icon(Icons.person, color: Colors.white),
+    //     focusedBorder: UnderlineInputBorder(
+    //       borderSide: const BorderSide(
+    //         color: Colors.white,
+    //       ),
+    //     ),
+    //     labelText: "Name",
+    //     labelStyle: const TextStyle(
+    //       color: Colors.white,
+    //     ),
+    //     hintStyle: const TextStyle(
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    // );
+    //
+    // final typeField = TextFormField(
+    //   controller: _typeController,
+    //   keyboardType: TextInputType.text,
+    //   style: const TextStyle(
+    //     color: Colors.white,
+    //   ),
+    //   cursorColor: Colors.white,
+    //   decoration: InputDecoration(
+    //     icon: const Icon(Icons.restaurant, color: Colors.white),
+    //     focusedBorder: UnderlineInputBorder(
+    //       borderSide: const BorderSide(
+    //         color: Colors.white,
+    //       ),
+    //     ),
+    //     labelText: "Type",
+    //     labelStyle: const TextStyle(
+    //       color: Colors.white,
+    //     ),
+    //     hintStyle: const TextStyle(
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    // );
 
     final emailField = TextFormField(
       controller: _emailController,
@@ -180,8 +176,6 @@ class _LoginViewState extends State<Login> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          typeField,
-          nameField,
           emailField,
           passwordField,
         ],
@@ -209,36 +203,16 @@ class _LoginViewState extends State<Login> {
             setState(() {
               provider.authState = authStatus.Authenticating;
             });
-            if (_nameController.text.isEmpty || _typeController.text.isEmpty)
-              return dialog('Empty field !');
             var auth = (await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text,
             ))
                 .user;
+            await provider.fetch();
             if (auth != null) {
               if (!mounted) return;
-              setState(() {
-                provider.authData['name'] = _nameController.text;
-                provider.authData['email'] = _emailController.text.trim();
-                provider.authData['password'] = _passwordController.text;
-                provider.authData['type'] = _typeController.text.trim();
-              });
-              await FirebaseFirestore.instance
-                  .collection('admins')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .set({
-                'email':_emailController.text.trim(),
-                'password':_passwordController.text,
-                'name':_nameController.text,
-                'type':_typeController.text.trim(),
-                'isAdmin':true,
-              });
-              setState(() {
-                provider.authState = authStatus.Authenticated;
-              });
               if (provider.authData['type'] == "shawarma")
-                Navigator.of(context).pushReplacementNamed('admin');
+                Navigator.of(context).pushReplacementNamed('adminShawarma');
               else if (provider.authData['type']== "homos")
                 Navigator.of(context).pushReplacementNamed('adminHomos');
               else if (provider.authData['type'] == "sweet")
@@ -247,6 +221,9 @@ class _LoginViewState extends State<Login> {
                 Navigator.of(context).pushReplacementNamed('adminDrinks');
               else if (provider.authData['type'] == "mainRes")
                 Navigator.of(context).pushReplacementNamed('adminRes');
+              setState(() {
+                provider.authState = authStatus.Authenticated;
+              });
             }
           } on FirebaseAuthException catch (e) {
             e.message == 'Given String is empty or null'

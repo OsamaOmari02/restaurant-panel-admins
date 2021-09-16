@@ -15,8 +15,19 @@ import 'homos_admin.dart';
 import 'languageProvider.dart';
 import 'logIn.dart';
 
-class UserState extends StatelessWidget {
+class UserState extends StatefulWidget {
 
+  @override
+  State<UserState> createState() => _UserStateState();
+}
+
+class _UserStateState extends State<UserState> {
+
+  @override
+  void initState() {
+    Provider.of<MyProvider>(context,listen: false).fetch();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);

@@ -58,6 +58,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
             );
           });
     }
+    dialog2() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Column(
+                  children: [
+                    TextButton(
+                        onPressed: () async =>
+                        await launch('tel://${0779434462}'),
+                        child: const Text(
+                          "0779434462",
+                          style: const TextStyle(fontSize: 18),
+                        )),
+                    TextButton(
+                        onPressed: () async =>
+                        await launch('tel://${0795143290}'),
+                        child: const Text(
+                          "0795143290",
+                          style: const TextStyle(fontSize: 18),
+                        )),
+                  ],
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              elevation: 24,
+              actions: [
+                TextButton(
+                    child: Text(lanProvider.texts('cancel?'),
+                        style: const TextStyle(fontSize: 21)),
+                    onPressed: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -87,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Text(lanProvider.texts('call us'),
                     style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: width * 0.055)),
-                onTap: () => launch('tel://${0789259915}'),
+                onTap: () => dialog2(),
               ),
             ),
           ],

@@ -45,7 +45,7 @@ class _AdminShawarmaState extends State<AdminShawarma> {
                 ),
               ],
               centerTitle: true,
-              title: Text(provider.authData['name']!),
+              title: Text(provider.authData['name']??""),
               bottom: TabBar(
                 tabs: [
                   Tab(text: lanProvider.texts('tab1')),
@@ -497,11 +497,11 @@ class _FirstAdminState extends State<FirstAdmin> {
             .collection('/shawarma/${provider.authData['name']}/shawarma')
             .snapshots(),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
+          // if (snapshot.connectionState == ConnectionState.waiting)
+          //   return Center(child: CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: snapshot.data?.docs.length??0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -723,7 +723,7 @@ class _SecondAdminState extends State<SecondAdmin> {
             return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: snapshot.data?.docs.length??0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -946,7 +946,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
             return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: snapshot.data?.docs.length??0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(

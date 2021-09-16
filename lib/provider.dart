@@ -35,6 +35,7 @@ class MyProvider with ChangeNotifier {
   //   admin = pref.getBool('admin')!;
   //   notifyListeners();
   // }
+
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
@@ -263,15 +264,16 @@ class MyProvider with ChangeNotifier {
     final user = FirebaseAuth.instance.currentUser;
       await FirebaseFirestore.instance
           .collection('admins')
-          .doc(user!.uid)
+          .doc(user?.uid)
           .get()
           .then((val) {
-        authData['email'] = val.data()!['email'];
-        authData['password'] = val.data()!['password'];
-        authData['name'] = val.data()!['name'];
-        authData['type'] = val.data()!['type'];
+        authData['email'] = val.data()?['email']??"";
+        authData['password'] = val.data()?['password']??"";
+        authData['name'] = val.data()?['name']??"";
+        authData['type'] = val.data()?['type']??"";
         notifyListeners();
       });
   }
+
 
 }
