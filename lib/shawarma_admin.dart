@@ -462,6 +462,8 @@ class _FirstAdminState extends State<FirstAdmin> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -497,8 +499,6 @@ class _FirstAdminState extends State<FirstAdmin> {
             .collection('/shawarma/${provider.authData['name']}/shawarma')
             .snapshots(),
         builder: (ctx, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting)
-          //   return Center(child: CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length??0,
@@ -527,10 +527,8 @@ class _FirstAdminState extends State<FirstAdmin> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: height*0.02),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
                                     child: Text(
                                       resData[index]['meal name'],
                                       style: TextStyle(
@@ -538,9 +536,8 @@ class _FirstAdminState extends State<FirstAdmin> {
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: height*0.01),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       resData[index]['description'],
                                       style: const TextStyle(
@@ -548,8 +545,6 @@ class _FirstAdminState extends State<FirstAdmin> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
                                     margin: const EdgeInsets.only(top: 10),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -567,7 +562,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                   ),
                                 ],
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
                                 onPressed: () => showDialog(
                                     context: context,
@@ -684,6 +679,8 @@ class _SecondAdminState extends State<SecondAdmin> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -749,20 +746,17 @@ class _SecondAdminState extends State<SecondAdmin> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: height*0.02),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
                                     child: Text(
                                       resData[index]['meal name'],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: height*0.01),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       resData[index]['description'],
                                       style: const TextStyle(
@@ -770,9 +764,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(top: 17),
+                                    margin: const EdgeInsets.only(top: 10),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 7),
@@ -789,7 +781,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                   ),
                                 ],
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
                                 onPressed: () => showDialog(
                                     context: context,
@@ -907,6 +899,8 @@ class _ThirdAdminState extends State<ThirdAdmin> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -972,20 +966,17 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: height*0.02),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
                                     child: Text(
                                       resData[index]['meal name'],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: height*0.01),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
                                     child: Text(
                                       resData[index]['description'],
                                       style: const TextStyle(
@@ -993,9 +984,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    alignment: Alignment.bottomLeft,
-                                    margin: const EdgeInsets.only(top: 17),
+                                    margin: const EdgeInsets.only(top: 10),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 7),
@@ -1012,7 +1001,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                   ),
                                 ],
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
                                 onPressed: () => showDialog(
                                     context: context,

@@ -69,54 +69,6 @@ class _LoginViewState extends State<Login> {
           });
     }
 
-    // final nameField = TextFormField(
-    //   controller: _nameController,
-    //   keyboardType: TextInputType.text,
-    //   style: const TextStyle(
-    //     color: Colors.white,
-    //   ),
-    //   cursorColor: Colors.white,
-    //   decoration: InputDecoration(
-    //     icon: const Icon(Icons.person, color: Colors.white),
-    //     focusedBorder: UnderlineInputBorder(
-    //       borderSide: const BorderSide(
-    //         color: Colors.white,
-    //       ),
-    //     ),
-    //     labelText: "Name",
-    //     labelStyle: const TextStyle(
-    //       color: Colors.white,
-    //     ),
-    //     hintStyle: const TextStyle(
-    //       color: Colors.white,
-    //     ),
-    //   ),
-    // );
-    //
-    // final typeField = TextFormField(
-    //   controller: _typeController,
-    //   keyboardType: TextInputType.text,
-    //   style: const TextStyle(
-    //     color: Colors.white,
-    //   ),
-    //   cursorColor: Colors.white,
-    //   decoration: InputDecoration(
-    //     icon: const Icon(Icons.restaurant, color: Colors.white),
-    //     focusedBorder: UnderlineInputBorder(
-    //       borderSide: const BorderSide(
-    //         color: Colors.white,
-    //       ),
-    //     ),
-    //     labelText: "Type",
-    //     labelStyle: const TextStyle(
-    //       color: Colors.white,
-    //     ),
-    //     hintStyle: const TextStyle(
-    //       color: Colors.white,
-    //     ),
-    //   ),
-    // );
-
     final emailField = TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,

@@ -30,7 +30,8 @@ class _AdminDrinksState extends State<AdminDrinks> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     dialog(title) {
       return showDialog(
           context: context,
@@ -122,10 +123,8 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height*0.02),
                                     Container(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      alignment: Alignment.topLeft,
                                       child: Text(
                                         resData[index]['meal name'],
                                         style: TextStyle(
@@ -133,9 +132,8 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    SizedBox(height: height*0.01),
                                     Container(
-                                      padding: const EdgeInsets.only(left: 10),
                                       child: Text(
                                         resData[index]['description'],
                                         style: const TextStyle(
@@ -143,8 +141,6 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
                                       margin: const EdgeInsets.only(top: 10),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -162,7 +158,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                     ),
                                   ],
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 IconButton(
                                   onPressed: () => showDialog(
                                       context: context,
@@ -176,7 +172,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                             style: const TextStyle(fontSize: 23),
                                           ),
                                           contentPadding:
-                                          EdgeInsets.symmetric(vertical: 7),
+                                          const EdgeInsets.symmetric(vertical: 7),
                                           elevation: 24,
                                           content: Container(
                                             height: 30,
@@ -185,7 +181,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                           ),
                                           actions: [
                                             if (provider.isLoading)
-                                              Center(
+                                              const Center(
                                                   child:
                                                   const CircularProgressIndicator()),
                                             if (!provider.isLoading)

@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurants_panel/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +21,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     dialog() {
       return showDialog(
           context: context,
@@ -69,14 +67,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     TextButton(
                         onPressed: () async =>
-                        await launch('tel://${0779434462}'),
+                        await launch('tel://0779434462'),
                         child: const Text(
                           "0779434462",
                           style: const TextStyle(fontSize: 18),
                         )),
                     TextButton(
                         onPressed: () async =>
-                        await launch('tel://${0795143290}'),
+                        await launch('tel://0795143290'),
                         child: const Text(
                           "0795143290",
                           style: const TextStyle(fontSize: 18),
@@ -84,7 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
               elevation: 24,
               actions: [
                 TextButton(

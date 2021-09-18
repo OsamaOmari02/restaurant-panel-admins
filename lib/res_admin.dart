@@ -30,6 +30,8 @@ class _AdminResState extends State<AdminRes> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     dialog(title) {
       return showDialog(
@@ -92,8 +94,6 @@ class _AdminResState extends State<AdminRes> {
               .collection('/mainRes/${provider.authData['name']}/meals')
               .snapshots(),
           builder: (ctx, snapshot) {
-            // if (snapshot.connectionState==ConnectionState.waiting)
-            //   return Center(child: CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
                 itemCount: snapshot.data?.docs.length??0,
@@ -120,14 +120,11 @@ class _AdminResState extends State<AdminRes> {
                                   icon: const Icon(Icons.edit),
                                   color: Colors.blue,
                                 ),
-
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: height*0.02),
                                     Container(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      alignment: Alignment.topLeft,
                                       child: Text(
                                         resData[index]['meal name'],
                                         style: TextStyle(
@@ -135,9 +132,8 @@ class _AdminResState extends State<AdminRes> {
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    SizedBox(height: height*0.01),
                                     Container(
-                                      padding: const EdgeInsets.only(left: 10),
                                       child: Text(
                                         resData[index]['description'],
                                         style: const TextStyle(
@@ -145,8 +141,6 @@ class _AdminResState extends State<AdminRes> {
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      alignment: Alignment.bottomLeft,
                                       margin: const EdgeInsets.only(top: 10),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -164,7 +158,7 @@ class _AdminResState extends State<AdminRes> {
                                     ),
                                   ],
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 IconButton(
                                   onPressed: () => showDialog(
                                       context: context,

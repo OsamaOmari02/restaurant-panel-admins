@@ -15,8 +15,6 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
@@ -144,7 +142,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 lanProvider.texts('Drawer1'),
                 style: const TextStyle(fontSize: 25),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.home,
                 color: Colors.blueAccent,
               ),
