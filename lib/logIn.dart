@@ -163,16 +163,7 @@ class _LoginViewState extends State<Login> {
             await provider.fetch();
             if (auth != null) {
               if (!mounted) return;
-              if (provider.authData['type'] == "shawarma")
-                Navigator.of(context).pushReplacementNamed('adminShawarma');
-              else if (provider.authData['type']== "homos")
-                Navigator.of(context).pushReplacementNamed('adminHomos');
-              else if (provider.authData['type'] == "sweet")
-                Navigator.of(context).pushReplacementNamed('adminSweets');
-              else if (provider.authData['type'] == "drinks")
-                Navigator.of(context).pushReplacementNamed('adminDrinks');
-              else if (provider.authData['type'] == "mainRes")
-                Navigator.of(context).pushReplacementNamed('adminRes');
+               Navigator.of(context).pushReplacementNamed('orders');
               setState(() {
                 provider.authState = authStatus.Authenticated;
               });

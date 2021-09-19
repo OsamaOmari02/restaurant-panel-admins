@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurants_panel/drinks_admin.dart';
+import 'package:restaurants_panel/orders.dart';
 import 'package:restaurants_panel/provider.dart';
 import 'package:restaurants_panel/res_admin.dart';
 import 'package:restaurants_panel/shawarma_admin.dart';
@@ -38,16 +39,7 @@ class _UserStateState extends State<UserState> {
           if (snapshot.data == null) {
             return Login();
           } else if (snapshot.hasData){
-            if (provider.authData['type']=="shawarma")
-              return AdminShawarma();
-            else if (provider.authData['type']=="homos")
-              return AdminHomos();
-            else if ( provider.authData['type']=="sweet")
-              return AdminSweets();
-            else if (provider.authData['type']=="mainRes")
-              return AdminRes();
-            else if (provider.authData['type']=="drinks")
-              return AdminDrinks();
+            return Orders();
           }
           if (snapshot.hasError) {
             return Center(
@@ -55,12 +47,11 @@ class _UserStateState extends State<UserState> {
                   style: const TextStyle(fontSize: 20, color: Colors.red)),
             );
           }
-          return Login();
-          // return Scaffold(
-          //     body: Center(
-          //         child: Text(lanProvider.texts("something went wrong !"),
-          //             style:
-          //             const TextStyle(fontSize: 23, color: Colors.blue))));
+          return Scaffold(
+              body: Center(
+                  child: Text(lanProvider.texts("something went wrong !"),
+                      style:
+                      const TextStyle(fontSize: 23, color: Colors.blue))));
         });
   }
 }

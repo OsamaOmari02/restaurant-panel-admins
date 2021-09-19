@@ -125,6 +125,8 @@ class _MyDrawerState extends State<MyDrawer> {
         child: ListView(
           children: [
             const SizedBox(height: 20),
+            listTile(lanProvider.texts('Drawer1'), Icons.home, 'orders'),
+            const Divider(thickness: 0.3),
             ListTile(
               onTap: () {
                 if (provider.authData['type'] == "shawarma")
@@ -138,20 +140,23 @@ class _MyDrawerState extends State<MyDrawer> {
                 else if (provider.authData['type'] == "sweet")
                   Navigator.of(context).pushReplacementNamed('adminSweets');
               },
-              title: Text(
-                lanProvider.texts('Drawer1'),
+              title: provider.authData['type']=='drinks' ?Text(
+                lanProvider.texts('Drawer10'),
+                style: const TextStyle(fontSize: 25),
+              ) :Text(
+                lanProvider.texts('Drawer9'),
                 style: const TextStyle(fontSize: 25),
               ),
-              leading: const Icon(
-                Icons.home,
+              leading: Icon(
+                Icons.edit_off,
                 color: Colors.blueAccent,
               ),
             ),
             const Divider(
-              thickness: 0.1,
+              thickness: 0.3,
             ),
             listTile(lanProvider.texts('Drawer6'), Icons.settings, 'settings'),
-            const Divider(thickness: 0.1),
+            const Divider(thickness: 0.3),
             ListTile(
               onTap: logOutFun,
               title: Text(

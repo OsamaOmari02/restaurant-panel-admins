@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurants_panel/details.dart';
 import 'package:restaurants_panel/provider.dart';
 import 'package:restaurants_panel/res_admin.dart';
 import 'package:restaurants_panel/settings.dart';
@@ -9,6 +10,7 @@ import 'package:restaurants_panel/shawarma_admin.dart';
 import 'package:restaurants_panel/sweet_admin.dart';
 import 'package:restaurants_panel/userState.dart';
 import 'drinks_admin.dart';
+import 'orders.dart';
 import 'provider.dart';
 import 'homos_admin.dart';
 import 'languageProvider.dart';
@@ -41,7 +43,6 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: UserState(),
@@ -54,6 +55,8 @@ class _MyAppState extends State<MyApp> {
       ),
       routes: {
         'myApp': (context) => MyApp(),
+        'orders': (context) => Orders(),
+        'details': (context) => Details(),
         'login': (context) => Login(),
         'adminShawarma': (context) => AdminShawarma(),
         'adminHomos': (context) => AdminHomos(),

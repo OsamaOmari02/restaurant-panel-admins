@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,6 +21,18 @@ class Meals {
         required this.mealPrice,
         required this.id});
 }
+class FoodCart {
+  var mealName;
+  var mealPrice;
+  var description;
+  var quantity;
+
+  FoodCart(
+      {required this.description,
+        required this.mealName,
+        required this.mealPrice,
+        required this.quantity});
+}
 
 class MyProvider with ChangeNotifier {
 
@@ -35,10 +48,23 @@ class MyProvider with ChangeNotifier {
   //   admin = pref.getBool('admin')!;
   //   notifyListeners();
   // }
+  Map<String, String> details = {
+    'name': '',
+    'total': '',
+    'note': '',
+    'length':'',
+  };
+
+  List<FoodCart> detailedCart = [];
 
   bool isLoading = false;
   List<Meals> mealIDs = [];
   var mealID;
+
+  String dateTime(timeStamp) {
+    var time = DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat('dd-MM-yyyy    hh:mm a').format(time);
+  }
 
 
   //-----------------------admin----------------------------
@@ -92,7 +118,6 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
-
   Future<void> fetchMealsHomos(title) async {
     await FirebaseFirestore.instance
         .collection('homos/$title/meals')
@@ -147,7 +172,6 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
-
   Future<void> fetchMealsSweets(title) async {
     await FirebaseFirestore.instance
         .collection('sweets/$title/kunafeh')
@@ -250,6 +274,7 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
 
   //------------------------auth----------------------
   authStatus authState = authStatus.Authenticated;
