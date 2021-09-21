@@ -192,9 +192,9 @@ class _LoginViewState extends State<Login> {
         body: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.all(36),
+            padding: const EdgeInsets.all(30),
             children: [
-              const SizedBox(height: 70),
+              SizedBox(height: mq.size.height*0.2),
               Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.only(bottom: 10),
@@ -208,8 +208,7 @@ class _LoginViewState extends State<Login> {
                         offset: const Offset(0, 2)),
                   ],
                 ),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                padding: EdgeInsets.symmetric(vertical: mq.size.height*0.013, horizontal: mq.size.width*0.1),
                 child: const Text(
                   "Delivery Time",
                   style: const TextStyle(
@@ -219,9 +218,9 @@ class _LoginViewState extends State<Login> {
                       fontStyle: FontStyle.italic),
                 ),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: mq.size.height*0.05),
               fields,
-              const SizedBox(height: 80),
+              SizedBox(height: mq.size.height*0.1),
               provider.authState == authStatus.Authenticating
                   ? Center(child: CircularProgressIndicator())
                   : loginButton,

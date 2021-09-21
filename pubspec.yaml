@@ -1,5 +1,5 @@
 name: restaurants_panel
-description: restaurants panel
+description: D.T Restaurants
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -30,6 +30,7 @@ dependencies:
   url_launcher: ^6.0.9
   intl: ^0.17.0
   cloud_firestore:
+  flutter_launcher_icons: ^0.9.2
   flutter:
     sdk: flutter
 
@@ -39,8 +40,21 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  flutter_native_splash: ^1.2.1
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: file/Delivery_time_LOGO.png
+  android_gravity: center
+  android: true
+  ios: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "file/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -54,9 +68,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - file/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
