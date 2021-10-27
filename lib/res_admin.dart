@@ -91,7 +91,7 @@ class _AdminResState extends State<AdminRes> {
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('/mainRes/${provider.authData['name']}/meals')
+              .collection('mainRes/${provider.authData['name']}/meals')
               .snapshots(),
           builder: (ctx, snapshot) {
             return Scrollbar(

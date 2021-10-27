@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurants_panel/drawer.dart';
 import 'package:restaurants_panel/provider.dart';
@@ -13,15 +17,13 @@ class AdminDrinks extends StatefulWidget {
   _AdminDrinksState createState() => _AdminDrinksState();
 }
 
-
 class _AdminDrinksState extends State<AdminDrinks> {
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<MyProvider>(context,listen: false).fetch();
+      Provider.of<MyProvider>(context, listen: false).fetch();
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
-          Provider.of<MyProvider>(context, listen: false).authData['name']
-      );
+          Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
     super.initState();
   }
@@ -47,7 +49,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                   Text(
                     title,
                     textAlign:
-                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -85,7 +87,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
               icon: const Icon(Icons.add),
             ),
           ],
-          title: Text(provider.authData['name']??""),
+          title: Text(provider.authData['name'] ?? ""),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -97,7 +99,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
             //   return Center(child: CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
-                itemCount: snapshot.data?.docs.length??0,
+                itemCount: snapshot.data?.docs.length ?? 0,
                 itemBuilder: (context, int index) {
                   var resData = snapshot.data!.docs;
                   return Card(
@@ -114,16 +116,16 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                     setState(() {
                                       provider.mealID = resData[index].id;
                                     });
-                                    Navigator.of(context).pushNamed('editDrinks');
+                                    Navigator.of(context)
+                                        .pushNamed('editDrinks');
                                   },
                                   icon: const Icon(Icons.edit),
                                   color: Colors.blue,
                                 ),
-
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    SizedBox(height: height*0.02),
+                                    SizedBox(height: height * 0.02),
                                     Container(
                                       child: Text(
                                         resData[index]['meal name'],
@@ -132,7 +134,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
-                                    SizedBox(height: height*0.01),
+                                    SizedBox(height: height * 0.01),
                                     Container(
                                       child: Text(
                                         resData[index]['description'],
@@ -165,14 +167,17 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                       builder: (BuildContext ctx) {
                                         return AlertDialog(
                                           title: Text(
-                                            lanProvider.texts('delete this meal?'),
+                                            lanProvider
+                                                .texts('delete this meal?'),
                                             textAlign: lanProvider.isEn
                                                 ? TextAlign.start
                                                 : TextAlign.end,
-                                            style: const TextStyle(fontSize: 23),
+                                            style:
+                                                const TextStyle(fontSize: 23),
                                           ),
                                           contentPadding:
-                                          const EdgeInsets.symmetric(vertical: 7),
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 7),
                                           elevation: 24,
                                           content: Container(
                                             height: 30,
@@ -183,7 +188,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                             if (provider.isLoading)
                                               const Center(
                                                   child:
-                                                  const CircularProgressIndicator()),
+                                                      const CircularProgressIndicator()),
                                             if (!provider.isLoading)
                                               InkWell(
                                                 child: Text(
@@ -199,32 +204,35 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                           resData[index].id;
                                                     });
                                                     Navigator.of(context).pop();
-                                                    await provider
-                                                        .deleteMeal('drinks',"meals");
+                                                    await provider.deleteMeal(
+                                                        'drinks', "meals");
                                                     Fluttertoast.showToast(
-                                                        msg: lanProvider
-                                                            .texts('Meal Deleted'),
+                                                        msg: lanProvider.texts(
+                                                            'Meal Deleted'),
                                                         toastLength:
-                                                        Toast.LENGTH_SHORT,
+                                                            Toast.LENGTH_SHORT,
                                                         backgroundColor:
-                                                        Colors.grey,
+                                                            Colors.grey,
                                                         textColor: Colors.white,
                                                         fontSize: 16.0);
                                                     setState(() {
-                                                      provider.isLoading = false;
+                                                      provider.isLoading =
+                                                          false;
                                                     });
                                                   } on FirebaseException catch (e) {
                                                     setState(() {
-                                                      provider.isLoading = false;
+                                                      provider.isLoading =
+                                                          false;
                                                     });
                                                     return dialog(e.message);
                                                   } catch (e) {
                                                     setState(() {
-                                                      provider.isLoading = false;
+                                                      provider.isLoading =
+                                                          false;
                                                     });
                                                     print(e);
-                                                    dialog(lanProvider
-                                                        .texts('Error occurred !'));
+                                                    dialog(lanProvider.texts(
+                                                        'Error occurred !'));
                                                   }
                                                 },
                                               ),
@@ -232,11 +240,13 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                             if (!provider.isLoading)
                                               InkWell(
                                                   child: Text(
-                                                      lanProvider.texts('cancel?'),
+                                                      lanProvider
+                                                          .texts('cancel?'),
                                                       style: const TextStyle(
                                                           fontSize: 19)),
                                                   onTap: () =>
-                                                      Navigator.of(context).pop()),
+                                                      Navigator.of(context)
+                                                          .pop()),
                                           ],
                                         );
                                       }),
@@ -285,6 +295,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
     var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     dialog(title) {
       return showDialog(
           context: context,
@@ -325,6 +336,23 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
             );
           });
     }
+    // File? file;
+    // Future pickImage (ImageSource src) async{
+    //   try{
+    //     var image = (await ImagePicker().pickImage(source: src));
+    //     if (image == null) return;
+    //     setState(() {
+    //       file = File(image.path);
+    //     });
+    //     print(file!.path);
+    //   } on PlatformException catch (e){
+    //     dialog(lanProvider.texts('Error occurred !'));
+    //     print(e.message);
+    //   } catch (e){
+    //     print(e);
+    //   }
+    //   print(file!.path);
+    // }
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -361,12 +389,28 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                 ),
               ),
               const SizedBox(height: 20),
+              // TextButton(
+              //     onPressed: () =>pickImage(ImageSource.gallery),
+              //     child: Row(
+              //       children: [Icon(Icons.add), Text("add image G")],
+              //     )),
+              // TextButton(
+              //     onPressed: ()=>pickImage(ImageSource.camera),
+              //     child: Row(
+              //       children: [Icon(Icons.add), Text("add image C")],
+              //     )),
+              //   Container(
+              //     width: 120,
+              //     height: 120,
+              //     child: file == null?Container(height: 120,width: 120,color: Colors.grey,)
+              //         :Image.file(File(file!.path),fit: BoxFit.fill,),
+              //   ),
               if (provider.isLoading)
                 Center(child: const CircularProgressIndicator()),
               const SizedBox(height: 20),
               if (!provider.isLoading)
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: width*0.2),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.2),
                   height: height * 0.065,
                   child: ElevatedButton(
                     onPressed: () async {
@@ -377,7 +421,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                           provider.isLoading = true;
                         });
                         await provider.addMeal(_mealName.text, _price.text,
-                            _description.text,'drinks','meals');
+                            _description.text, 'drinks', 'meals');
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
                             msg: lanProvider.texts('Meal Added'),
@@ -414,6 +458,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
     );
   }
 }
+
 //--------------------------Edit-----------------------------------
 class EditDrinks extends StatefulWidget {
   @override
@@ -453,7 +498,7 @@ class _EditDrinksState extends State<EditDrinks> {
                     child: Text(
                       title,
                       textAlign:
-                      lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                          lanProvider.isEn ? TextAlign.start : TextAlign.end,
                       style: const TextStyle(fontSize: 23),
                     ),
                   ),
@@ -526,7 +571,7 @@ class _EditDrinksState extends State<EditDrinks> {
                             provider.isLoading = true;
                           });
                           await provider.editMeal(_mealName.text, _price.text,
-                              _description.text,'drinks','meals');
+                              _description.text, 'drinks', 'meals');
                           Navigator.of(context).pop();
                           setState(() {
                             provider.isLoading = false;
