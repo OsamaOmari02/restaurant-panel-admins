@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -110,20 +112,25 @@ class _AdminResState extends State<AdminRes> {
                           child: Container(
                             child: Row(
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      provider.mealID = resData[index].id;
-                                    });
-                                    Navigator.of(context).pushNamed('editRes');
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                  color: Colors.blue,
-                                ),
+                                if (resData[index]['imageUrl']!="")
+                                  Container(
+                                    margin: const EdgeInsets.all(7),
+                                    width: width*0.24,
+                                    height: height*0.16,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.fill,
+                                        imageUrl: resData[index]['imageUrl'],
+                                        placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      ),
+                                    ),
+                                  ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    SizedBox(height: height*0.02),
+                                    SizedBox(height: height * 0.02),
                                     Container(
                                       child: Text(
                                         resData[index]['meal name'],
@@ -132,12 +139,17 @@ class _AdminResState extends State<AdminRes> {
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
-                                    SizedBox(height: height*0.01),
-                                    Container(
-                                      child: Text(
+                                    SizedBox(height: height * 0.01),
+                                    SizedBox(
+                                      width: width*0.4,
+                                      child: AutoSizeText(
                                         resData[index]['description'],
+                                        maxLines: 3,
+                                        minFontSize: 12,
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                            fontSize: 15, color: Colors.grey),
+                                            fontSize: 14,
+                                            color: Colors.grey),
                                       ),
                                     ),
                                     Container(
@@ -159,89 +171,104 @@ class _AdminResState extends State<AdminRes> {
                                   ],
                                 ),
                                 const Spacer(),
-                                IconButton(
-                                  onPressed: () => showDialog(
-                                      context: context,
-                                      builder: (BuildContext ctx) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            lanProvider.texts('delete this meal?'),
-                                            textAlign: lanProvider.isEn
-                                                ? TextAlign.start
-                                                : TextAlign.end,
-                                            style: const TextStyle(fontSize: 23),
-                                          ),
-                                          contentPadding:
-                                          EdgeInsets.symmetric(vertical: 7),
-                                          elevation: 24,
-                                          content: Container(
-                                            height: 30,
-                                            child: const Divider(),
-                                            alignment: Alignment.topCenter,
-                                          ),
-                                          actions: [
-                                            if (provider.isLoading)
-                                              Center(
-                                                  child:
-                                                  const CircularProgressIndicator()),
-                                            if (!provider.isLoading)
-                                              InkWell(
-                                                child: Text(
-                                                  lanProvider.texts('yes?'),
-                                                  style: const TextStyle(
-                                                      fontSize: 19,
-                                                      color: Colors.red),
-                                                ),
-                                                onTap: () async {
-                                                  try {
-                                                    setState(() {
-                                                      provider.mealID =
-                                                          resData[index].id;
-                                                    });
-                                                    Navigator.of(context).pop();
-                                                    await provider
-                                                        .deleteMeal('mainRes',"meals");
-                                                    Fluttertoast.showToast(
-                                                        msg: lanProvider
-                                                            .texts('Meal Deleted'),
-                                                        toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                        backgroundColor:
-                                                        Colors.grey,
-                                                        textColor: Colors.white,
-                                                        fontSize: 16.0);
-                                                    setState(() {
-                                                      provider.isLoading = false;
-                                                    });
-                                                  } on FirebaseException catch (e) {
-                                                    setState(() {
-                                                      provider.isLoading = false;
-                                                    });
-                                                    return dialog(e.message);
-                                                  } catch (e) {
-                                                    setState(() {
-                                                      provider.isLoading = false;
-                                                    });
-                                                    print(e);
-                                                    dialog(lanProvider
-                                                        .texts('Error occurred !'));
-                                                  }
-                                                },
+                                Column(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          provider.mealID = resData[index].id;
+                                        });
+                                        Navigator.of(context)
+                                            .pushNamed('editRes');
+                                      },
+                                      icon: const Icon(Icons.edit),
+                                      color: Colors.blue,
+                                    ),
+                                    IconButton(
+                                      onPressed: () => showDialog(
+                                          context: context,
+                                          builder: (BuildContext ctx) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                lanProvider.texts('delete this meal?'),
+                                                textAlign: lanProvider.isEn
+                                                    ? TextAlign.start
+                                                    : TextAlign.end,
+                                                style: const TextStyle(fontSize: 23),
                                               ),
-                                            const SizedBox(width: 11),
-                                            if (!provider.isLoading)
-                                              InkWell(
-                                                  child: Text(
-                                                      lanProvider.texts('cancel?'),
+                                              contentPadding:
+                                              EdgeInsets.symmetric(vertical: 7),
+                                              elevation: 24,
+                                              content: Container(
+                                                height: 30,
+                                                child: const Divider(),
+                                                alignment: Alignment.topCenter,
+                                              ),
+                                              actions: [
+                                                if (provider.isLoading)
+                                                  Center(
+                                                      child:
+                                                      const CircularProgressIndicator()),
+                                                if (!provider.isLoading)
+                                                  InkWell(
+                                                    child: Text(
+                                                      lanProvider.texts('yes?'),
                                                       style: const TextStyle(
-                                                          fontSize: 19)),
-                                                  onTap: () =>
-                                                      Navigator.of(context).pop()),
-                                          ],
-                                        );
-                                      }),
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.red,
+                                                          fontSize: 19,
+                                                          color: Colors.red),
+                                                    ),
+                                                    onTap: () async {
+                                                      try {
+                                                        setState(() {
+                                                          provider.mealID =
+                                                              resData[index].id;
+                                                        });
+                                                        Navigator.of(context).pop();
+                                                        await provider
+                                                            .deleteMeal('mainRes',"meals");
+                                                        Fluttertoast.showToast(
+                                                            msg: lanProvider
+                                                                .texts('Meal Deleted'),
+                                                            toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                            backgroundColor:
+                                                            Colors.grey,
+                                                            textColor: Colors.white,
+                                                            fontSize: 16.0);
+                                                        setState(() {
+                                                          provider.isLoading = false;
+                                                        });
+                                                      } on FirebaseException catch (e) {
+                                                        setState(() {
+                                                          provider.isLoading = false;
+                                                        });
+                                                        return dialog(e.message);
+                                                      } catch (e) {
+                                                        setState(() {
+                                                          provider.isLoading = false;
+                                                        });
+                                                        print(e);
+                                                        dialog(lanProvider
+                                                            .texts('Error occurred !'));
+                                                      }
+                                                    },
+                                                  ),
+                                                const SizedBox(width: 11),
+                                                if (!provider.isLoading)
+                                                  InkWell(
+                                                      child: Text(
+                                                          lanProvider.texts('cancel?'),
+                                                          style: const TextStyle(
+                                                              fontSize: 19)),
+                                                      onTap: () =>
+                                                          Navigator.of(context).pop()),
+                                              ],
+                                            );
+                                          }),
+                                      icon: const Icon(Icons.delete),
+                                      color: Colors.red,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

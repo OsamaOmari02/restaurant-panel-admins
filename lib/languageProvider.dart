@@ -131,6 +131,10 @@ class LanProvider with ChangeNotifier {
     'alert': 'إنتباه !',
     'details': 'التفاصيل',
     'orders':'الطلبات',
+    'choose one':'إختر طريقة',
+    'gallery':'المعرض',
+    'camera':'الكاميرا',
+    'add image':'إضافة صورة',
     'last note':
     'في بعض الحالات (اذا كان الطلب حساس او كبير الحجم او في حال عدم توفر دراجة بتلك اللحظة) سيتم التوصيل عن طريق السيارة وسيتم زيادة نصف دينار على سعر التوصيل.',
   };
@@ -259,6 +263,10 @@ class LanProvider with ChangeNotifier {
     'attention': 'Attention !',
     'details': 'Details',
     'orders':'Orders',
+    'choose one':'choose one',
+    'gallery':'Gallery',
+    'camera':'Camera',
+    'add image':'Add image',
     'last note':
     'In some cases we have to use a car instead of a bike,0.50 JD will be added to the delivery price.',
   };

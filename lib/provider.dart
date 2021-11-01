@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,13 +17,15 @@ class Meals {
   var mealPrice;
   var description;
   final String resName;
+  String imageUrl='';
 
   Meals(
       {required this.resName,
         required this.description,
         required this.mealName,
         required this.mealPrice,
-        required this.id});
+        imageUrl,
+        required this.id,});
 }
 class FoodCart {
   var mealName;
@@ -148,6 +154,7 @@ class MyProvider with ChangeNotifier {
               mealName: element.data()['meal name'],
               mealPrice: element.data()['meal price'],
               description: element.data()['description'],
+              imageUrl: element.data()['imageUrl'],
               id: element.id,
               resName: title));
       });
@@ -221,10 +228,18 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  var file;
+  var imageUrl;
   Future<void> addMeal(
       String mealName, String price, String desc, type, tab) async {
     isLoading = true;
     var uuid = Uuid().v4();
+    if (file!=null)
+      await FirebaseStorage.instance.ref().child(uuid)
+          .child(Uri.file(file.path).pathSegments.last).putFile(file).then((value)async{
+        imageUrl = await value.ref.getDownloadURL();
+        print(imageUrl);
+      });
     await FirebaseFirestore.instance
         .collection('$type/${authData['name']}/$tab')
         .doc(uuid)
@@ -233,12 +248,14 @@ class MyProvider with ChangeNotifier {
       'meal price': price,
       'description': desc,
       'resName': authData['name'],
+      'imageUrl':file==null?'':imageUrl??'',
     }).then((value) {
       mealIDs.add(Meals(
           id: uuid,
           mealPrice: price,
           mealName: mealName,
           description: desc,
+          imageUrl:file==null?'':imageUrl??'',
           resName: authData['name']!));
     });
     notifyListeners();
@@ -247,6 +264,9 @@ class MyProvider with ChangeNotifier {
   deleteMeal(type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
+    if (mealIDs[mealIndex].imageUrl!="")
+      await FirebaseStorage.instance.ref().child(mealIDs[mealIndex].id).
+      child(mealIDs[mealIndex].imageUrl).delete();
     await FirebaseFirestore.instance
         .collection('$type/${authData['name']}/$tab')
         .doc(mealID)
@@ -267,10 +287,12 @@ class MyProvider with ChangeNotifier {
       'meal name': mealName,
       'meal price': price,
       'description': desc,
+      'imageUrl': file!.path,
     }).then((value) {
       mealIDs[mealIndex].mealName = mealName;
       mealIDs[mealIndex].mealPrice = price;
       mealIDs[mealIndex].description = desc;
+      mealIDs[mealIndex].imageUrl = file!.path;
     });
     notifyListeners();
   }

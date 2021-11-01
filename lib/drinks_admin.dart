@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,11 +48,18 @@ class _AdminDrinksState extends State<AdminDrinks> {
                     color: Colors.red,
                   ),
                   const SizedBox(width: 10),
-                  Text(
-                    title,
-                    textAlign:
-                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                    style: const TextStyle(fontSize: 23),
+                  SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: Expanded(
+                      child: Text(
+                        title,
+                        maxLines: 3,
+                        textAlign:
+                            lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                        style: const TextStyle(fontSize: 23),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -111,17 +120,21 @@ class _AdminDrinksState extends State<AdminDrinks> {
                           child: Container(
                             child: Row(
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      provider.mealID = resData[index].id;
-                                    });
-                                    Navigator.of(context)
-                                        .pushNamed('editDrinks');
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                  color: Colors.blue,
-                                ),
+                                if (resData[index]['imageUrl']!="")
+                                  Container(
+                                    margin: const EdgeInsets.all(7),
+                                    width: width*0.24,
+                                    height: height*0.16,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.fill,
+                                        imageUrl: resData[index]['imageUrl'],
+                                        placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      ),
+                                    ),
+                                  ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -135,11 +148,16 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                       ),
                                     ),
                                     SizedBox(height: height * 0.01),
-                                    Container(
-                                      child: Text(
+                                    SizedBox(
+                                      width: width*0.4,
+                                      child: AutoSizeText(
                                         resData[index]['description'],
+                                        maxLines: 3,
+                                        minFontSize: 12,
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                            fontSize: 15, color: Colors.grey),
+                                            fontSize: 14,
+                                            color: Colors.grey),
                                       ),
                                     ),
                                     Container(
@@ -161,97 +179,112 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                   ],
                                 ),
                                 const Spacer(),
-                                IconButton(
-                                  onPressed: () => showDialog(
-                                      context: context,
-                                      builder: (BuildContext ctx) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            lanProvider
-                                                .texts('delete this meal?'),
-                                            textAlign: lanProvider.isEn
-                                                ? TextAlign.start
-                                                : TextAlign.end,
-                                            style:
-                                                const TextStyle(fontSize: 23),
-                                          ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  vertical: 7),
-                                          elevation: 24,
-                                          content: Container(
-                                            height: 30,
-                                            child: const Divider(),
-                                            alignment: Alignment.topCenter,
-                                          ),
-                                          actions: [
-                                            if (provider.isLoading)
-                                              const Center(
-                                                  child:
-                                                      const CircularProgressIndicator()),
-                                            if (!provider.isLoading)
-                                              InkWell(
-                                                child: Text(
-                                                  lanProvider.texts('yes?'),
-                                                  style: const TextStyle(
-                                                      fontSize: 19,
-                                                      color: Colors.red),
-                                                ),
-                                                onTap: () async {
-                                                  try {
-                                                    setState(() {
-                                                      provider.mealID =
-                                                          resData[index].id;
-                                                    });
-                                                    Navigator.of(context).pop();
-                                                    await provider.deleteMeal(
-                                                        'drinks', "meals");
-                                                    Fluttertoast.showToast(
-                                                        msg: lanProvider.texts(
-                                                            'Meal Deleted'),
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        backgroundColor:
-                                                            Colors.grey,
-                                                        textColor: Colors.white,
-                                                        fontSize: 16.0);
-                                                    setState(() {
-                                                      provider.isLoading =
-                                                          false;
-                                                    });
-                                                  } on FirebaseException catch (e) {
-                                                    setState(() {
-                                                      provider.isLoading =
-                                                          false;
-                                                    });
-                                                    return dialog(e.message);
-                                                  } catch (e) {
-                                                    setState(() {
-                                                      provider.isLoading =
-                                                          false;
-                                                    });
-                                                    print(e);
-                                                    dialog(lanProvider.texts(
-                                                        'Error occurred !'));
-                                                  }
-                                                },
+                                Column(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          provider.mealID = resData[index].id;
+                                        });
+                                        Navigator.of(context)
+                                            .pushNamed('editDrinks');
+                                      },
+                                      icon: const Icon(Icons.edit),
+                                      color: Colors.blue,
+                                    ),
+                                    IconButton(
+                                      onPressed: () => showDialog(
+                                          context: context,
+                                          builder: (BuildContext ctx) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                lanProvider
+                                                    .texts('delete this meal?'),
+                                                textAlign: lanProvider.isEn
+                                                    ? TextAlign.start
+                                                    : TextAlign.end,
+                                                style:
+                                                    const TextStyle(fontSize: 23),
                                               ),
-                                            const SizedBox(width: 11),
-                                            if (!provider.isLoading)
-                                              InkWell(
-                                                  child: Text(
-                                                      lanProvider
-                                                          .texts('cancel?'),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 7),
+                                              elevation: 24,
+                                              content: Container(
+                                                height: 30,
+                                                child: const Divider(),
+                                                alignment: Alignment.topCenter,
+                                              ),
+                                              actions: [
+                                                if (provider.isLoading)
+                                                  const Center(
+                                                      child:
+                                                          const CircularProgressIndicator()),
+                                                if (!provider.isLoading)
+                                                  InkWell(
+                                                    child: Text(
+                                                      lanProvider.texts('yes?'),
                                                       style: const TextStyle(
-                                                          fontSize: 19)),
-                                                  onTap: () =>
-                                                      Navigator.of(context)
-                                                          .pop()),
-                                          ],
-                                        );
-                                      }),
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.red,
+                                                          fontSize: 19,
+                                                          color: Colors.red),
+                                                    ),
+                                                    onTap: () async {
+                                                      try {
+                                                        setState(() {
+                                                          provider.mealID =
+                                                              resData[index].id;
+                                                        });
+                                                        Navigator.of(context).pop();
+                                                        await provider.deleteMeal(
+                                                            'drinks', "meals");
+                                                        Fluttertoast.showToast(
+                                                            msg: lanProvider.texts(
+                                                                'Meal Deleted'),
+                                                            toastLength:
+                                                                Toast.LENGTH_SHORT,
+                                                            backgroundColor:
+                                                                Colors.grey,
+                                                            textColor: Colors.white,
+                                                            fontSize: 16.0);
+                                                        setState(() {
+                                                          provider.isLoading =
+                                                              false;
+                                                        });
+                                                      } on FirebaseException catch (e) {
+                                                        setState(() {
+                                                          provider.isLoading =
+                                                              false;
+                                                        });
+                                                        return dialog(e.message);
+                                                      } catch (e) {
+                                                        setState(() {
+                                                          provider.isLoading =
+                                                              false;
+                                                        });
+                                                        print(e);
+                                                        dialog(lanProvider.texts(
+                                                            'Error occurred !'));
+                                                      }
+                                                    },
+                                                  ),
+                                                const SizedBox(width: 11),
+                                                if (!provider.isLoading)
+                                                  InkWell(
+                                                      child: Text(
+                                                          lanProvider
+                                                              .texts('cancel?'),
+                                                          style: const TextStyle(
+                                                              fontSize: 19)),
+                                                      onTap: () =>
+                                                          Navigator.of(context)
+                                                              .pop()),
+                                              ],
+                                            );
+                                          }),
+                                      icon: const Icon(Icons.delete),
+                                      color: Colors.red,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -295,7 +328,6 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
     var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     dialog(title) {
       return showDialog(
           context: context,
@@ -311,7 +343,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                   Text(
                     title,
                     textAlign:
-                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -336,23 +368,85 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
             );
           });
     }
-    // File? file;
-    // Future pickImage (ImageSource src) async{
-    //   try{
-    //     var image = (await ImagePicker().pickImage(source: src));
-    //     if (image == null) return;
-    //     setState(() {
-    //       file = File(image.path);
-    //     });
-    //     print(file!.path);
-    //   } on PlatformException catch (e){
-    //     dialog(lanProvider.texts('Error occurred !'));
-    //     print(e.message);
-    //   } catch (e){
-    //     print(e);
-    //   }
-    //   print(file!.path);
-    // }
+
+    Future pickImage(ImageSource src) async {
+      try {
+        var image = (await ImagePicker().pickImage(source: src));
+        if (image == null) return;
+        setState(() {
+          provider.file = File(image.path);
+        });
+        Navigator.of(context).pop();
+      } on PlatformException catch (e) {
+        dialog(lanProvider.texts('Error occurred !'));
+        print(e.message);
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    dialog2() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return Directionality(
+              textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              child: AlertDialog(
+                title: Text(
+                  lanProvider.texts('choose one'),
+                  style: const TextStyle(fontSize: 23),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 7),
+                elevation: 24,
+                content: Container(
+                  height: height*0.15,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(Icons.add_photo_alternate,color: Colors.blue),
+                            ),
+                            Text(
+                              lanProvider.texts('gallery'),
+                              style: const TextStyle(fontSize: 19,color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        onTap: () => pickImage(ImageSource.gallery),
+                      ),
+                      const SizedBox(width: 11),
+                      InkWell(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(Icons.add_a_photo,color: Colors.blue,),
+                            ),
+                            Text(
+                              lanProvider.texts('camera'),
+                              style: const TextStyle(fontSize: 19,color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        onTap: () => pickImage(ImageSource.camera),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+
+                ],
+              ),
+            );
+          });
+    }
 
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -389,22 +483,28 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                 ),
               ),
               const SizedBox(height: 20),
-              // TextButton(
-              //     onPressed: () =>pickImage(ImageSource.gallery),
-              //     child: Row(
-              //       children: [Icon(Icons.add), Text("add image G")],
-              //     )),
-              // TextButton(
-              //     onPressed: ()=>pickImage(ImageSource.camera),
-              //     child: Row(
-              //       children: [Icon(Icons.add), Text("add image C")],
-              //     )),
-              //   Container(
-              //     width: 120,
-              //     height: 120,
-              //     child: file == null?Container(height: 120,width: 120,color: Colors.grey,)
-              //         :Image.file(File(file!.path),fit: BoxFit.fill,),
-              //   ),
+              TextButton(
+                  onPressed: () => dialog2(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add_a_photo),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(lanProvider.texts('add image'))
+                    ],
+                  )),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 90),
+                height: 125,
+                child: provider.file == null
+                    ? Container()
+                    : Image.file(
+                        File(provider.file!.path),
+                        fit: BoxFit.fill,
+                      ),
+              ),
               if (provider.isLoading)
                 Center(child: const CircularProgressIndicator()),
               const SizedBox(height: 20),
@@ -436,7 +536,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                         setState(() {
                           provider.isLoading = false;
                         });
-                        return dialog(e.message);
+                        dialog(e.message);
                       } catch (e) {
                         setState(() {
                           provider.isLoading = false;
