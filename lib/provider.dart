@@ -234,12 +234,13 @@ class MyProvider with ChangeNotifier {
       String mealName, String price, String desc, type, tab) async {
     isLoading = true;
     var uuid = Uuid().v4();
-    if (file!=null)
+    if (file!=null) {
       await FirebaseStorage.instance.ref().child(uuid)
-          .child(Uri.file(file.path).pathSegments.last).putFile(file).then((value)async{
+          .child('imageName').putFile(file).then((value) async {
         imageUrl = await value.ref.getDownloadURL();
         print(imageUrl);
       });
+    }
     await FirebaseFirestore.instance
         .collection('$type/${authData['name']}/$tab')
         .doc(uuid)
@@ -247,6 +248,7 @@ class MyProvider with ChangeNotifier {
       'meal name': mealName,
       'meal price': price,
       'description': desc,
+      'imagePath':file==null?'':Uri.file(file.path).pathSegments.last,
       'resName': authData['name'],
       'imageUrl':file==null?'':imageUrl??'',
     }).then((value) {
@@ -257,16 +259,29 @@ class MyProvider with ChangeNotifier {
           description: desc,
           imageUrl:file==null?'':imageUrl??'',
           resName: authData['name']!));
+      imageUrl==null?print('null'):print(imageUrl);
+    }).then((value) {
+      for (int i=0;i<mealIDs.length;i++)
+        print(imageUrl==null?('null'):(imageUrl) + ' done');
     });
+    file = null;
+    imageUrl = null;
     notifyListeners();
   }
 
+  deleteImage() async{
+    file = null;
+    notifyListeners();
+  }
   deleteMeal(type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-    if (mealIDs[mealIndex].imageUrl!="")
-      await FirebaseStorage.instance.ref().child(mealIDs[mealIndex].id).
-      child(mealIDs[mealIndex].imageUrl).delete();
+    if (mealIDs[mealIndex].imageUrl!='') {
+      print(" try deleted");
+      await FirebaseStorage.instance.refFromURL(mealIDs[mealIndex].imageUrl)
+          .delete();
+      print("deleted");
+    }
     await FirebaseFirestore.instance
         .collection('$type/${authData['name']}/$tab')
         .doc(mealID)
@@ -280,20 +295,33 @@ class MyProvider with ChangeNotifier {
   editMeal(String mealName, price, String desc, type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
+    if (file!=null)
+      await FirebaseStorage.instance.ref().child(mealIDs[mealIndex].id).
+      child('imageName').putFile(file).then((value) async{
+      imageUrl = await value.ref.getDownloadURL();
+    });
     await FirebaseFirestore.instance
         .collection('$type/${authData['name']}/$tab')
         .doc(mealID)
         .update({
-      'meal name': mealName,
-      'meal price': price,
-      'description': desc,
-      'imageUrl': file!.path,
+        'meal name': mealName,
+        'meal price': price,
+      if (desc!='')
+        'description': desc,
+      if (file!=null)
+        'imagePath':Uri.file(file.path).pathSegments.last,
+      if (file!=null)
+        'imageUrl': imageUrl??'',
     }).then((value) {
-      mealIDs[mealIndex].mealName = mealName;
-      mealIDs[mealIndex].mealPrice = price;
-      mealIDs[mealIndex].description = desc;
-      mealIDs[mealIndex].imageUrl = file!.path;
+        mealIDs[mealIndex].mealName = mealName;
+        mealIDs[mealIndex].mealPrice = price;
+      if (desc!='')
+       mealIDs[mealIndex].description = desc;
+      if (file!=null)
+        mealIDs[mealIndex].imageUrl = imageUrl??'';
     });
+    file = null;
+    imageUrl = null;
     notifyListeners();
   }
 
