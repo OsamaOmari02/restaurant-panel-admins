@@ -152,7 +152,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                     ),
                                     SizedBox(height: height * 0.01),
                                     SizedBox(
-                                      width: width * 0.4,
+                                      width: width * 0.5,
                                       child: AutoSizeText(
                                         resData[index]['description'],
                                         maxLines: 3,
@@ -187,7 +187,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                       onPressed: () {
                                         setState(() {
                                           provider.mealID = resData[index].id;
-                                          // provider.filteredFile = resData[index]['imagePath'];
+                                          provider.tempFile = resData[index]['imageUrl'];
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editDrinks');
@@ -236,6 +236,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                         setState(() {
                                                           provider.mealID =
                                                               resData[index].id;
+                                                          provider.tempFile = resData[index]['imageUrl'];
                                                         });
                                                         Navigator.of(context)
                                                             .pop();
@@ -513,7 +514,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                     children: [
                       const Icon(Icons.add_a_photo),
                       const SizedBox(
-                        width: 10,
+                        width: 10
                       ),
                       Text(lanProvider.texts('add image')),
                       if (provider.file != null) SizedBox(width: width * 0.1),
@@ -719,7 +720,7 @@ class _EditDrinksState extends State<EditDrinks> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.add_a_photo,
                                 color: Colors.blue,
                               ),
@@ -736,7 +737,6 @@ class _EditDrinksState extends State<EditDrinks> {
                     ],
                   ),
                 ),
-                actions: [],
               ),
             );
           });
@@ -804,7 +804,7 @@ class _EditDrinksState extends State<EditDrinks> {
                 provider.file == null
                     ? SizedBox(height: 20)
                     : Container(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.25),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.28),
                   height: height * 0.2,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
@@ -814,6 +814,23 @@ class _EditDrinksState extends State<EditDrinks> {
                     ),
                   ),
                 ),
+                if (provider.file==null && provider.tempFile!=null && provider.tempFile!='')
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                    height: height * 0.2,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl: provider.tempFile,
+                        placeholder: (context, url) => const Center(
+                            child:
+                            const CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 10),
                 if (provider.isLoading)
                   const Center(child: const CircularProgressIndicator()),

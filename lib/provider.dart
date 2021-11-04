@@ -230,6 +230,7 @@ class MyProvider with ChangeNotifier {
 
   var file;
   var imageUrl;
+  var tempFile;
   Future<void> addMeal(
       String mealName, String price, String desc, type, tab) async {
     isLoading = true;
@@ -238,7 +239,6 @@ class MyProvider with ChangeNotifier {
       await FirebaseStorage.instance.ref().child(uuid)
           .child('imageName').putFile(file).then((value) async {
         imageUrl = await value.ref.getDownloadURL();
-        print(imageUrl);
       });
     }
     await FirebaseFirestore.instance
@@ -248,8 +248,8 @@ class MyProvider with ChangeNotifier {
       'meal name': mealName,
       'meal price': price,
       'description': desc,
-      'imagePath':file==null?'':Uri.file(file.path).pathSegments.last,
       'resName': authData['name'],
+      'imagePath':file==null?'':Uri.file(file.path).pathSegments.last,
       'imageUrl':file==null?'':imageUrl??'',
     }).then((value) {
       mealIDs.add(Meals(
@@ -259,10 +259,6 @@ class MyProvider with ChangeNotifier {
           description: desc,
           imageUrl:file==null?'':imageUrl??'',
           resName: authData['name']!));
-      imageUrl==null?print('null'):print(imageUrl);
-    }).then((value) {
-      for (int i=0;i<mealIDs.length;i++)
-        print(imageUrl==null?('null'):(imageUrl) + ' done');
     });
     file = null;
     imageUrl = null;
@@ -271,14 +267,15 @@ class MyProvider with ChangeNotifier {
 
   deleteImage() async{
     file = null;
+    tempFile = null;
     notifyListeners();
   }
+
   deleteMeal(type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
-    if (mealIDs[mealIndex].imageUrl!='') {
-      print(" try deleted");
-      await FirebaseStorage.instance.refFromURL(mealIDs[mealIndex].imageUrl)
+    if (tempFile!=null || tempFile!='') {
+      await FirebaseStorage.instance.refFromURL(tempFile)
           .delete();
       print("deleted");
     }

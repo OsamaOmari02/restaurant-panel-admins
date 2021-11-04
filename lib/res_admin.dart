@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurants_panel/drawer.dart';
 import 'package:restaurants_panel/provider.dart';
@@ -112,18 +116,21 @@ class _AdminResState extends State<AdminRes> {
                           child: Container(
                             child: Row(
                               children: [
-                                if (resData[index]['imageUrl']!="")
+                                if (resData[index]['imageUrl'] != "")
                                   Container(
                                     margin: const EdgeInsets.all(7),
-                                    width: width*0.24,
-                                    height: height*0.16,
+                                    width: width * 0.24,
+                                    height: height * 0.16,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
                                         fit: BoxFit.fill,
                                         imageUrl: resData[index]['imageUrl'],
-                                        placeholder: (context, url) => const Center(child: const CircularProgressIndicator()),
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        placeholder: (context, url) => const Center(
+                                            child:
+                                            const CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                       ),
                                     ),
                                   ),
@@ -141,15 +148,14 @@ class _AdminResState extends State<AdminRes> {
                                     ),
                                     SizedBox(height: height * 0.01),
                                     SizedBox(
-                                      width: width*0.4,
+                                      width: width * 0.5,
                                       child: AutoSizeText(
                                         resData[index]['description'],
                                         maxLines: 3,
                                         minFontSize: 12,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey),
+                                            fontSize: 14, color: Colors.grey),
                                       ),
                                     ),
                                     Container(
@@ -177,6 +183,7 @@ class _AdminResState extends State<AdminRes> {
                                       onPressed: () {
                                         setState(() {
                                           provider.mealID = resData[index].id;
+                                          provider.tempFile = resData[index]['imageUrl'];
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editRes');
@@ -190,14 +197,17 @@ class _AdminResState extends State<AdminRes> {
                                           builder: (BuildContext ctx) {
                                             return AlertDialog(
                                               title: Text(
-                                                lanProvider.texts('delete this meal?'),
+                                                lanProvider
+                                                    .texts('delete this meal?'),
                                                 textAlign: lanProvider.isEn
                                                     ? TextAlign.start
                                                     : TextAlign.end,
-                                                style: const TextStyle(fontSize: 23),
+                                                style: const TextStyle(
+                                                    fontSize: 23),
                                               ),
                                               contentPadding:
-                                              EdgeInsets.symmetric(vertical: 7),
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 7),
                                               elevation: 24,
                                               content: Container(
                                                 height: 30,
@@ -206,7 +216,7 @@ class _AdminResState extends State<AdminRes> {
                                               ),
                                               actions: [
                                                 if (provider.isLoading)
-                                                  Center(
+                                                  const Center(
                                                       child:
                                                       const CircularProgressIndicator()),
                                                 if (!provider.isLoading)
@@ -222,34 +232,43 @@ class _AdminResState extends State<AdminRes> {
                                                         setState(() {
                                                           provider.mealID =
                                                               resData[index].id;
+                                                          provider.tempFile = resData[index]['imageUrl'];
                                                         });
-                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context)
+                                                            .pop();
                                                         await provider
-                                                            .deleteMeal('mainRes',"meals");
+                                                            .deleteMeal(
+                                                            'mainRes',
+                                                            "meals");
                                                         Fluttertoast.showToast(
-                                                            msg: lanProvider
-                                                                .texts('Meal Deleted'),
-                                                            toastLength:
-                                                            Toast.LENGTH_SHORT,
+                                                            msg: lanProvider.texts(
+                                                                'Meal Deleted'),
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
                                                             backgroundColor:
                                                             Colors.grey,
-                                                            textColor: Colors.white,
+                                                            textColor:
+                                                            Colors.white,
                                                             fontSize: 16.0);
                                                         setState(() {
-                                                          provider.isLoading = false;
+                                                          provider.isLoading =
+                                                          false;
                                                         });
                                                       } on FirebaseException catch (e) {
                                                         setState(() {
-                                                          provider.isLoading = false;
+                                                          provider.isLoading =
+                                                          false;
                                                         });
-                                                        return dialog(e.message);
+                                                        return dialog(
+                                                            e.message);
                                                       } catch (e) {
                                                         setState(() {
-                                                          provider.isLoading = false;
+                                                          provider.isLoading =
+                                                          false;
                                                         });
                                                         print(e);
-                                                        dialog(lanProvider
-                                                            .texts('Error occurred !'));
+                                                        dialog(lanProvider.texts(
+                                                            'Error occurred !'));
                                                       }
                                                     },
                                                   ),
@@ -257,11 +276,15 @@ class _AdminResState extends State<AdminRes> {
                                                 if (!provider.isLoading)
                                                   InkWell(
                                                       child: Text(
-                                                          lanProvider.texts('cancel?'),
-                                                          style: const TextStyle(
-                                                              fontSize: 19)),
+                                                          lanProvider.texts(
+                                                              'cancel?'),
+                                                          style:
+                                                          const TextStyle(
+                                                              fontSize:
+                                                              19)),
                                                       onTap: () =>
-                                                          Navigator.of(context).pop()),
+                                                          Navigator.of(context)
+                                                              .pop()),
                                               ],
                                             );
                                           }),
@@ -353,6 +376,89 @@ class _AddMealResState extends State<AddMealRes> {
           });
     }
 
+    Future pickImage(ImageSource src) async {
+      try {
+        var image = (await ImagePicker().pickImage(source: src));
+        if (image == null) return;
+        setState(() {
+          provider.file = File(image.path);
+        });
+        Navigator.of(context).pop();
+      } on PlatformException catch (e) {
+        dialog(lanProvider.texts('Error occurred !'));
+        print(e.message);
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    dialog2() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return Directionality(
+              textDirection:
+              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              child: AlertDialog(
+                title: Text(
+                  lanProvider.texts('choose one'),
+                  style: const TextStyle(fontSize: 23),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 7),
+                elevation: 24,
+                content: Container(
+                  height: height * 0.15,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(Icons.add_photo_alternate,
+                                  color: Colors.blue),
+                            ),
+                            Text(
+                              lanProvider.texts('gallery'),
+                              style: const TextStyle(
+                                  fontSize: 19, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        onTap: () => pickImage(ImageSource.gallery),
+                      ),
+                      const SizedBox(width: 11),
+                      InkWell(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.add_a_photo,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            Text(
+                              lanProvider.texts('camera'),
+                              style: const TextStyle(
+                                  fontSize: 19, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        onTap: () => pickImage(ImageSource.camera),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [],
+              ),
+            );
+          });
+    }
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -387,7 +493,37 @@ class _AddMealResState extends State<AddMealRes> {
                   labelText: lanProvider.texts('desc'),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              TextButton(
+                  onPressed: () => dialog2(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.add_a_photo),
+                      const SizedBox(
+                          width: 10
+                      ),
+                      Text(lanProvider.texts('add image')),
+                      if (provider.file != null) SizedBox(width: width * 0.1),
+                      if (provider.file != null)
+                        IconButton(
+                            onPressed: () => provider.deleteImage(),
+                            icon: Icon(Icons.delete, color: Colors.red)),
+                    ],
+                  )),
+              provider.file == null
+                  ? SizedBox(height: 20)
+                  : Container(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                height: height * 0.2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.file(
+                    File(provider.file!.path),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
               if (provider.isLoading)
                 Center(child: const CircularProgressIndicator()),
               const SizedBox(height: 20),
@@ -464,6 +600,8 @@ class _EditResState extends State<EditRes> {
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
     var provider = Provider.of<MyProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -507,6 +645,89 @@ class _EditResState extends State<EditRes> {
           });
     }
 
+    Future pickImage(ImageSource src) async {
+      try {
+        var image = (await ImagePicker().pickImage(source: src));
+        if (image == null) return;
+        setState(() {
+          provider.file = File(image.path);
+        });
+        Navigator.of(context).pop();
+      } on PlatformException catch (e) {
+        dialog(lanProvider.texts('Error occurred !'));
+        print(e.message);
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    dialog2() {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return Directionality(
+              textDirection:
+              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              child: AlertDialog(
+                title: Text(
+                  lanProvider.texts('choose one'),
+                  style: const TextStyle(fontSize: 23),
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 7),
+                elevation: 24,
+                content: Container(
+                  height: height * 0.15,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(Icons.add_photo_alternate,
+                                  color: Colors.blue),
+                            ),
+                            Text(
+                              lanProvider.texts('gallery'),
+                              style: const TextStyle(
+                                  fontSize: 19, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        onTap: () => pickImage(ImageSource.gallery),
+                      ),
+                      const SizedBox(width: 11),
+                      InkWell(
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: const Icon(
+                                Icons.add_a_photo,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            Text(
+                              lanProvider.texts('camera'),
+                              style: const TextStyle(
+                                  fontSize: 19, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        onTap: () => pickImage(ImageSource.camera),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
     return Directionality(
         textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
@@ -516,31 +737,87 @@ class _EditResState extends State<EditRes> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Column(
+            child: ListView(
               children: [
-                const SizedBox(height: 30),
-                TextField(
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),                  child: TextField(
                   keyboardType: TextInputType.text,
                   controller: _mealName,
                   decoration: InputDecoration(
                     labelText: lanProvider.texts('meal name'),
                   ),
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: _price,
-                  decoration: InputDecoration(
-                      labelText: lanProvider.texts('meal price'),
-                      hintText: "ex: 2.00"),
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _description,
-                  decoration: InputDecoration(
-                    labelText: lanProvider.texts('desc'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _price,
+                    decoration: InputDecoration(
+                        labelText: lanProvider.texts('meal price'),
+                        hintText: "ex: 2.00"),
                   ),
                 ),
-                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    controller: _description,
+                    decoration: InputDecoration(
+                      labelText: lanProvider.texts('desc'),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextButton(
+                    onPressed: () => dialog2(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.add_a_photo),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(lanProvider.texts('add image')),
+                        if (provider.file != null) SizedBox(width: width * 0.1),
+                        if (provider.file != null)
+                          IconButton(
+                              onPressed: () => provider.deleteImage(),
+                              icon: Icon(Icons.delete, color: Colors.red)),
+                      ],
+                    )),
+                provider.file == null
+                    ? SizedBox(height: 20)
+                    : Container(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.28),
+                  height: height * 0.2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.file(
+                      File(provider.file!.path),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                if (provider.file==null && provider.tempFile!=null && provider.tempFile!='')
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                    height: height * 0.2,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl: provider.tempFile,
+                        placeholder: (context, url) => const Center(
+                            child:
+                            const CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 10),
                 if (provider.isLoading)
                   const Center(child: const CircularProgressIndicator()),
                 if (!provider.isLoading)
