@@ -378,7 +378,7 @@ class _AddMealHomosState extends State<AddMealHomos> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src));
+        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
           provider.file = File(image.path);
@@ -653,7 +653,7 @@ class _EditHomosState extends State<EditHomos> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src));
+        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
           provider.file = File(image.path);

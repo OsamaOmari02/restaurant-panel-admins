@@ -378,7 +378,7 @@ class _AddMealResState extends State<AddMealRes> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src));
+        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
           provider.file = File(image.path);
@@ -647,7 +647,7 @@ class _EditResState extends State<EditRes> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src));
+        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
           provider.file = File(image.path);

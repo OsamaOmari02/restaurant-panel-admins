@@ -271,13 +271,27 @@ class MyProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // deleteImageFromDB(type,tab) async {
+  //   await FirebaseStorage.instance.refFromURL(tempFile)
+  //       .delete();
+  //   await FirebaseFirestore.instance
+  //       .collection('$type/${authData['name']}/$tab')
+  //       .doc(mealID).update({
+  //     'imageUrl':'',
+  //     'imagePath':'',
+  //   });
+  //   file = null;
+  //   tempFile = null;
+  //   notifyListeners();
+  // }
+
+
   deleteMeal(type, tab) async {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     if (tempFile!=null || tempFile!='') {
       await FirebaseStorage.instance.refFromURL(tempFile)
           .delete();
-      print("deleted");
     }
     await FirebaseFirestore.instance
         .collection('$type/${authData['name']}/$tab')

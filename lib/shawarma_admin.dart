@@ -51,7 +51,7 @@ class _AdminShawarmaState extends State<AdminShawarma> {
                 ),
               ],
               centerTitle: true,
-              title: Text(provider.authData['name']??""),
+              title: Text(provider.authData['name'] ?? ""),
               bottom: TabBar(
                 tabs: [
                   Tab(text: lanProvider.texts('tab1')),
@@ -149,9 +149,10 @@ class _EditShawarmaState extends State<EditShawarma> {
             );
           });
     }
+
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src));
+        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
           provider.file = File(image.path);
@@ -171,7 +172,7 @@ class _EditShawarmaState extends State<EditShawarma> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   lanProvider.texts('choose one'),
@@ -245,13 +246,14 @@ class _EditShawarmaState extends State<EditShawarma> {
               children: [
                 const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),                  child: TextField(
-                  keyboardType: TextInputType.text,
-                  controller: _mealName,
-                  decoration: InputDecoration(
-                    labelText: lanProvider.texts('meal name'),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    controller: _mealName,
+                    decoration: InputDecoration(
+                      labelText: lanProvider.texts('meal name'),
+                    ),
                   ),
-                ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -294,17 +296,19 @@ class _EditShawarmaState extends State<EditShawarma> {
                 provider.file == null
                     ? SizedBox(height: 20)
                     : Container(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.28),
-                  height: height * 0.2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.file(
-                      File(provider.file!.path),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                if (provider.file==null && provider.tempFile!=null && provider.tempFile!='')
+                        padding: EdgeInsets.symmetric(horizontal: width * 0.28),
+                        height: height * 0.2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.file(
+                            File(provider.file!.path),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                if (provider.file == null &&
+                    provider.tempFile != null &&
+                    provider.tempFile != '')
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: width * 0.3),
                     height: height * 0.2,
@@ -314,10 +318,9 @@ class _EditShawarmaState extends State<EditShawarma> {
                         fit: BoxFit.fill,
                         imageUrl: provider.tempFile,
                         placeholder: (context, url) => const Center(
-                            child:
-                            const CircularProgressIndicator()),
+                            child: const CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -401,7 +404,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                   Text(
                     title,
                     textAlign:
-                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -429,7 +432,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src));
+        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
           provider.file = File(image.path);
@@ -449,7 +452,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   lanProvider.texts('choose one'),
@@ -560,9 +563,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.add_a_photo),
-                      const SizedBox(
-                          width: 10
-                      ),
+                      const SizedBox(width: 10),
                       Text(lanProvider.texts('add image')),
                       if (provider.file != null) SizedBox(width: width * 0.1),
                       if (provider.file != null)
@@ -574,16 +575,16 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
               provider.file == null
                   ? SizedBox(height: 20)
                   : Container(
-                padding: EdgeInsets.symmetric(horizontal: width * 0.3),
-                height: height * 0.2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.file(
-                    File(provider.file!.path),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
+                      padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                      height: height * 0.2,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Image.file(
+                          File(provider.file!.path),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
               if (provider.isLoading)
                 Center(child: const CircularProgressIndicator()),
               if (!provider.isLoading)
@@ -597,7 +598,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
               if (!provider.isLoading)
                 Container(
                   height: height * 0.06,
-                  padding: EdgeInsets.symmetric(horizontal: width*0.2),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.2),
                   child: ElevatedButton(
                     onPressed: () async {
                       try {
@@ -641,7 +642,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
               if (!provider.isLoading)
                 Container(
                   height: height * 0.06,
-                  padding: EdgeInsets.symmetric(horizontal: width*0.2),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.2),
                   child: ElevatedButton(
                       onPressed: () async {
                         try {
@@ -678,7 +679,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
               if (!provider.isLoading)
                 Container(
                   height: height * 0.06,
-                  padding: EdgeInsets.symmetric(horizontal: width*0.2),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.2),
                   child: ElevatedButton(
                       onPressed: () async {
                         try {
@@ -769,7 +770,7 @@ class _FirstAdminState extends State<FirstAdmin> {
         builder: (ctx, snapshot) {
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data?.docs.length??0,
+              itemCount: snapshot.data?.docs.length ?? 0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -793,9 +794,9 @@ class _FirstAdminState extends State<FirstAdmin> {
                                       imageUrl: resData[index]['imageUrl'],
                                       placeholder: (context, url) => const Center(
                                           child:
-                                          const CircularProgressIndicator()),
+                                              const CircularProgressIndicator()),
                                       errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                 ),
@@ -848,7 +849,8 @@ class _FirstAdminState extends State<FirstAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile = resData[index]['imageUrl'];
+                                        provider.tempFile =
+                                            resData[index]['imageUrl'];
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -867,10 +869,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                               textAlign: lanProvider.isEn
                                                   ? TextAlign.start
                                                   : TextAlign.end,
-                                              style: const TextStyle(fontSize: 23),
+                                              style:
+                                                  const TextStyle(fontSize: 23),
                                             ),
                                             contentPadding:
-                                                EdgeInsets.symmetric(vertical: 7),
+                                                EdgeInsets.symmetric(
+                                                    vertical: 7),
                                             elevation: 24,
                                             content: Container(
                                               height: 30,
@@ -895,32 +899,41 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
+                                                        provider.tempFile =
+                                                            resData[index]
+                                                                ['imageUrl'];
                                                       });
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
                                                       await provider.deleteMeal(
-                                                          "shawarma", 'shawarma');
+                                                          "shawarma",
+                                                          'shawarma');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
-                                                          toastLength:
-                                                              Toast.LENGTH_SHORT,
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
                                                           backgroundColor:
                                                               Colors.grey,
-                                                          textColor: Colors.white,
+                                                          textColor:
+                                                              Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                       dialog(lanProvider.texts(
                                                           'Error occurred !'));
                                                       print(e.message);
                                                     } catch (e) {
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                       print(e);
                                                       dialog(lanProvider.texts(
@@ -1015,7 +1028,7 @@ class _SecondAdminState extends State<SecondAdmin> {
             return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data?.docs.length??0,
+              itemCount: snapshot.data?.docs.length ?? 0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -1039,9 +1052,9 @@ class _SecondAdminState extends State<SecondAdmin> {
                                       imageUrl: resData[index]['imageUrl'],
                                       placeholder: (context, url) => const Center(
                                           child:
-                                          const CircularProgressIndicator()),
+                                              const CircularProgressIndicator()),
                                       errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                 ),
@@ -1094,7 +1107,8 @@ class _SecondAdminState extends State<SecondAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile = resData[index]['imageUrl'];
+                                        provider.tempFile =
+                                            resData[index]['imageUrl'];
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -1113,7 +1127,8 @@ class _SecondAdminState extends State<SecondAdmin> {
                                               textAlign: lanProvider.isEn
                                                   ? TextAlign.start
                                                   : TextAlign.end,
-                                              style: const TextStyle(fontSize: 23),
+                                              style:
+                                                  const TextStyle(fontSize: 23),
                                             ),
                                             contentPadding:
                                                 const EdgeInsets.symmetric(
@@ -1142,32 +1157,40 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
+                                                        provider.tempFile =
+                                                            resData[index]
+                                                                ['imageUrl'];
                                                       });
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
                                                       await provider.deleteMeal(
                                                           "shawarma", 'snacks');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
-                                                          toastLength:
-                                                              Toast.LENGTH_SHORT,
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
                                                           backgroundColor:
                                                               Colors.grey,
-                                                          textColor: Colors.white,
+                                                          textColor:
+                                                              Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                       dialog(lanProvider.texts(
                                                           'Error occurred !'));
                                                       print(e.message);
                                                     } catch (e) {
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                       print(e);
                                                       dialog(lanProvider.texts(
@@ -1262,7 +1285,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
             return Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
-              itemCount: snapshot.data?.docs.length??0,
+              itemCount: snapshot.data?.docs.length ?? 0,
               itemBuilder: (context, int index) {
                 var resData = snapshot.data!.docs;
                 return Card(
@@ -1286,9 +1309,9 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                       imageUrl: resData[index]['imageUrl'],
                                       placeholder: (context, url) => const Center(
                                           child:
-                                          const CircularProgressIndicator()),
+                                              const CircularProgressIndicator()),
                                       errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                 ),
@@ -1341,7 +1364,8 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile = resData[index]['imageUrl'];
+                                        provider.tempFile =
+                                            resData[index]['imageUrl'];
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -1360,7 +1384,8 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                               textAlign: lanProvider.isEn
                                                   ? TextAlign.start
                                                   : TextAlign.end,
-                                              style: const TextStyle(fontSize: 23),
+                                              style:
+                                                  const TextStyle(fontSize: 23),
                                             ),
                                             contentPadding:
                                                 const EdgeInsets.symmetric(
@@ -1389,32 +1414,40 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
+                                                        provider.tempFile =
+                                                            resData[index]
+                                                                ['imageUrl'];
                                                       });
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
                                                       await provider.deleteMeal(
                                                           "shawarma", 'others');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
-                                                          toastLength:
-                                                              Toast.LENGTH_SHORT,
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
                                                           backgroundColor:
                                                               Colors.grey,
-                                                          textColor: Colors.white,
+                                                          textColor:
+                                                              Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                       dialog(lanProvider.texts(
                                                           'Error occurred !'));
                                                       print(e.message);
                                                     } catch (e) {
                                                       setState(() {
-                                                        provider.isLoading = false;
+                                                        provider.isLoading =
+                                                            false;
                                                       });
                                                       print(e);
                                                       dialog(lanProvider.texts(
