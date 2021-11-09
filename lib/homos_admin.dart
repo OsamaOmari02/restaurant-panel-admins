@@ -19,16 +19,18 @@ class AdminHomos extends StatefulWidget {
   _AdminHomosState createState() => _AdminHomosState();
 }
 
-
 class _AdminHomosState extends State<AdminHomos> {
+    var tab1h;
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
         Provider.of<MyProvider>(context,listen: false).fetch();
       Provider.of<MyProvider>(context, listen: false).fetchMealsHomos(
-          Provider.of<MyProvider>(context, listen: false).authData['name']
-      );
+          Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
+    tab1h = FirebaseFirestore.instance
+        .collection('/homos/${Provider.of<MyProvider>(context,listen: false).authData['name']}/meals')
+        .snapshots();
     super.initState();
   }
 
@@ -96,12 +98,10 @@ class _AdminHomosState extends State<AdminHomos> {
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/homos/${provider.authData['name']}/meals')
-              .snapshots(),
+          stream: tab1h,
           builder: (ctx, snapshot) {
-            // if (snapshot.connectionState==ConnectionState.waiting)
-            //   return Center(child: CircularProgressIndicator());
+            if (snapshot.connectionState==ConnectionState.waiting)
+              return const Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
                 itemCount: snapshot.data?.docs.length??0,
@@ -183,7 +183,11 @@ class _AdminHomosState extends State<AdminHomos> {
                                       onPressed: () {
                                         setState(() {
                                           provider.mealID = resData[index].id;
-                                          provider.tempFile = resData[index]['imageUrl'];
+                                          if (resData[index]['imageUrl']!='')
+                                            provider.tempFile = resData[index]
+                                            ['imageUrl'];
+                                          else
+                                            provider.tempFile = null;
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editHomos');
@@ -232,7 +236,11 @@ class _AdminHomosState extends State<AdminHomos> {
                                                         setState(() {
                                                           provider.mealID =
                                                               resData[index].id;
-                                                          provider.tempFile = resData[index]['imageUrl'];
+                                                          if (resData[index]['imageUrl']!='')
+                                                            provider.tempFile = resData[index]
+                                                            ['imageUrl'];
+                                                          else
+                                                            provider.tempFile = null;
                                                         });
                                                         Navigator.of(context)
                                                             .pop();

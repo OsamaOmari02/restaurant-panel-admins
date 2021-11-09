@@ -21,16 +21,15 @@ class AdminSweets extends StatefulWidget {
   _AdminSweetsState createState() => _AdminSweetsState();
 }
 
-
 class _AdminSweetsState extends State<AdminSweets> {
+
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context, listen: false).tabIndex = "kunafeh";
       Provider.of<MyProvider>(context,listen: false).fetch();
       Provider.of<MyProvider>(context, listen: false).fetchMealsSweets(
-          Provider.of<MyProvider>(context, listen: false).authData['name']
-      );
+          Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
     super.initState();
   }
@@ -728,6 +727,16 @@ class FirstAdmin extends StatefulWidget {
 }
 
 class _FirstAdminState extends State<FirstAdmin> {
+
+  var tab1s;
+  @override
+  void initState() {
+    tab1s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/kunafeh')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -765,10 +774,12 @@ class _FirstAdminState extends State<FirstAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/sweets/${provider.authData['name']}/kunafeh')
-            .snapshots(),
+        stream: tab1s,
         builder: (ctx, snapshot) {
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length??0,
@@ -850,8 +861,11 @@ class _FirstAdminState extends State<FirstAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile =
-                                        resData[index]['imageUrl'];
+                                        if (resData[index]['imageUrl']!='')
+                                          provider.tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          provider.tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editSweets');
@@ -900,9 +914,11 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
-                                                        provider.tempFile =
-                                                        resData[index]
-                                                        ['imageUrl'];
+                                                        if (resData[index]['imageUrl']!='')
+                                                          provider.tempFile = resData[index]
+                                                          ['imageUrl'];
+                                                        else
+                                                          provider.tempFile = null;
                                                       });
                                                       Navigator.of(context).pop();
                                                       await provider
@@ -974,6 +990,16 @@ class SecondAdmin extends StatefulWidget {
 }
 
 class _SecondAdminState extends State<SecondAdmin> {
+
+  var tab2s;
+  @override
+  void initState() {
+    tab2s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/cake')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -1011,10 +1037,12 @@ class _SecondAdminState extends State<SecondAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/sweets/${provider.authData['name']}/cake')
-            .snapshots(),
+        stream: tab2s,
         builder: (ctx, snapshot) {
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length??0,
@@ -1096,8 +1124,11 @@ class _SecondAdminState extends State<SecondAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile =
-                                        resData[index]['imageUrl'];
+                                        if (resData[index]['imageUrl']!='')
+                                          provider.tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          provider.tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editSweets');
@@ -1146,9 +1177,11 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
-                                                        provider.tempFile =
-                                                        resData[index]
-                                                        ['imageUrl'];
+                                                        if (resData[index]['imageUrl']!='')
+                                                          provider.tempFile = resData[index]
+                                                          ['imageUrl'];
+                                                        else
+                                                          provider.tempFile = null;
                                                       });
                                                       Navigator.of(context).pop();
                                                       await provider
@@ -1219,6 +1252,16 @@ class ThirdAdmin extends StatefulWidget {
 }
 
 class _ThirdAdminState extends State<ThirdAdmin> {
+
+    var tab3s;
+  @override
+  void initState() {
+    tab3s = FirebaseFirestore.instance
+        .collection('/sweets/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/others')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -1256,10 +1299,12 @@ class _ThirdAdminState extends State<ThirdAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/sweets/${provider.authData['name']}/others')
-            .snapshots(),
+        stream: tab3s,
         builder: (ctx, snapshot) {
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length??0,
@@ -1341,8 +1386,11 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile =
-                                        resData[index]['imageUrl'];
+                                        if (resData[index]['imageUrl']!='')
+                                          provider.tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          provider.tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editSweets');
@@ -1391,9 +1439,11 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
-                                                        provider.tempFile =
-                                                        resData[index]
-                                                        ['imageUrl'];
+                                                        if (resData[index]['imageUrl']!='')
+                                                          provider.tempFile = resData[index]
+                                                          ['imageUrl'];
+                                                        else
+                                                          provider.tempFile = null;
                                                       });
                                                       Navigator.of(context).pop();
                                                       await provider

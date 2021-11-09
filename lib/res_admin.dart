@@ -19,16 +19,18 @@ class AdminRes extends StatefulWidget {
   _AdminResState createState() => _AdminResState();
 }
 
-
 class _AdminResState extends State<AdminRes> {
+    var tab1r;
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<MyProvider>(context,listen: false).fetch();
       Provider.of<MyProvider>(context, listen: false).fetchMealsMain(
-          Provider.of<MyProvider>(context, listen: false).authData['name']
-      );
+          Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
+    tab1r = FirebaseFirestore.instance
+        .collection('mainRes/${Provider.of<MyProvider>(context,listen: false).authData['name']}/meals')
+        .snapshots();
     super.initState();
   }
 
@@ -96,9 +98,7 @@ class _AdminResState extends State<AdminRes> {
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('mainRes/${provider.authData['name']}/meals')
-              .snapshots(),
+          stream: tab1r,
           builder: (ctx, snapshot) {
             return Scrollbar(
               child: ListView.builder(
@@ -183,7 +183,11 @@ class _AdminResState extends State<AdminRes> {
                                       onPressed: () {
                                         setState(() {
                                           provider.mealID = resData[index].id;
-                                          provider.tempFile = resData[index]['imageUrl'];
+                                          if (resData[index]['imageUrl']!='')
+                                            provider.tempFile = resData[index]
+                                            ['imageUrl'];
+                                          else
+                                            provider.tempFile = null;
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editRes');
@@ -232,7 +236,11 @@ class _AdminResState extends State<AdminRes> {
                                                         setState(() {
                                                           provider.mealID =
                                                               resData[index].id;
-                                                          provider.tempFile = resData[index]['imageUrl'];
+                                                          if (resData[index]['imageUrl']!='')
+                                                            provider.tempFile = resData[index]
+                                                            ['imageUrl'];
+                                                          else
+                                                            provider.tempFile = null;
                                                         });
                                                         Navigator.of(context)
                                                             .pop();

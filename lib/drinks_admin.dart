@@ -20,6 +20,7 @@ class AdminDrinks extends StatefulWidget {
 }
 
 class _AdminDrinksState extends State<AdminDrinks> {
+  var tab1d;
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
@@ -27,6 +28,9 @@ class _AdminDrinksState extends State<AdminDrinks> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
+    tab1d = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
+        .snapshots();
     super.initState();
   }
 
@@ -100,12 +104,10 @@ class _AdminDrinksState extends State<AdminDrinks> {
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('/drinks/${provider.authData['name']}/meals')
-              .snapshots(),
+          stream: tab1d,
           builder: (ctx, snapshot) {
-            // if (snapshot.connectionState==ConnectionState.waiting)
-            //   return Center(child: CircularProgressIndicator());
+            if (snapshot.connectionState==ConnectionState.waiting)
+              return const Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
                 itemCount: snapshot.data?.docs.length ?? 0,
@@ -187,7 +189,11 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                       onPressed: () {
                                         setState(() {
                                           provider.mealID = resData[index].id;
-                                          provider.tempFile = resData[index]['imageUrl'];
+                                          if (resData[index]['imageUrl']!='')
+                                            provider.tempFile = resData[index]
+                                            ['imageUrl'];
+                                          else
+                                            provider.tempFile = null;
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editDrinks');
@@ -236,7 +242,11 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                         setState(() {
                                                           provider.mealID =
                                                               resData[index].id;
-                                                          provider.tempFile = resData[index]['imageUrl'];
+                                                          if (resData[index]['imageUrl']!='')
+                                                            provider.tempFile = resData[index]
+                                                            ['imageUrl'];
+                                                          else
+                                                            provider.tempFile = null;
                                                         });
                                                         Navigator.of(context)
                                                             .pop();

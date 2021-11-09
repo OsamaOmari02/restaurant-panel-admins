@@ -19,8 +19,11 @@ class AdminShawarma extends StatefulWidget {
   @override
   _AdminShawarmaState createState() => _AdminShawarmaState();
 }
-
+  var tab1sh;
+  var tab2sh;
+  var tab3sh;
 class _AdminShawarmaState extends State<AdminShawarma> {
+
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
@@ -727,6 +730,15 @@ class FirstAdmin extends StatefulWidget {
 }
 
 class _FirstAdminState extends State<FirstAdmin> {
+
+  @override
+  void initState() {
+    tab1sh = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/shawarma')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -764,10 +776,12 @@ class _FirstAdminState extends State<FirstAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/shawarma/${provider.authData['name']}/shawarma')
-            .snapshots(),
+        stream: tab1sh,
         builder: (ctx, snapshot) {
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length ?? 0,
@@ -849,8 +863,11 @@ class _FirstAdminState extends State<FirstAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile =
-                                            resData[index]['imageUrl'];
+                                        if (resData[index]['imageUrl']!='')
+                                          provider.tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          provider.tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -899,9 +916,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
+                                                        if (resData[index]['imageUrl']!='')
                                                         provider.tempFile =
                                                             resData[index]
                                                                 ['imageUrl'];
+                                                        else
+                                                          provider.tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
@@ -983,6 +1003,15 @@ class SecondAdmin extends StatefulWidget {
 }
 
 class _SecondAdminState extends State<SecondAdmin> {
+
+  @override
+  void initState() {
+    tab2sh = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/snacks')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -1020,12 +1049,12 @@ class _SecondAdminState extends State<SecondAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/shawarma/${provider.authData['name']}/snacks')
-            .snapshots(),
+        stream: tab2sh,
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: const CircularProgressIndicator());
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length ?? 0,
@@ -1107,8 +1136,11 @@ class _SecondAdminState extends State<SecondAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile =
-                                            resData[index]['imageUrl'];
+                                        if (resData[index]['imageUrl']!='')
+                                          provider.tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          provider.tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -1157,9 +1189,11 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
-                                                        provider.tempFile =
-                                                            resData[index]
-                                                                ['imageUrl'];
+                                                        if (resData[index]['imageUrl']!='')
+                                                          provider.tempFile = resData[index]
+                                                          ['imageUrl'];
+                                                        else
+                                                          provider.tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
@@ -1240,6 +1274,15 @@ class ThirdAdmin extends StatefulWidget {
 }
 
 class _ThirdAdminState extends State<ThirdAdmin> {
+
+  @override
+  void initState() {
+    tab3sh = FirebaseFirestore.instance
+        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/others')
+        .snapshots();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
@@ -1277,12 +1320,12 @@ class _ThirdAdminState extends State<ThirdAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('/shawarma/${provider.authData['name']}/others')
-            .snapshots(),
+        stream: tab3sh,
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: const CircularProgressIndicator());
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
           return Scrollbar(
             child: ListView.builder(
               itemCount: snapshot.data?.docs.length ?? 0,
@@ -1364,8 +1407,11 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                     onPressed: () {
                                       setState(() {
                                         provider.mealID = resData[index].id;
-                                        provider.tempFile =
-                                            resData[index]['imageUrl'];
+                                        if (resData[index]['imageUrl']!='')
+                                          provider.tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          provider.tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -1414,9 +1460,11 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                       setState(() {
                                                         provider.mealID =
                                                             resData[index].id;
-                                                        provider.tempFile =
-                                                            resData[index]
-                                                                ['imageUrl'];
+                                                        if (resData[index]['imageUrl']!='')
+                                                          provider.tempFile = resData[index]
+                                                          ['imageUrl'];
+                                                        else
+                                                          provider.tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
