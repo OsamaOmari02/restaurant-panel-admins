@@ -15,9 +15,16 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
 
+  var stream;
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
+    stream = FirebaseFirestore.instance
+        .collection(
+        'restaurants orders/${Provider.of<MyProvider>(context, listen: false)
+            .authData['name']}/orders')
+        .orderBy('date', descending: true)
+        .snapshots();
     super.initState();
   }
 
@@ -76,11 +83,7 @@ class _OrdersState extends State<Orders> {
           ],
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection(
-                  'restaurants orders/${provider.authData['name']}/orders')
-              .orderBy('date', descending: true)
-              .snapshots(),
+          stream: stream,
           builder: (ctx, snapshot) {
             if (snapshot.connectionState==ConnectionState.waiting)
               return const Center(child: const CircularProgressIndicator());
