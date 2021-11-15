@@ -733,10 +733,12 @@ class _FirstAdminState extends State<FirstAdmin> {
 
   @override
   void initState() {
-    tab1sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/shawarma')
-        .snapshots();
+    setState(() {
+      tab1sh = FirebaseFirestore.instance
+          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+          .authData['name']}/shawarma')
+          .snapshots();
+    });
     super.initState();
   }
   @override
@@ -1006,10 +1008,12 @@ class _SecondAdminState extends State<SecondAdmin> {
 
   @override
   void initState() {
-    tab2sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/snacks')
-        .snapshots();
+    setState(() {
+      tab2sh = FirebaseFirestore.instance
+          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+          .authData['name']}/snacks')
+          .snapshots();
+    });
     super.initState();
   }
   @override
@@ -1277,10 +1281,12 @@ class _ThirdAdminState extends State<ThirdAdmin> {
 
   @override
   void initState() {
-    tab3sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/others')
-        .snapshots();
+    setState(() {
+      tab3sh = FirebaseFirestore.instance
+          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
+          .authData['name']}/others')
+          .snapshots();
+    });
     super.initState();
   }
   @override

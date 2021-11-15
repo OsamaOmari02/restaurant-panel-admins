@@ -19,12 +19,14 @@ class _OrdersState extends State<Orders> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
-    stream = FirebaseFirestore.instance
-        .collection(
-        'restaurants orders/${Provider.of<MyProvider>(context, listen: false)
-            .authData['name']}/orders')
-        .orderBy('date', descending: true)
-        .snapshots();
+    setState(() {
+      stream = FirebaseFirestore.instance
+          .collection(
+          'restaurants orders/${Provider.of<MyProvider>(context, listen: false)
+              .authData['name']}/orders')
+          .orderBy('date', descending: true)
+          .snapshots();
+    });
     super.initState();
   }
 

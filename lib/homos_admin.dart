@@ -28,9 +28,12 @@ class _AdminHomosState extends State<AdminHomos> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsHomos(
           Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
-    tab1h = FirebaseFirestore.instance
-        .collection('/homos/${Provider.of<MyProvider>(context,listen: false).authData['name']}/meals')
-        .snapshots();
+    setState(() {
+      tab1h = FirebaseFirestore.instance
+          .collection('/homos/${Provider.of<MyProvider>(context,listen: false).authData['name']}/meals')
+          .snapshots();
+
+    });
     super.initState();
   }
 

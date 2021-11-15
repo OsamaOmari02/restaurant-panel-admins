@@ -28,9 +28,11 @@ class _AdminDrinksState extends State<AdminDrinks> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
-    tab1d = FirebaseFirestore.instance
-        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
-        .snapshots();
+    setState(() {
+      tab1d = FirebaseFirestore.instance
+          .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
+          .snapshots();
+    });
     super.initState();
   }
 
