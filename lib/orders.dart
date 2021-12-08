@@ -19,20 +19,17 @@ class _OrdersState extends State<Orders> {
   @override
   void initState() {
     Provider.of<MyProvider>(context, listen: false).detailedCart.clear();
-    setState(() {
       stream = FirebaseFirestore.instance
           .collection(
           'restaurants orders/${Provider.of<MyProvider>(context, listen: false)
               .authData['name']}/orders')
           .orderBy('date', descending: true)
           .snapshots();
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     dialog2() {
       return showDialog(
@@ -105,18 +102,18 @@ class _OrdersState extends State<Orders> {
                               child: ListTile(
                                 onTap: () {
                                   setState(() {
-                                    provider.details['name'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['name'] =
                                         resData[index]['name'];
-                                    provider.details['total'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['total'] =
                                         resData[index]['total'].toString();
-                                    provider.details['note'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['note'] =
                                         resData[index]['note'];
-                                    provider.details['length'] =
+                                    Provider.of<MyProvider>(context,listen: false).details['length'] =
                                         resData[index]['length'].toString();
                                     for (int i = 0;
                                         i < int.parse(resData[index]['length']);
                                         i++)
-                                      provider.detailedCart.add(FoodCart(
+                                      Provider.of<MyProvider>(context,listen: false).detailedCart.add(FoodCart(
                                           mealName: resData[index]['meals'][i]
                                               ['meal name'],
                                           mealPrice: resData[index]['meals'][i]
@@ -133,7 +130,7 @@ class _OrdersState extends State<Orders> {
                                   value: resData[index]['isChecked'],
                                   onChanged: (bool? value) async {
                                     await FirebaseFirestore.instance
-                                        .collection('restaurants orders/${provider.authData['name']}/orders')
+                                        .collection('restaurants orders/${Provider.of<MyProvider>(context,listen: false).authData['name']}/orders')
                                         .doc(resData[index].id)
                                         .update({
                                       'isChecked': value,
@@ -148,7 +145,7 @@ class _OrdersState extends State<Orders> {
                                 ),
                                 subtitle: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(provider
+                                    child: Text(Provider.of<MyProvider>(context,listen: false)
                                         .dateTime(resData[index]['date']))),
                               ),
                             ),

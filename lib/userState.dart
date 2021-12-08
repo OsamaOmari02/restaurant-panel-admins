@@ -21,9 +21,7 @@ class _UserStateState extends State<UserState> {
   @override
   void initState() {
     Provider.of<MyProvider>(context,listen: false).fetch();
-    setState(() {
       stream = FirebaseAuth.instance.authStateChanges();
-    });
     super.initState();
   }
   @override

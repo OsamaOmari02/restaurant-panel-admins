@@ -17,10 +17,9 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    // double width = MediaQuery.of(context).size.width;
+    // double height = MediaQuery.of(context).size.height;
     dialog(title) {
       return showDialog(
           context: context,
@@ -62,12 +61,12 @@ class _DetailsState extends State<Details> {
           padding: const EdgeInsets.all(8.0),
           children: [
             Text(
-              provider.details['name']!,
+              Provider.of<MyProvider>(context).details['name']!,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            for (int i = 0; i < provider.detailedCart.length; i++)
+            for (int i = 0; i < Provider.of<MyProvider>(context).detailedCart.length; i++)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -75,15 +74,15 @@ class _DetailsState extends State<Details> {
                       borderRadius: BorderRadius.circular(12)),
                   elevation: 3.0,
                   child: ListTile(
-                    title: Text(provider.detailedCart[i].mealName),
-                    subtitle: Text(provider.detailedCart[i].description +
+                    title: Text(Provider.of<MyProvider>(context).detailedCart[i].mealName),
+                    subtitle: Text(Provider.of<MyProvider>(context).detailedCart[i].description +
                         "\n" +
                         lanProvider.texts('meal price : ') +
-                        provider.detailedCart[i].mealPrice.toString() + " " +
+                        Provider.of<MyProvider>(context).detailedCart[i].mealPrice.toString() + " " +
                         lanProvider.texts('jd') +
                         "\n" +
                         lanProvider.texts('quantity : ') +
-                        provider.detailedCart[i].quantity.toString()),
+                        Provider.of<MyProvider>(context).detailedCart[i].quantity.toString()),
                     isThreeLine: true,
                   ),
                 ),
@@ -97,7 +96,7 @@ class _DetailsState extends State<Details> {
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
-                  provider.details['total'].toString() + " ",
+                  Provider.of<MyProvider>(context).details['total'].toString() + " ",
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -115,7 +114,7 @@ class _DetailsState extends State<Details> {
                   child: Row(
                     children: [
                       Text(lanProvider.texts('notes')),
-                      Expanded(child: Text(provider.details['note']!)),
+                      Expanded(child: Text(Provider.of<MyProvider>(context).details['note']!)),
                     ],
                   ),
                 ),

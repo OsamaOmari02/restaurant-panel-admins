@@ -37,7 +37,6 @@ class _AdminShawarmaState extends State<AdminShawarma> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     return Directionality(
         textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -54,7 +53,7 @@ class _AdminShawarmaState extends State<AdminShawarma> {
                 ),
               ],
               centerTitle: true,
-              title: Text(provider.authData['name'] ?? ""),
+              title: Text(Provider.of<MyProvider>(context).authData['name'] ?? ""),
               bottom: TabBar(
                 tabs: [
                   Tab(text: lanProvider.texts('tab1')),
@@ -63,11 +62,11 @@ class _AdminShawarmaState extends State<AdminShawarma> {
                 ],
                 onTap: (index) {
                   if (index == 0)
-                    provider.tabIndex = "shawarma";
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "shawarma";
                   else if (index == 1)
-                    provider.tabIndex = "snacks";
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "snacks";
                   else
-                    provider.tabIndex = "others";
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "others";
                 },
               ),
             ),
@@ -107,7 +106,6 @@ class _EditShawarmaState extends State<EditShawarma> {
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
@@ -158,7 +156,7 @@ class _EditShawarmaState extends State<EditShawarma> {
         var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
-          provider.file = File(image.path);
+          Provider.of<MyProvider>(context,listen: false).file = File(image.path);
         });
         Navigator.of(context).pop();
       } on PlatformException catch (e) {
@@ -289,14 +287,14 @@ class _EditShawarmaState extends State<EditShawarma> {
                           width: 10,
                         ),
                         Text(lanProvider.texts('add image')),
-                        if (provider.file != null) SizedBox(width: width * 0.1),
-                        if (provider.file != null)
+                        if (Provider.of<MyProvider>(context).file != null) SizedBox(width: width * 0.1),
+                        if (Provider.of<MyProvider>(context).file != null)
                           IconButton(
-                              onPressed: () => provider.deleteImage(),
+                              onPressed: () => Provider.of<MyProvider>(context,listen: false).deleteImage(),
                               icon: Icon(Icons.delete, color: Colors.red)),
                       ],
                     )),
-                provider.file == null
+                Provider.of<MyProvider>(context).file == null
                     ? SizedBox(height: 20)
                     : Container(
                         padding: EdgeInsets.symmetric(horizontal: width * 0.28),
@@ -304,14 +302,14 @@ class _EditShawarmaState extends State<EditShawarma> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: Image.file(
-                            File(provider.file!.path),
+                            File(Provider.of<MyProvider>(context).file!.path),
                             fit: BoxFit.fill,
                           ),
                         ),
                       ),
-                if (provider.file == null &&
-                    provider.tempFile != null &&
-                    provider.tempFile != '')
+                if (Provider.of<MyProvider>(context).file == null &&
+                    Provider.of<MyProvider>(context).tempFile != null &&
+                    Provider.of<MyProvider>(context).tempFile != '')
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: width * 0.3),
                     height: height * 0.2,
@@ -319,7 +317,7 @@ class _EditShawarmaState extends State<EditShawarma> {
                       borderRadius: BorderRadius.circular(10.0),
                       child: CachedNetworkImage(
                         fit: BoxFit.fill,
-                        imageUrl: provider.tempFile,
+                        imageUrl: Provider.of<MyProvider>(context).tempFile,
                         placeholder: (context, url) => const Center(
                             child: const CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
@@ -328,32 +326,32 @@ class _EditShawarmaState extends State<EditShawarma> {
                     ),
                   ),
                 const SizedBox(height: 10),
-                if (provider.isLoading)
+                if (Provider.of<MyProvider>(context).isLoading)
                   const Center(child: const CircularProgressIndicator()),
-                if (!provider.isLoading)
+                if (!Provider.of<MyProvider>(context).isLoading)
                   ElevatedButton(
                       onPressed: () async {
                         try {
                           if (_mealName.text.isEmpty || _price.text.isEmpty)
                             return dialog(lanProvider.texts('empty field'));
                           setState(() {
-                            provider.isLoading = true;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await provider.editMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', provider.tabIndex);
+                          await Provider.of<MyProvider>(context,listen: false).editMeal(_mealName.text, _price.text,
+                              _description.text, 'shawarma', Provider.of<MyProvider>(context,listen: false).tabIndex);
                           Navigator.of(context).pop();
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                         } on FirebaseException catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           dialog(e.message);
                           print(e);
                         } catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           dialog(lanProvider.texts('Error occurred !'));
                           print(e);
@@ -389,7 +387,6 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
@@ -438,7 +435,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
         var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
-          provider.file = File(image.path);
+          Provider.of<MyProvider>(context,listen: false).file = File(image.path);
         });
         Navigator.of(context).pop();
       } on PlatformException catch (e) {
@@ -568,14 +565,14 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                       const Icon(Icons.add_a_photo),
                       const SizedBox(width: 10),
                       Text(lanProvider.texts('add image')),
-                      if (provider.file != null) SizedBox(width: width * 0.1),
-                      if (provider.file != null)
+                      if (Provider.of<MyProvider>(context).file != null) SizedBox(width: width * 0.1),
+                      if (Provider.of<MyProvider>(context).file != null)
                         IconButton(
-                            onPressed: () => provider.deleteImage(),
+                            onPressed: () => Provider.of<MyProvider>(context,listen: false).deleteImage(),
                             icon: Icon(Icons.delete, color: Colors.red)),
                     ],
                   )),
-              provider.file == null
+              Provider.of<MyProvider>(context).file == null
                   ? SizedBox(height: 20)
                   : Container(
                       padding: EdgeInsets.symmetric(horizontal: width * 0.3),
@@ -583,14 +580,14 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: Image.file(
-                          File(provider.file!.path),
+                          File(Provider.of<MyProvider>(context).file!.path),
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
-              if (provider.isLoading)
+              if (Provider.of<MyProvider>(context).isLoading)
                 Center(child: const CircularProgressIndicator()),
-              if (!provider.isLoading)
+              if (!Provider.of<MyProvider>(context).isLoading)
                 Center(
                   child: Text(
                     lanProvider.texts('add text'),
@@ -598,7 +595,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                   ),
                 ),
               const SizedBox(height: 10),
-              if (!provider.isLoading)
+              if (!Provider.of<MyProvider>(context).isLoading)
                 Container(
                   height: height * 0.06,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -608,9 +605,9 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         if (_mealName.text.isEmpty || _price.text.isEmpty)
                           return dialog(lanProvider.texts('empty field'));
                         setState(() {
-                          provider.isLoading = true;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
                         });
-                        await provider.addMeal(_mealName.text, _price.text,
+                        await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
                             _description.text, 'shawarma', "shawarma");
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
@@ -620,16 +617,16 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             textColor: Colors.white,
                             fontSize: 16.0);
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                       } on FirebaseException catch (e) {
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                         return dialog(e.message);
                       } catch (e) {
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                         print(e);
                         dialog(lanProvider.texts('Error occurred !'));
@@ -642,7 +639,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                   ),
                 ),
               const SizedBox(height: 20),
-              if (!provider.isLoading)
+              if (!Provider.of<MyProvider>(context).isLoading)
                 Container(
                   height: height * 0.06,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -652,22 +649,22 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                           if (_mealName.text.isEmpty || _price.text.isEmpty)
                             return dialog(lanProvider.texts('empty field'));
                           setState(() {
-                            provider.isLoading = true;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await provider.addMeal(_mealName.text, _price.text,
+                          await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
                               _description.text, 'shawarma', "snacks");
                           Navigator.of(context).pop();
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                         } on FirebaseException catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           return dialog(e.message);
                         } catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           print(e);
                           dialog(lanProvider.texts('Error occurred !'));
@@ -679,7 +676,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                       )),
                 ),
               const SizedBox(height: 20),
-              if (!provider.isLoading)
+              if (!Provider.of<MyProvider>(context).isLoading)
                 Container(
                   height: height * 0.06,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -689,22 +686,22 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                           if (_mealName.text.isEmpty || _price.text.isEmpty)
                             return dialog(lanProvider.texts('empty field'));
                           setState(() {
-                            provider.isLoading = true;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await provider.addMeal(_mealName.text, _price.text,
+                          await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
                               _description.text, 'shawarma', "others");
                           Navigator.of(context).pop();
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                         } on FirebaseException catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           return dialog(e.message);
                         } catch (e) {
                           setState(() {
-                            provider.isLoading = false;
+                            Provider.of<MyProvider>(context,listen: false).isLoading = false;
                           });
                           print(e);
                           dialog(lanProvider.texts('Error occurred !'));
@@ -733,17 +730,14 @@ class _FirstAdminState extends State<FirstAdmin> {
 
   @override
   void initState() {
-    setState(() {
       tab1sh = FirebaseFirestore.instance
           .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
           .authData['name']}/shawarma')
           .snapshots();
-    });
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -820,24 +814,28 @@ class _FirstAdminState extends State<FirstAdmin> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(height: height * 0.02),
-                                  Container(
-                                    child: Text(
+                                  SizedBox(
+                                    width: width * 0.54,
+                                    child: AutoSizeText(
                                       resData[index]['meal name'],
+                                      maxLines: 2,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
                                   SizedBox(height: height * 0.01),
                                   SizedBox(
-                                    width: width * 0.5,
+                                    width: width * 0.52,
                                     child: AutoSizeText(
                                       resData[index]['description'],
                                       maxLines: 3,
                                       minFontSize: 12,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                          fontSize: 14, color: Colors.grey),
+                                          fontSize: 13, color: Colors.grey),
                                     ),
                                   ),
                                   Container(
@@ -864,12 +862,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                   IconButton(
                                     onPressed: () {
                                       setState(() {
-                                        provider.mealID = resData[index].id;
+                                        Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                         if (resData[index]['imageUrl']!='')
-                                          provider.tempFile = resData[index]
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                           ['imageUrl'];
                                         else
-                                          provider.tempFile = null;
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -901,11 +899,11 @@ class _FirstAdminState extends State<FirstAdmin> {
                                               alignment: Alignment.topCenter,
                                             ),
                                             actions: [
-                                              if (provider.isLoading)
+                                              if (Provider.of<MyProvider>(context).isLoading)
                                                 Center(
                                                     child:
                                                         const CircularProgressIndicator()),
-                                              if (!provider.isLoading)
+                                              if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                   child: Text(
                                                     lanProvider.texts('yes?'),
@@ -916,18 +914,18 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                   onTap: () async {
                                                     try {
                                                       setState(() {
-                                                        provider.mealID =
+                                                        Provider.of<MyProvider>(context,listen: false).mealID =
                                                             resData[index].id;
                                                         if (resData[index]['imageUrl']!='')
-                                                        provider.tempFile =
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile =
                                                             resData[index]
                                                                 ['imageUrl'];
                                                         else
-                                                          provider.tempFile = null;
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
-                                                      await provider.deleteMeal(
+                                                      await Provider.of<MyProvider>(context,listen: false).deleteMeal(
                                                           "shawarma",
                                                           'shawarma');
                                                       Fluttertoast.showToast(
@@ -941,12 +939,12 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                               Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                       dialog(lanProvider.texts(
@@ -954,7 +952,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                       print(e.message);
                                                     } catch (e) {
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                       print(e);
@@ -964,7 +962,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                   },
                                                 ),
                                               const SizedBox(width: 11),
-                                              if (!provider.isLoading)
+                                              if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                     child: Text(
                                                         lanProvider
@@ -1008,17 +1006,14 @@ class _SecondAdminState extends State<SecondAdmin> {
 
   @override
   void initState() {
-    setState(() {
       tab2sh = FirebaseFirestore.instance
           .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
           .authData['name']}/snacks')
           .snapshots();
-    });
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -1095,11 +1090,15 @@ class _SecondAdminState extends State<SecondAdmin> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(height: height * 0.02),
-                                  Container(
-                                    child: Text(
+                                  SizedBox(
+                                    width: width * 0.54,
+                                    child: AutoSizeText(
                                       resData[index]['meal name'],
+                                      maxLines: 2,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
@@ -1139,12 +1138,12 @@ class _SecondAdminState extends State<SecondAdmin> {
                                   IconButton(
                                     onPressed: () {
                                       setState(() {
-                                        provider.mealID = resData[index].id;
+                                        Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                         if (resData[index]['imageUrl']!='')
-                                          provider.tempFile = resData[index]
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                           ['imageUrl'];
                                         else
-                                          provider.tempFile = null;
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -1176,11 +1175,11 @@ class _SecondAdminState extends State<SecondAdmin> {
                                               alignment: Alignment.topCenter,
                                             ),
                                             actions: [
-                                              if (provider.isLoading)
+                                              if (Provider.of<MyProvider>(context).isLoading)
                                                 Center(
                                                     child:
                                                         const CircularProgressIndicator()),
-                                              if (!provider.isLoading)
+                                              if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                   child: Text(
                                                     lanProvider.texts('yes?'),
@@ -1191,17 +1190,17 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                   onTap: () async {
                                                     try {
                                                       setState(() {
-                                                        provider.mealID =
+                                                        Provider.of<MyProvider>(context,listen: false).mealID =
                                                             resData[index].id;
                                                         if (resData[index]['imageUrl']!='')
-                                                          provider.tempFile = resData[index]
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                                           ['imageUrl'];
                                                         else
-                                                          provider.tempFile = null;
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
-                                                      await provider.deleteMeal(
+                                                      await Provider.of<MyProvider>(context,listen: false).deleteMeal(
                                                           "shawarma", 'snacks');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
@@ -1214,12 +1213,12 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                               Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                       dialog(lanProvider.texts(
@@ -1227,7 +1226,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                       print(e.message);
                                                     } catch (e) {
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                       print(e);
@@ -1237,7 +1236,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                   },
                                                 ),
                                               const SizedBox(width: 11),
-                                              if (!provider.isLoading)
+                                              if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                     child: Text(
                                                         lanProvider
@@ -1281,17 +1280,14 @@ class _ThirdAdminState extends State<ThirdAdmin> {
 
   @override
   void initState() {
-    setState(() {
       tab3sh = FirebaseFirestore.instance
           .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
           .authData['name']}/others')
           .snapshots();
-    });
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -1368,11 +1364,15 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(height: height * 0.02),
-                                  Container(
-                                    child: Text(
+                                  SizedBox(
+                                    width: width * 0.54,
+                                    child: AutoSizeText(
                                       resData[index]['meal name'],
+                                      maxLines: 2,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w800),
                                     ),
                                   ),
@@ -1412,12 +1412,12 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                   IconButton(
                                     onPressed: () {
                                       setState(() {
-                                        provider.mealID = resData[index].id;
+                                        Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                         if (resData[index]['imageUrl']!='')
-                                          provider.tempFile = resData[index]
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                           ['imageUrl'];
                                         else
-                                          provider.tempFile = null;
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
                                           .pushNamed('editShawarma');
@@ -1449,11 +1449,11 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                               alignment: Alignment.topCenter,
                                             ),
                                             actions: [
-                                              if (provider.isLoading)
+                                              if (Provider.of<MyProvider>(context).isLoading)
                                                 Center(
                                                     child:
                                                         const CircularProgressIndicator()),
-                                              if (!provider.isLoading)
+                                              if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                   child: Text(
                                                     lanProvider.texts('yes?'),
@@ -1464,17 +1464,17 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                   onTap: () async {
                                                     try {
                                                       setState(() {
-                                                        provider.mealID =
+                                                        Provider.of<MyProvider>(context,listen: false).mealID =
                                                             resData[index].id;
                                                         if (resData[index]['imageUrl']!='')
-                                                          provider.tempFile = resData[index]
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                                           ['imageUrl'];
                                                         else
-                                                          provider.tempFile = null;
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
-                                                      await provider.deleteMeal(
+                                                      await Provider.of<MyProvider>(context,listen: false).deleteMeal(
                                                           "shawarma", 'others');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
@@ -1487,12 +1487,12 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                               Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                       dialog(lanProvider.texts(
@@ -1500,7 +1500,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                       print(e.message);
                                                     } catch (e) {
                                                       setState(() {
-                                                        provider.isLoading =
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
                                                             false;
                                                       });
                                                       print(e);
@@ -1510,7 +1510,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
                                                   },
                                                 ),
                                               const SizedBox(width: 11),
-                                              if (!provider.isLoading)
+                                              if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                     child: Text(
                                                         lanProvider

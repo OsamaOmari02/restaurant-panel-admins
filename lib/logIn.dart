@@ -29,8 +29,6 @@ class _LoginViewState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    var provider = Provider.of<MyProvider>(context);
-
     dialog(title) {
       return showDialog(
           context: context,
@@ -153,19 +151,19 @@ class _LoginViewState extends State<Login> {
         onPressed: () async {
           try {
             setState(() {
-              provider.authState = authStatus.Authenticating;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticating;
             });
             var auth = (await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text,
             ))
                 .user;
-            await provider.fetch();
+            await Provider.of<MyProvider>(context,listen: false).fetch();
             if (auth != null) {
               if (!mounted) return;
                Navigator.of(context).pushReplacementNamed('orders');
               setState(() {
-                provider.authState = authStatus.Authenticated;
+                Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
               });
             }
           } on FirebaseAuthException catch (e) {
@@ -173,13 +171,13 @@ class _LoginViewState extends State<Login> {
                 ? dialog('Empty field !')
                 : dialog(e.message);
             setState(() {
-              provider.authState = authStatus.unAuthenticated;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
             });
             _passwordController.clear();
           } catch (e) {
             print(e);
             setState(() {
-              provider.authState = authStatus.unAuthenticated;
+              Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
             });
           }
         },
@@ -221,7 +219,7 @@ class _LoginViewState extends State<Login> {
               SizedBox(height: mq.size.height*0.05),
               fields,
               SizedBox(height: mq.size.height*0.1),
-              provider.authState == authStatus.Authenticating
+              Provider.of<MyProvider>(context).authState == authStatus.Authenticating
                   ? Center(child: CircularProgressIndicator())
                   : loginButton,
             ],

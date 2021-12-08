@@ -15,7 +15,6 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
 
     Widget listTile(String title, icon, route) {
@@ -87,7 +86,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
-                          provider.authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
                           Provider.of<MyProvider>(context, listen: false)
                               .authData
@@ -99,13 +98,13 @@ class _MyDrawerState extends State<MyDrawer> {
                       } on FirebaseException catch (e) {
                         dialog(e.message);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       } catch (e) {
                         dialog(lanProvider.texts('Error occurred !'));
                         print(e);
                         setState(() {
-                          provider.authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
                         });
                       }
                     }),
@@ -129,18 +128,18 @@ class _MyDrawerState extends State<MyDrawer> {
             const Divider(thickness: 0.3),
             ListTile(
               onTap: () {
-                if (provider.authData['type'] == "shawarma")
+                if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "shawarma")
                   Navigator.of(context).pushReplacementNamed('adminShawarma');
-                else if (provider.authData['type'] == "homos")
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "homos")
                   Navigator.of(context).pushReplacementNamed('adminHomos');
-                else if (provider.authData['type'] == "drinks")
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "drinks")
                   Navigator.of(context).pushReplacementNamed('adminDrinks');
-                else if (provider.authData['type'] == "mainRes")
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "mainRes")
                   Navigator.of(context).pushReplacementNamed('adminRes');
-                else if (provider.authData['type'] == "sweet")
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "sweet")
                   Navigator.of(context).pushReplacementNamed('adminSweets');
               },
-              title: provider.authData['type']=='drinks' ?Text(
+              title: Provider.of<MyProvider>(context,listen: false).authData['type']=='drinks' ?Text(
                 lanProvider.texts('Drawer10'),
                 style: const TextStyle(fontSize: 25),
               ) :Text(

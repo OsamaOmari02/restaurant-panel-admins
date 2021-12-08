@@ -275,7 +275,6 @@ class MyProvider with ChangeNotifier {
     isLoading = true;
     final mealIndex = mealIDs.indexWhere((element) => element.id == mealID);
     if (tempFile!=null) {
-      print('tried');
       await FirebaseStorage.instance.refFromURL(tempFile)
           .delete();
     }

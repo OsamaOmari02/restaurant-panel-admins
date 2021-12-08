@@ -28,17 +28,14 @@ class _AdminDrinksState extends State<AdminDrinks> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
-    setState(() {
       tab1d = FirebaseFirestore.instance
           .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
           .snapshots();
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context);
     var lanProvider = Provider.of<LanProvider>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -102,7 +99,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
               icon: const Icon(Icons.add),
             ),
           ],
-          title: Text(provider.authData['name'] ?? ""),
+          title: Text(Provider.of<MyProvider>(context).authData['name'] ?? ""),
           centerTitle: true,
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -146,11 +143,15 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     SizedBox(height: height * 0.02),
-                                    Container(
-                                      child: Text(
+                                    SizedBox(
+                                      width: width * 0.54,
+                                      child: AutoSizeText(
                                         resData[index]['meal name'],
+                                        maxLines: 2,
+                                        minFontSize: 12,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 15,
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ),
@@ -190,12 +191,12 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          provider.mealID = resData[index].id;
+                                          Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                           if (resData[index]['imageUrl']!='')
-                                            provider.tempFile = resData[index]
+                                            Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                             ['imageUrl'];
                                           else
-                                            provider.tempFile = null;
+                                            Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editDrinks');
@@ -227,11 +228,11 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                 alignment: Alignment.topCenter,
                                               ),
                                               actions: [
-                                                if (provider.isLoading)
+                                                if (Provider.of<MyProvider>(context).isLoading)
                                                   const Center(
                                                       child:
                                                           const CircularProgressIndicator()),
-                                                if (!provider.isLoading)
+                                                if (!Provider.of<MyProvider>(context).isLoading)
                                                   InkWell(
                                                     child: Text(
                                                       lanProvider.texts('yes?'),
@@ -242,17 +243,17 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                     onTap: () async {
                                                       try {
                                                         setState(() {
-                                                          provider.mealID =
+                                                          Provider.of<MyProvider>(context,listen: false).mealID =
                                                               resData[index].id;
                                                           if (resData[index]['imageUrl']!='')
-                                                            provider.tempFile = resData[index]
+                                                            Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
                                                             ['imageUrl'];
                                                           else
-                                                            provider.tempFile = null;
+                                                            Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                                         });
                                                         Navigator.of(context)
                                                             .pop();
-                                                        await provider
+                                                        await Provider.of<MyProvider>(context,listen: false)
                                                             .deleteMeal(
                                                                 'drinks',
                                                                 "meals");
@@ -267,19 +268,19 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                                 Colors.white,
                                                             fontSize: 16.0);
                                                         setState(() {
-                                                          provider.isLoading =
+                                                          Provider.of<MyProvider>(context,listen: false).isLoading =
                                                               false;
                                                         });
                                                       } on FirebaseException catch (e) {
                                                         setState(() {
-                                                          provider.isLoading =
+                                                          Provider.of<MyProvider>(context,listen: false).isLoading =
                                                               false;
                                                         });
                                                         return dialog(
                                                             e.message);
                                                       } catch (e) {
                                                         setState(() {
-                                                          provider.isLoading =
+                                                          Provider.of<MyProvider>(context,listen: false).isLoading =
                                                               false;
                                                         });
                                                         print(e);
@@ -289,7 +290,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                     },
                                                   ),
                                                 const SizedBox(width: 11),
-                                                if (!provider.isLoading)
+                                                if (!Provider.of<MyProvider>(context).isLoading)
                                                   InkWell(
                                                       child: Text(
                                                           lanProvider.texts(
@@ -348,7 +349,6 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
@@ -397,7 +397,7 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
         var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
-          provider.file = File(image.path);
+          Provider.of<MyProvider>(context,listen: false).file = File(image.path);
         });
         Navigator.of(context).pop();
       } on PlatformException catch (e) {
@@ -529,14 +529,14 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                         width: 10
                       ),
                       Text(lanProvider.texts('add image')),
-                      if (provider.file != null) SizedBox(width: width * 0.1),
-                      if (provider.file != null)
+                      if (Provider.of<MyProvider>(context).file != null) SizedBox(width: width * 0.1),
+                      if (Provider.of<MyProvider>(context).file != null)
                         IconButton(
-                            onPressed: () => provider.deleteImage(),
+                            onPressed: () => Provider.of<MyProvider>(context,listen: false).deleteImage(),
                             icon: Icon(Icons.delete, color: Colors.red)),
                     ],
                   )),
-              provider.file == null
+              Provider.of<MyProvider>(context).file == null
                   ? SizedBox(height: 20)
                   : Container(
                       padding: EdgeInsets.symmetric(horizontal: width * 0.3),
@@ -544,15 +544,15 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: Image.file(
-                          File(provider.file!.path),
+                          File(Provider.of<MyProvider>(context).file!.path),
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
-              if (provider.isLoading)
+              if (Provider.of<MyProvider>(context).isLoading)
                 Center(child: const CircularProgressIndicator()),
               const SizedBox(height: 20),
-              if (!provider.isLoading)
+              if (!Provider.of<MyProvider>(context).isLoading)
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
                   height: height * 0.065,
@@ -562,9 +562,9 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                         if (_mealName.text.isEmpty || _price.text.isEmpty)
                           return dialog(lanProvider.texts('empty field'));
                         setState(() {
-                          provider.isLoading = true;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
                         });
-                        await provider.addMeal(_mealName.text, _price.text,
+                        await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
                             _description.text, 'drinks', 'meals');
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
@@ -574,16 +574,16 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                             textColor: Colors.white,
                             fontSize: 16.0);
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                       } on FirebaseException catch (e) {
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                         dialog(e.message);
                       } catch (e) {
                         setState(() {
-                          provider.isLoading = false;
+                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
                         });
                         print(e);
                         dialog(lanProvider.texts('Error occurred !'));
@@ -625,7 +625,6 @@ class _EditDrinksState extends State<EditDrinks> {
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
-    var provider = Provider.of<MyProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     dialog(title) {
@@ -676,7 +675,7 @@ class _EditDrinksState extends State<EditDrinks> {
         var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
         if (image == null) return;
         setState(() {
-          provider.file = File(image.path);
+          Provider.of<MyProvider>(context,listen: false).file = File(image.path);
         });
         Navigator.of(context).pop();
       } on PlatformException catch (e) {
@@ -806,14 +805,14 @@ class _EditDrinksState extends State<EditDrinks> {
                           width: 10,
                         ),
                         Text(lanProvider.texts('add image')),
-                        if (provider.file != null) SizedBox(width: width * 0.1),
-                        if (provider.file != null)
+                        if (Provider.of<MyProvider>(context).file != null) SizedBox(width: width * 0.1),
+                        if (Provider.of<MyProvider>(context).file != null)
                           IconButton(
-                              onPressed: () => provider.deleteImage(),
+                              onPressed: () => Provider.of<MyProvider>(context,listen: false).deleteImage(),
                               icon: Icon(Icons.delete, color: Colors.red)),
                       ],
                     )),
-                provider.file == null
+                Provider.of<MyProvider>(context).file == null
                     ? SizedBox(height: 20)
                     : Container(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.28),
@@ -821,12 +820,14 @@ class _EditDrinksState extends State<EditDrinks> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.file(
-                      File(provider.file!.path),
+                      File(Provider.of<MyProvider>(context).file!.path),
                       fit: BoxFit.fill,
                     ),
                   ),
                 ),
-                if (provider.file==null && provider.tempFile!=null && provider.tempFile!='')
+                if (Provider.of<MyProvider>(context).file==null &&
+                    Provider.of<MyProvider>(context).tempFile!=null &&
+                    Provider.of<MyProvider>(context).tempFile!='')
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: width * 0.3),
                     height: height * 0.2,
@@ -834,7 +835,7 @@ class _EditDrinksState extends State<EditDrinks> {
                       borderRadius: BorderRadius.circular(10.0),
                       child: CachedNetworkImage(
                         fit: BoxFit.fill,
-                        imageUrl: provider.tempFile,
+                        imageUrl: Provider.of<MyProvider>(context).tempFile,
                         placeholder: (context, url) => const Center(
                             child:
                             const CircularProgressIndicator()),
@@ -844,9 +845,9 @@ class _EditDrinksState extends State<EditDrinks> {
                     ),
                   ),
                 const SizedBox(height: 10),
-                if (provider.isLoading)
+                if (Provider.of<MyProvider>(context).isLoading)
                   const Center(child: const CircularProgressIndicator()),
-                if (!provider.isLoading)
+                if (!Provider.of<MyProvider>(context).isLoading)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: width*0.2),
                     child: ElevatedButton(
@@ -855,23 +856,23 @@ class _EditDrinksState extends State<EditDrinks> {
                             if (_mealName.text.isEmpty || _price.text.isEmpty)
                               return dialog(lanProvider.texts('empty field'));
                             setState(() {
-                              provider.isLoading = true;
+                              Provider.of<MyProvider>(context,listen: false).isLoading = true;
                             });
-                            await provider.editMeal(_mealName.text, _price.text,
+                            await Provider.of<MyProvider>(context,listen: false).editMeal(_mealName.text, _price.text,
                                 _description.text, 'drinks', 'meals');
                             Navigator.of(context).pop();
                             setState(() {
-                              provider.isLoading = false;
+                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
                             });
                           } on FirebaseException catch (e) {
                             setState(() {
-                              provider.isLoading = false;
+                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
                             });
                             dialog(e.message);
                             print(e);
                           } catch (e) {
                             setState(() {
-                              provider.isLoading = false;
+                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
                             });
                             dialog(lanProvider.texts('Error occurred !'));
                             print(e);
