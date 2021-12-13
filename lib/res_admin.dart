@@ -185,6 +185,9 @@ class _AdminResState extends State<AdminRes> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
+                                          Provider.of<MyProvider>(context,listen: false).mealNameCont = resData[index]['meal name'];
+                                          Provider.of<MyProvider>(context,listen: false).mealPriceCont = resData[index]['meal price'];
+                                          Provider.of<MyProvider>(context,listen: false).mealDescCont = resData[index]['description']??'';
                                           Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                           if (resData[index]['imageUrl']!='')
                                             Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
@@ -594,10 +597,18 @@ class EditRes extends StatefulWidget {
 }
 
 class _EditResState extends State<EditRes> {
+
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();
 
+  @override
+  void initState() {
+    _mealName = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealNameCont);
+    _price = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealPriceCont);
+    _description = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealDescCont);
+    super.initState();
+  }
   @override
   void dispose() {
     _mealName.dispose();
@@ -750,7 +761,8 @@ class _EditResState extends State<EditRes> {
               children: [
                 const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),                  child: TextField(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TextField(
                   keyboardType: TextInputType.text,
                   controller: _mealName,
                   decoration: InputDecoration(
@@ -835,12 +847,12 @@ class _EditResState extends State<EditRes> {
                   ElevatedButton(
                       onPressed: () async {
                         try {
-                          if (_mealName.text.isEmpty || _price.text.isEmpty)
+                          if (_mealName.text.isEmpty||_price.text.isEmpty)
                             return dialog(lanProvider.texts('empty field'));
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
-                          await Provider.of<MyProvider>(context,listen: false).editMeal(_mealName.text, _price.text,
+                          await Provider.of<MyProvider>(context,listen: false).editMeal(_mealName.text,_price.text,
                               _description.text,'mainRes','meals');
                           Navigator.of(context).pop();
                           setState(() {

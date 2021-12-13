@@ -185,6 +185,9 @@ class _AdminHomosState extends State<AdminHomos> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
+                                          Provider.of<MyProvider>(context,listen: false).mealNameCont = resData[index]['meal name'];
+                                          Provider.of<MyProvider>(context,listen: false).mealPriceCont = resData[index]['meal price'];
+                                          Provider.of<MyProvider>(context,listen: false).mealDescCont = resData[index]['description']??'';
                                           Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
                                           if (resData[index]['imageUrl']!='')
                                             Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
@@ -604,6 +607,14 @@ class _EditHomosState extends State<EditHomos> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();
+
+  @override
+  void initState() {
+    _mealName = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealNameCont);
+    _price = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealPriceCont);
+    _description = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealDescCont);
+    super.initState();
+  }
 
   @override
   void dispose() {

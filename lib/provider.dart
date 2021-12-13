@@ -54,6 +54,10 @@ class MyProvider with ChangeNotifier {
   //   admin = pref.getBool('admin')!;
   //   notifyListeners();
   // }
+  var mealNameCont;
+  var mealPriceCont;
+  var mealDescCont;
+
   Map<String, String> details = {
     'name': '',
     'total': '',
