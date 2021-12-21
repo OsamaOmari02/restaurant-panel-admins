@@ -138,6 +138,16 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.of(context).pushReplacementNamed('adminRes');
                 else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "sweet")
                   Navigator.of(context).pushReplacementNamed('adminSweets');
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "pizza")
+                  Navigator.of(context).pushReplacementNamed('adminPizza');
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "rice")
+                  Navigator.of(context).pushReplacementNamed('adminRice');
+                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "mo3ajanat")
+                  Navigator.of(context).pushReplacementNamed('adminMo3ajanat');
+                // else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "rice")
+                //   Navigator.of(context).pushReplacementNamed('adminRice');
+                // else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "mo3ajanat")
+                //   Navigator.of(context).pushReplacementNamed('adminMo3ajanat');
               },
               title: Provider.of<MyProvider>(context,listen: false).authData['type']=='drinks' ?Text(
                 lanProvider.texts('Drawer10'),

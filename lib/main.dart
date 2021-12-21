@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurants_panel/mo3ajanat.dart';
+import 'package:restaurants_panel/pizza_admin.dart';
 import 'package:restaurants_panel/res_admin.dart';
+import 'package:restaurants_panel/rice_admin.dart';
 import 'package:restaurants_panel/settings.dart';
 import 'package:restaurants_panel/shawarma_admin.dart';
 import 'package:restaurants_panel/sweet_admin.dart';
@@ -66,16 +69,25 @@ class _MyAppState extends State<MyApp> {
         'adminSweets': (context) => AdminSweets(),
         'adminDrinks': (context) => AdminDrinks(),
         'adminRes': (context) => AdminRes(),
+        'adminPizza': (context) => AdminPizza(),
+        'adminRice': (context) => AdminRice(),
+        'adminMo3ajanat': (context) => AdminMo3ajanat(),
         'editShawarma': (context) => EditShawarma(),
         'editSweets': (context) => EditSweets(),
         'editHomos': (context) => EditHomos(),
         'editDrinks': (context) => EditDrinks(),
         'editRes': (context) => EditRes(),
+        'editPizza': (context) => EditPizza(),
+        'editRice': (context) => EditRice(),
+        'editMo3ajanat': (context) => EditMo3ajanat(),
         'addMeal': (context) => AddMealShawarma(),
         'addMealSweets': (context) => AddMealSweets(),
         'addMealHomos': (context) => AddMealHomos(),
         'addMealDrinks': (context) => AddMealDrinks(),
         'addMealRes': (context) => AddMealRes(),
+        'addMealPizza': (context) => AddMealPizza(),
+        'addMealRice': (context) => AddMealRice(),
+        'addMealMo3ajanat': (context) => AddMealMo3ajanat(),
         'userState': (context) => UserState(),
         'settings':(context) => SettingsScreen(),
       },

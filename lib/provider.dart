@@ -183,6 +183,173 @@ class MyProvider with ChangeNotifier {
     });
     notifyListeners();
   }
+
+  Future<void> fetchMealsPizza(title) async {
+    await FirebaseFirestore.instance
+        .collection('Pizza/$title/Pizza')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              resName: title,
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    if (title == 'بيتزا المفرق')
+      await FirebaseFirestore.instance
+          .collection('Pizza/$title/broasted')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+    await FirebaseFirestore.instance
+        .collection('Pizza/$title/others')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    notifyListeners();
+  }
+
+  Future<void> fetchMealsMo3ajanat(title) async {
+    if (authData['name'] == 'معجنات ورد') {
+      await FirebaseFirestore.instance
+          .collection('mainRes/$title/manakeesh')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                resName: title,
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id));
+        });
+      });
+    }
+    await FirebaseFirestore.instance
+        .collection('mainRes/$title/Pizza')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              resName: title,
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    if (authData['name'] == 'ارزه لبنان')
+      await FirebaseFirestore.instance
+          .collection('mainRes/$title/mashrouh')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          bool exists = mealIDs.any((e) => e.id == element.id);
+          if (!exists)
+            mealIDs.add(Meals(
+                mealName: element.data()['meal name'],
+                mealPrice: element.data()['meal price'],
+                description: element.data()['description'],
+                id: element.id,
+                resName: title));
+        });
+      });
+    await FirebaseFirestore.instance
+        .collection('mainRes/$title/others')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    notifyListeners();
+  }
+
+  Future<void> fetchMealsRice(title) async {
+    await FirebaseFirestore.instance
+        .collection('rice/$title/riceTypes')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              resName: title,
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id));
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection('rice/$title/rice')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    await FirebaseFirestore.instance
+        .collection('rice/$title/others')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        bool exists = mealIDs.any((e) => e.id == element.id);
+        if (!exists)
+          mealIDs.add(Meals(
+              mealName: element.data()['meal name'],
+              mealPrice: element.data()['meal price'],
+              description: element.data()['description'],
+              id: element.id,
+              resName: title));
+      });
+    });
+    notifyListeners();
+  }
+
   Future<void> fetchMealsSweets(title) async {
     await FirebaseFirestore.instance
         .collection('sweets/$title/kunafeh')
