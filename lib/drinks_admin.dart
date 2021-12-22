@@ -21,6 +21,7 @@ class AdminDrinks extends StatefulWidget {
 
 class _AdminDrinksState extends State<AdminDrinks> {
   var tab1d;
+
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
@@ -28,9 +29,11 @@ class _AdminDrinksState extends State<AdminDrinks> {
       Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
-      tab1d = FirebaseFirestore.instance
-          .collection('/drinks/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
-          .snapshots();
+    tab1d = FirebaseFirestore.instance
+        .collection(
+            '/drinks/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
+        .orderBy('meal name')
+        .snapshots();
     super.initState();
   }
 
@@ -105,7 +108,7 @@ class _AdminDrinksState extends State<AdminDrinks> {
         body: StreamBuilder<QuerySnapshot>(
           stream: tab1d,
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState==ConnectionState.waiting)
+            if (snapshot.connectionState == ConnectionState.waiting)
               return const Center(child: const CircularProgressIndicator());
             return Scrollbar(
               child: ListView.builder(
@@ -191,15 +194,31 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          Provider.of<MyProvider>(context,listen: false).mealNameCont = resData[index]['meal name'];
-                                          Provider.of<MyProvider>(context,listen: false).mealPriceCont = resData[index]['meal price'];
-                                          Provider.of<MyProvider>(context,listen: false).mealDescCont = resData[index]['description']??'';
-                                          Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
-                                          if (resData[index]['imageUrl']!='')
-                                            Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
-                                            ['imageUrl'];
+                                          Provider.of<MyProvider>(context,
+                                                      listen: false)
+                                                  .mealNameCont =
+                                              resData[index]['meal name'];
+                                          Provider.of<MyProvider>(context,
+                                                      listen: false)
+                                                  .mealPriceCont =
+                                              resData[index]['meal price'];
+                                          Provider.of<MyProvider>(context,
+                                                  listen: false)
+                                              .mealDescCont = resData[index]
+                                                  ['description'] ??
+                                              '';
+                                          Provider.of<MyProvider>(context,
+                                                  listen: false)
+                                              .mealID = resData[index].id;
+                                          if (resData[index]['imageUrl'] != '')
+                                            Provider.of<MyProvider>(context,
+                                                        listen: false)
+                                                    .tempFile =
+                                                resData[index]['imageUrl'];
                                           else
-                                            Provider.of<MyProvider>(context,listen: false).tempFile = null;
+                                            Provider.of<MyProvider>(context,
+                                                    listen: false)
+                                                .tempFile = null;
                                         });
                                         Navigator.of(context)
                                             .pushNamed('editDrinks');
@@ -231,11 +250,15 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                 alignment: Alignment.topCenter,
                                               ),
                                               actions: [
-                                                if (Provider.of<MyProvider>(context).isLoading)
+                                                if (Provider.of<MyProvider>(
+                                                        context)
+                                                    .isLoading)
                                                   const Center(
                                                       child:
                                                           const CircularProgressIndicator()),
-                                                if (!Provider.of<MyProvider>(context).isLoading)
+                                                if (!Provider.of<MyProvider>(
+                                                        context)
+                                                    .isLoading)
                                                   InkWell(
                                                     child: Text(
                                                       lanProvider.texts('yes?'),
@@ -246,17 +269,35 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                     onTap: () async {
                                                       try {
                                                         setState(() {
-                                                          Provider.of<MyProvider>(context,listen: false).mealID =
-                                                              resData[index].id;
-                                                          if (resData[index]['imageUrl']!='')
-                                                            Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
-                                                            ['imageUrl'];
+                                                          Provider.of<MyProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .mealID = resData[
+                                                                  index]
+                                                              .id;
+                                                          if (resData[index][
+                                                                  'imageUrl'] !=
+                                                              '')
+                                                            Provider.of<MyProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .tempFile =
+                                                                resData[index][
+                                                                    'imageUrl'];
                                                           else
-                                                            Provider.of<MyProvider>(context,listen: false).tempFile = null;
+                                                            Provider.of<MyProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .tempFile = null;
                                                         });
                                                         Navigator.of(context)
                                                             .pop();
-                                                        await Provider.of<MyProvider>(context,listen: false)
+                                                        await Provider.of<
+                                                                    MyProvider>(
+                                                                context,
+                                                                listen: false)
                                                             .deleteMeal(
                                                                 'drinks',
                                                                 "meals");
@@ -271,20 +312,26 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                                 Colors.white,
                                                             fontSize: 16.0);
                                                         setState(() {
-                                                          Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                              false;
+                                                          Provider.of<MyProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .isLoading = false;
                                                         });
                                                       } on FirebaseException catch (e) {
                                                         setState(() {
-                                                          Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                              false;
+                                                          Provider.of<MyProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .isLoading = false;
                                                         });
                                                         return dialog(
                                                             e.message);
                                                       } catch (e) {
                                                         setState(() {
-                                                          Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                              false;
+                                                          Provider.of<MyProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .isLoading = false;
                                                         });
                                                         print(e);
                                                         dialog(lanProvider.texts(
@@ -293,7 +340,9 @@ class _AdminDrinksState extends State<AdminDrinks> {
                                                     },
                                                   ),
                                                 const SizedBox(width: 11),
-                                                if (!Provider.of<MyProvider>(context).isLoading)
+                                                if (!Provider.of<MyProvider>(
+                                                        context)
+                                                    .isLoading)
                                                   InkWell(
                                                       child: Text(
                                                           lanProvider.texts(
@@ -397,10 +446,12 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
+        var image =
+            (await ImagePicker().pickImage(source: src, imageQuality: 50));
         if (image == null) return;
         setState(() {
-          Provider.of<MyProvider>(context,listen: false).file = File(image.path);
+          Provider.of<MyProvider>(context, listen: false).file =
+              File(image.path);
         });
         Navigator.of(context).pop();
       } on PlatformException catch (e) {
@@ -528,14 +579,15 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.add_a_photo),
-                      const SizedBox(
-                        width: 10
-                      ),
+                      const SizedBox(width: 10),
                       Text(lanProvider.texts('add image')),
-                      if (Provider.of<MyProvider>(context).file != null) SizedBox(width: width * 0.1),
+                      if (Provider.of<MyProvider>(context).file != null)
+                        SizedBox(width: width * 0.1),
                       if (Provider.of<MyProvider>(context).file != null)
                         IconButton(
-                            onPressed: () => Provider.of<MyProvider>(context,listen: false).deleteImage(),
+                            onPressed: () =>
+                                Provider.of<MyProvider>(context, listen: false)
+                                    .deleteImage(),
                             icon: Icon(Icons.delete, color: Colors.red)),
                     ],
                   )),
@@ -565,10 +617,12 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                         if (_mealName.text.isEmpty || _price.text.isEmpty)
                           return dialog(lanProvider.texts('empty field'));
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .isLoading = true;
                         });
-                        await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                            _description.text, 'drinks', 'meals');
+                        await Provider.of<MyProvider>(context, listen: false)
+                            .addMeal(_mealName.text, _price.text,
+                                _description.text, 'drinks', 'meals');
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
                             msg: lanProvider.texts('Meal Added'),
@@ -577,16 +631,19 @@ class _AddMealDrinksState extends State<AddMealDrinks> {
                             textColor: Colors.white,
                             fontSize: 16.0);
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .isLoading = false;
                         });
                       } on FirebaseException catch (e) {
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .isLoading = false;
                         });
                         dialog(e.message);
                       } catch (e) {
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .isLoading = false;
                         });
                         print(e);
                         dialog(lanProvider.texts('Error occurred !'));
@@ -619,9 +676,12 @@ class _EditDrinksState extends State<EditDrinks> {
 
   @override
   void initState() {
-    _mealName = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealNameCont);
-    _price = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealPriceCont);
-    _description = TextEditingController(text:Provider.of<MyProvider>(context,listen: false).mealDescCont);
+    _mealName = TextEditingController(
+        text: Provider.of<MyProvider>(context, listen: false).mealNameCont);
+    _price = TextEditingController(
+        text: Provider.of<MyProvider>(context, listen: false).mealPriceCont);
+    _description = TextEditingController(
+        text: Provider.of<MyProvider>(context, listen: false).mealDescCont);
     super.initState();
   }
 
@@ -683,10 +743,12 @@ class _EditDrinksState extends State<EditDrinks> {
 
     Future pickImage(ImageSource src) async {
       try {
-        var image = (await ImagePicker().pickImage(source: src,imageQuality: 50));
+        var image =
+            (await ImagePicker().pickImage(source: src, imageQuality: 50));
         if (image == null) return;
         setState(() {
-          Provider.of<MyProvider>(context,listen: false).file = File(image.path);
+          Provider.of<MyProvider>(context, listen: false).file =
+              File(image.path);
         });
         Navigator.of(context).pop();
       } on PlatformException catch (e) {
@@ -703,7 +765,7 @@ class _EditDrinksState extends State<EditDrinks> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   lanProvider.texts('choose one'),
@@ -817,29 +879,32 @@ class _EditDrinksState extends State<EditDrinks> {
                           width: 10,
                         ),
                         Text(lanProvider.texts('add image')),
-                        if (Provider.of<MyProvider>(context).file != null) SizedBox(width: width * 0.1),
+                        if (Provider.of<MyProvider>(context).file != null)
+                          SizedBox(width: width * 0.1),
                         if (Provider.of<MyProvider>(context).file != null)
                           IconButton(
-                              onPressed: () => Provider.of<MyProvider>(context,listen: false).deleteImage(),
+                              onPressed: () => Provider.of<MyProvider>(context,
+                                      listen: false)
+                                  .deleteImage(),
                               icon: Icon(Icons.delete, color: Colors.red)),
                       ],
                     )),
                 Provider.of<MyProvider>(context).file == null
                     ? SizedBox(height: 20)
                     : Container(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.28),
-                  height: height * 0.2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.file(
-                      File(Provider.of<MyProvider>(context).file!.path),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                if (Provider.of<MyProvider>(context).file==null &&
-                    Provider.of<MyProvider>(context).tempFile!=null &&
-                    Provider.of<MyProvider>(context).tempFile!='')
+                        padding: EdgeInsets.symmetric(horizontal: width * 0.28),
+                        height: height * 0.2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.file(
+                            File(Provider.of<MyProvider>(context).file!.path),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                if (Provider.of<MyProvider>(context).file == null &&
+                    Provider.of<MyProvider>(context).tempFile != null &&
+                    Provider.of<MyProvider>(context).tempFile != '')
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: width * 0.3),
                     height: height * 0.2,
@@ -849,10 +914,9 @@ class _EditDrinksState extends State<EditDrinks> {
                         fit: BoxFit.fill,
                         imageUrl: Provider.of<MyProvider>(context).tempFile,
                         placeholder: (context, url) => const Center(
-                            child:
-                            const CircularProgressIndicator()),
+                            child: const CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -861,37 +925,43 @@ class _EditDrinksState extends State<EditDrinks> {
                   const Center(child: const CircularProgressIndicator()),
                 if (!Provider.of<MyProvider>(context).isLoading)
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width*0.2),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.2),
                     child: ElevatedButton(
                         onPressed: () async {
                           try {
                             if (_mealName.text.isEmpty || _price.text.isEmpty)
                               return dialog(lanProvider.texts('empty field'));
                             setState(() {
-                              Provider.of<MyProvider>(context,listen: false).isLoading = true;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .isLoading = true;
                             });
-                            await Provider.of<MyProvider>(context,listen: false).editMeal(_mealName.text, _price.text,
-                                _description.text, 'drinks', 'meals');
+                            await Provider.of<MyProvider>(context,
+                                    listen: false)
+                                .editMeal(_mealName.text, _price.text,
+                                    _description.text, 'drinks', 'meals');
                             Navigator.of(context).pop();
                             setState(() {
-                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .isLoading = false;
                             });
                           } on FirebaseException catch (e) {
                             setState(() {
-                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .isLoading = false;
                             });
                             dialog(e.message);
                             print(e);
                           } catch (e) {
                             setState(() {
-                              Provider.of<MyProvider>(context,listen: false).isLoading = false;
+                              Provider.of<MyProvider>(context, listen: false)
+                                  .isLoading = false;
                             });
                             dialog(lanProvider.texts('Error occurred !'));
                             print(e);
                           }
                         },
-                        child: Text(lanProvider.texts('save')
-                        ,style: TextStyle(fontSize: width * 0.05))),
+                        child: Text(lanProvider.texts('save'),
+                            style: TextStyle(fontSize: width * 0.05))),
                   ),
               ],
             ),

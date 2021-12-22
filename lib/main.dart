@@ -10,6 +10,7 @@ import 'package:restaurants_panel/settings.dart';
 import 'package:restaurants_panel/shawarma_admin.dart';
 import 'package:restaurants_panel/sweet_admin.dart';
 import 'package:restaurants_panel/userState.dart';
+import '2drinks_admin.dart';
 import 'details.dart';
 import 'drinks_admin.dart';
 import 'orders.dart';
@@ -65,29 +66,32 @@ class _MyAppState extends State<MyApp> {
         'details': (context) => Details(),
         'login': (context) => Login(),
         'adminShawarma': (context) => AdminShawarma(),
-        'adminHomos': (context) => AdminHomos(),
+        // 'adminHomos': (context) => AdminHomos(),
         'adminSweets': (context) => AdminSweets(),
         'adminDrinks': (context) => AdminDrinks(),
         'adminRes': (context) => AdminRes(),
         'adminPizza': (context) => AdminPizza(),
         'adminRice': (context) => AdminRice(),
         'adminMo3ajanat': (context) => AdminMo3ajanat(),
+        'admin2Drinks': (context) => Admin2Drinks(),
         'editShawarma': (context) => EditShawarma(),
         'editSweets': (context) => EditSweets(),
-        'editHomos': (context) => EditHomos(),
+        // 'editHomos': (context) => EditHomos(),
         'editDrinks': (context) => EditDrinks(),
         'editRes': (context) => EditRes(),
         'editPizza': (context) => EditPizza(),
         'editRice': (context) => EditRice(),
         'editMo3ajanat': (context) => EditMo3ajanat(),
+        'edit2Drinks': (context) => Edit2Drinks(),
         'addMeal': (context) => AddMealShawarma(),
         'addMealSweets': (context) => AddMealSweets(),
-        'addMealHomos': (context) => AddMealHomos(),
+        // 'addMealHomos': (context) => AddMealHomos(),
         'addMealDrinks': (context) => AddMealDrinks(),
         'addMealRes': (context) => AddMealRes(),
         'addMealPizza': (context) => AddMealPizza(),
         'addMealRice': (context) => AddMealRice(),
         'addMealMo3ajanat': (context) => AddMealMo3ajanat(),
+        'addMeal2Drinks': (context) => AddMeal2Drinks(),
         'userState': (context) => UserState(),
         'settings':(context) => SettingsScreen(),
       },

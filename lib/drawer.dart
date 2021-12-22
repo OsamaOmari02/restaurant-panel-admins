@@ -12,7 +12,6 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-
   @override
   Widget build(BuildContext context) {
     var lanProvider = Provider.of<LanProvider>(context);
@@ -86,7 +85,8 @@ class _MyDrawerState extends State<MyDrawer> {
                       try {
                         await FirebaseAuth.instance.signOut();
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.Authenticated;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .authState = authStatus.Authenticated;
                           Navigator.of(context).pushReplacementNamed('login');
                           Provider.of<MyProvider>(context, listen: false)
                               .authData
@@ -98,13 +98,15 @@ class _MyDrawerState extends State<MyDrawer> {
                       } on FirebaseException catch (e) {
                         dialog(e.message);
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .authState = authStatus.unAuthenticated;
                         });
                       } catch (e) {
                         dialog(lanProvider.texts('Error occurred !'));
                         print(e);
                         setState(() {
-                          Provider.of<MyProvider>(context,listen: false).authState = authStatus.unAuthenticated;
+                          Provider.of<MyProvider>(context, listen: false)
+                              .authState = authStatus.unAuthenticated;
                         });
                       }
                     }),
@@ -128,34 +130,47 @@ class _MyDrawerState extends State<MyDrawer> {
             const Divider(thickness: 0.3),
             ListTile(
               onTap: () {
-                if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "shawarma")
+                if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "shawarma")
                   Navigator.of(context).pushReplacementNamed('adminShawarma');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "homos")
-                  Navigator.of(context).pushReplacementNamed('adminHomos');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "drinks")
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "drinks")
                   Navigator.of(context).pushReplacementNamed('adminDrinks');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "mainRes")
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "mainRes")
                   Navigator.of(context).pushReplacementNamed('adminRes');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "sweet")
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "sweet")
                   Navigator.of(context).pushReplacementNamed('adminSweets');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "pizza")
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "pizza")
                   Navigator.of(context).pushReplacementNamed('adminPizza');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "rice")
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "rice")
                   Navigator.of(context).pushReplacementNamed('adminRice');
-                else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "mo3ajanat")
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "mo3ajanat")
                   Navigator.of(context).pushReplacementNamed('adminMo3ajanat');
-                // else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "rice")
-                //   Navigator.of(context).pushReplacementNamed('adminRice');
+                else if (Provider.of<MyProvider>(context, listen: false)
+                        .authData['type'] == "2drinks")
+                  Navigator.of(context).pushReplacementNamed('admin2Drinks');
                 // else if (Provider.of<MyProvider>(context,listen: false).authData['type'] == "mo3ajanat")
                 //   Navigator.of(context).pushReplacementNamed('adminMo3ajanat');
               },
-              title: Provider.of<MyProvider>(context,listen: false).authData['type']=='drinks' ?Text(
-                lanProvider.texts('Drawer10'),
-                style: const TextStyle(fontSize: 25),
-              ) :Text(
-                lanProvider.texts('Drawer9'),
-                style: const TextStyle(fontSize: 25),
-              ),
+              title: Provider.of<MyProvider>(context, listen: false)
+                              .authData['type'] ==
+                          'drinks' ||
+                      Provider.of<MyProvider>(context, listen: false)
+                              .authData['type'] ==
+                          '2drinks'
+                  ? Text(
+                      lanProvider.texts('Drawer10'),
+                      style: const TextStyle(fontSize: 25),
+                    )
+                  : Text(
+                      lanProvider.texts('Drawer9'),
+                      style: const TextStyle(fontSize: 25),
+                    ),
               leading: Icon(
                 Icons.edit_off,
                 color: Colors.blueAccent,

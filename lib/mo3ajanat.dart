@@ -844,10 +844,10 @@ class _FirstAdminState extends State<FirstAdmin> {
         .authData['name']=='معجنات ورد'?
     tab1sh = FirebaseFirestore.instance
         .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/manakeesh')
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/manakeesh').orderBy('meal name')
         .snapshots():tab1sh = FirebaseFirestore.instance
         .collection(
-        '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/Pizza')
+        '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/Pizza').orderBy('meal name')
         .snapshots();
     super.initState();
   }
@@ -1172,10 +1172,10 @@ class _SecondAdminState extends State<SecondAdmin> {
         .authData['name']=='معجنات ورد'?
     tab2sh = FirebaseFirestore.instance
         .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/Pizza')
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/Pizza').orderBy('meal name')
         .snapshots():tab2sh = FirebaseFirestore.instance
         .collection(
-        '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/mashrouh')
+        '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/mashrouh').orderBy('meal name')
         .snapshots();
     super.initState();
   }
@@ -1498,7 +1498,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
   void initState() {
     tab3sh = FirebaseFirestore.instance
         .collection(
-            '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/others')
+            '/mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/others').orderBy('meal name')
         .snapshots();
     super.initState();
   }

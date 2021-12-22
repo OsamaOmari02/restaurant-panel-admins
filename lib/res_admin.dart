@@ -31,7 +31,7 @@ class _AdminResState extends State<AdminRes> {
     });
     tab1r = FirebaseFirestore.instance
         .collection(
-            'mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals')
+            'mainRes/${Provider.of<MyProvider>(context, listen: false).authData['name']}/meals').orderBy('meal name')
         .snapshots();
     super.initState();
   }

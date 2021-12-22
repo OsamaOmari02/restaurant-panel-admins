@@ -752,7 +752,7 @@ class _FirstAdminState extends State<FirstAdmin> {
   void initState() {
     tab1sh = FirebaseFirestore.instance
         .collection('/rice/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/riceTypes')
+        .authData['name']}/riceTypes').orderBy('meal name')
         .snapshots();
     super.initState();
   }
@@ -1031,7 +1031,7 @@ class _SecondAdminState extends State<SecondAdmin> {
   void initState() {
     tab2sh = FirebaseFirestore.instance
         .collection('/rice/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/rice')
+        .authData['name']}/rice').orderBy('meal name')
         .snapshots();
     super.initState();
   }
@@ -1308,7 +1308,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
   void initState() {
     tab3sh = FirebaseFirestore.instance
         .collection('/rice/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/others')
+        .authData['name']}/others').orderBy('meal name')
         .snapshots();
     super.initState();
   }

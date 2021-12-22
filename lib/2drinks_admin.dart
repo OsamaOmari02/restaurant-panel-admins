@@ -15,28 +15,28 @@ import 'package:restaurants_panel/provider.dart';
 import 'drawer.dart';
 import 'languageProvider.dart';
 
-class AdminShawarma extends StatefulWidget {
+class Admin2Drinks extends StatefulWidget {
   @override
-  _AdminShawarmaState createState() => _AdminShawarmaState();
+  _Admin2DrinksState createState() => _Admin2DrinksState();
 }
-var tab1sh;
-var tab2sh;
-var tab3sh;
-var tab4sh;
-var tab5sh;
-var tab6sh;
-var tab7sh;
-var tab8sh;
-var tab9sh;
+var tab1p;
+var tab2p;
+var tab3p;
+var tab4p;
+var tab5p;
+var tab6p;
+var tab7p;
+var tab8p;
+var tab9p;
 
-class _AdminShawarmaState extends State<AdminShawarma> {
+class _Admin2DrinksState extends State<Admin2Drinks> {
 
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<MyProvider>(context, listen: false).tabIndex = "shawarma";
+      Provider.of<MyProvider>(context, listen: false).tabIndex = "milk";
       Provider.of<MyProvider>(context, listen: false).fetch();
-      Provider.of<MyProvider>(context, listen: false).fetchMealsShawarma(
+      Provider.of<MyProvider>(context, listen: false).fetchMealsDrinks(
           Provider.of<MyProvider>(context, listen: false).authData['name']);
     });
     super.initState();
@@ -48,13 +48,9 @@ class _AdminShawarmaState extends State<AdminShawarma> {
     return Directionality(
         textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
         child: DefaultTabController(
-          length: Provider.of<MyProvider>(context).authData['name'] ==
-              'Snap Burger' ||
-              Provider.of<MyProvider>(context).authData['name'] == 'شاورما هنية'
-              ? 2
-              : Provider.of<MyProvider>(context).authData['name'] == 'الدويري' ||
-              Provider.of<MyProvider>(context).authData['name'] == 'هون وبس'
-              ? 5
+          length: Provider.of<MyProvider>(context, listen: false).authData['name'] ==
+              'لبناني الشمال'
+              ? 7
               : 3,
           child: Scaffold(
             drawer: MyDrawer(),
@@ -62,107 +58,92 @@ class _AdminShawarmaState extends State<AdminShawarma> {
               backgroundColor: Colors.redAccent,
               actions: [
                 IconButton(
-                  onPressed: () => Navigator.of(context).pushNamed('addMeal'),
+                  onPressed: () => Navigator.of(context).pushNamed('addMeal2Drinks'),
                   icon: const Icon(Icons.add),
                 ),
               ],
               centerTitle: true,
               title: Text(Provider.of<MyProvider>(context).authData['name'] ?? ""),
               bottom: TabBar(
-                isScrollable: true,
+                isScrollable: Provider.of<MyProvider>(context, listen: false)
+                    .authData['name'] ==
+                    'لبناني الشمال'
+                    ? true
+                    : false,
                 tabs: [
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'هون وبس')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tab1edited')),
-                  if (Provider.of<MyProvider>(context).authData['name'] !=
-                      'Snap Burger' &&
-                      Provider.of<MyProvider>(context).authData['name'] !=
-                          'هون وبس')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tab1')),
-                  if (Provider.of<MyProvider>(context).authData['name'] !=
-                      'شاورما هنية' &&
-                      Provider.of<MyProvider>(context).authData['name'] !=
-                          'الدويري' &&
-                      Provider.of<MyProvider>(context).authData['name'] !=
-                          'هون وبس')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tab2')),
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'هون وبس')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tabfalafel&snacks')),
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'هون وبس')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tabmo3ajanat')),
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'هون وبس')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tabHummus')),
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'الدويري')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tabChicken')),
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'الدويري')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tabDwairy')),
-                  if (Provider.of<MyProvider>(context).authData['name'] ==
-                      'الدويري')
-                    Tab(
-                        text: Provider.of<LanProvider>(context, listen: false)
-                            .texts('tabBreakFast')),
                   Tab(
                       text: Provider.of<LanProvider>(context, listen: false)
-                          .texts('tab3')),
+                          .texts('tabMilk')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabCockTail')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabNaturalDrinks')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabSpecial')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabSlushDrinks')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabSalads')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabWaffles&Pancakes')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'الحفرة')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabMixes')),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'الحفرة')
+                    Tab(
+                        text: Provider.of<LanProvider>(context, listen: false)
+                            .texts('tabHot')),
                 ],
                 onTap: (index) {
-                  if (index == 0 && Provider.of<MyProvider>(context,listen: false).authData['name'] !=
-                  'Snap Burger')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "shawarma";
-                  else if (index==0 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                  'Snap Burger')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "snacks";
-                  else if (index==1 && Provider.of<MyProvider>(context,listen: false).authData['name'] !=
-                      'شاورما هنية' &&
-                      Provider.of<MyProvider>(context,listen: false).authData['name'] !=
-                          'الدويري' &&
-                      Provider.of<MyProvider>(context,listen: false).authData['name'] !=
-                          'هون وبس' &&
-                      Provider.of<MyProvider>(context,listen: false).authData['name'] !=
-                          'Snap Burger')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "snacks";
-                  else if (index==1 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                      'الدويري')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "Chicken";
+                  if (index == 0)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "milk";
+                  else if (index == 1 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
+                      'لبناني الشمال')
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "natural cocktail";
+                  else if (index == 1)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "mixes";
                   else if (index==2 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                      'الدويري')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "Aldwairy";
-                  else if (index==3 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                      'الدويري')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "BreakFast";
-
-                  else if (index==1 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                      'هون وبس')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "Falafel";
-                  else if (index==2 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                      'هون وبس')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "Mo3ajanat";
-                  else if (index==3 && Provider.of<MyProvider>(context,listen: false).authData['name'] ==
-                      'هون وبس')
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "Hummus";
-                  else
-                    Provider.of<MyProvider>(context,listen: false).tabIndex = "others";
+                      'لبناني الشمال')
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "natural drinks";
+                  else if (index==2)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "hot drinks";
+                  else if (index==3)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "special cocktail";
+                  else if (index==4)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "natural slush";
+                  else if (index==5)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "fruits salads";
+                  else if (index==6)
+                    Provider.of<MyProvider>(context,listen: false).tabIndex = "waffle";
 
                   print('index = ${Provider.of<MyProvider>(context,listen: false).tabIndex}\n');
                 },
@@ -170,29 +151,41 @@ class _AdminShawarmaState extends State<AdminShawarma> {
             ),
             body: Stack(children: [
               TabBarView(
+                physics: BouncingScrollPhysics(),
                 children: <Widget>[
-                  if (Provider.of<MyProvider>(context).authData['name'] !=
-                      'Snap Burger')
-                    FirstAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
-                    FalafelAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
-                    Mo3ajanatAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
-                    HummusAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] !=
-                      'شاورما هنية' &&
-                      Provider.of<MyProvider>(context).authData['name'] !=
-                          'الدويري' &&
-                      Provider.of<MyProvider>(context).authData['name'] != 'هون وبس')
+                  FirstAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    NaturalCocktailAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    NaturalDrinksAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    SpecialCocktailAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    NaturalSlushAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    FruitsSaladsAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] ==
+                      'لبناني الشمال')
+                    CrepeAndWafflsAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] !=
+                      'لبناني الشمال')
                     SecondAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
-                    ChickenAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
-                    AldwairyAdmin(),
-                  if (Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
-                    BreakFastAdmin(),
-                  ThirdAdmin(),
+                  if (Provider.of<MyProvider>(context, listen: false)
+                      .authData['name'] !=
+                      'لبناني الشمال')
+                    ThirdAdmin(),
                 ],
               ),
             ]),
@@ -202,12 +195,12 @@ class _AdminShawarmaState extends State<AdminShawarma> {
 }
 
 //--------------------------Edit-----------------------------------
-class EditShawarma extends StatefulWidget {
+class Edit2Drinks extends StatefulWidget {
   @override
-  _EditShawarmaState createState() => _EditShawarmaState();
+  _Edit2DrinksState createState() => _Edit2DrinksState();
 }
 
-class _EditShawarmaState extends State<EditShawarma> {
+class _Edit2DrinksState extends State<Edit2Drinks> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();
@@ -250,7 +243,7 @@ class _EditShawarmaState extends State<EditShawarma> {
                     child: Text(
                       title,
                       textAlign:
-                          lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                      lanProvider.isEn ? TextAlign.start : TextAlign.end,
                       style: const TextStyle(fontSize: 23),
                     ),
                   ),
@@ -297,7 +290,7 @@ class _EditShawarmaState extends State<EditShawarma> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   lanProvider.texts('choose one'),
@@ -421,16 +414,16 @@ class _EditShawarmaState extends State<EditShawarma> {
                 Provider.of<MyProvider>(context).file == null
                     ? SizedBox(height: 20)
                     : Container(
-                        padding: EdgeInsets.symmetric(horizontal: width * 0.28),
-                        height: height * 0.2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.file(
-                            File(Provider.of<MyProvider>(context).file!.path),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.28),
+                  height: height * 0.2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.file(
+                      File(Provider.of<MyProvider>(context).file!.path),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
                 if (Provider.of<MyProvider>(context).file == null &&
                     Provider.of<MyProvider>(context).tempFile != null &&
                     Provider.of<MyProvider>(context).tempFile != '')
@@ -445,7 +438,7 @@ class _EditShawarmaState extends State<EditShawarma> {
                         placeholder: (context, url) => const Center(
                             child: const CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -462,7 +455,7 @@ class _EditShawarmaState extends State<EditShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).editMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', Provider.of<MyProvider>(context,listen: false).tabIndex);
+                              _description.text, 'drinks', Provider.of<MyProvider>(context,listen: false).tabIndex);
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -490,12 +483,12 @@ class _EditShawarmaState extends State<EditShawarma> {
 }
 
 //-------------------------addMeal-----------------------------
-class AddMealShawarma extends StatefulWidget {
+class AddMeal2Drinks extends StatefulWidget {
   @override
-  _AddMealShawarmaState createState() => _AddMealShawarmaState();
+  _AddMeal2DrinksState createState() => _AddMeal2DrinksState();
 }
 
-class _AddMealShawarmaState extends State<AddMealShawarma> {
+class _AddMeal2DrinksState extends State<AddMeal2Drinks> {
   TextEditingController _mealName = TextEditingController();
   TextEditingController _price = TextEditingController();
   TextEditingController _description = TextEditingController();
@@ -529,7 +522,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                   Text(
                     title,
                     textAlign:
-                        lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                    lanProvider.isEn ? TextAlign.start : TextAlign.end,
                     style: const TextStyle(fontSize: 23),
                   ),
                 ],
@@ -575,7 +568,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
           builder: (BuildContext ctx) {
             return Directionality(
               textDirection:
-                  lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+              lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
               child: AlertDialog(
                 title: Text(
                   lanProvider.texts('choose one'),
@@ -698,16 +691,16 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
               Provider.of<MyProvider>(context).file == null
                   ? SizedBox(height: 20)
                   : Container(
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.3),
-                      height: height * 0.2,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.file(
-                          File(Provider.of<MyProvider>(context).file!.path),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.3),
+                height: height * 0.2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.file(
+                    File(Provider.of<MyProvider>(context).file!.path),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
               if (Provider.of<MyProvider>(context).isLoading)
                 Center(child: const CircularProgressIndicator()),
               if (!Provider.of<MyProvider>(context).isLoading)
@@ -718,8 +711,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                   ),
                 ),
               const SizedBox(height: 10),
-              if (!Provider.of<MyProvider>(context).isLoading && Provider.of<MyProvider>(context).authData['name'] !=
-                  'Snap Burger')
+              if (!Provider.of<MyProvider>(context).isLoading)
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -732,7 +724,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                           Provider.of<MyProvider>(context,listen: false).isLoading = true;
                         });
                         await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                            _description.text, 'shawarma', "shawarma");
+                            _description.text, 'drinks', "milk");
                         Navigator.of(context).pop();
                         Fluttertoast.showToast(
                             msg: lanProvider.texts('Meal Added'),
@@ -757,16 +749,14 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                       }
                     },
                     child: Text(
-                      lanProvider.texts('tab1'),
+                      lanProvider.texts('tabMilk'),
                       style: TextStyle(fontSize: width * 0.05),
                     ),
                   ),
                 ),
               const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] != 'شاورما هنية' &&
-                  Provider.of<MyProvider>(context).authData['name'] != 'الدويري' &&
-                  Provider.of<MyProvider>(context).authData['name'] != 'هون وبس')
+                  Provider.of<MyProvider>(context).authData['name'] == 'الحفرة')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -779,7 +769,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "snacks");
+                              _description.text, 'drinks', "mixes");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -798,17 +788,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tab2'),
+                        lanProvider.texts('tabMixes'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] != 'شاورما هنية' &&
-                  Provider.of<MyProvider>(context).authData['name'] != 'الدويري' &&
-                  Provider.of<MyProvider>(context).authData['name'] != 'هون وبس')
-              const SizedBox(height: 20),
+                  Provider.of<MyProvider>(context).authData['name'] == 'الحفرة')
+                const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
+                  Provider.of<MyProvider>(context).authData['name'] == 'الحفرة')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -821,7 +809,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "Falafel");
+                              _description.text, 'drinks', "hot drinks");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -840,15 +828,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tabfalafel&snacks'),
+                        lanProvider.texts('tabHot'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
-              const SizedBox(height: 20),
+                  Provider.of<MyProvider>(context).authData['name'] == 'الحفرة')
+                const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -861,7 +849,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "Mo3ajanat");
+                              _description.text, 'drinks', "natural cocktail");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -880,15 +868,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tabmo3ajanat'),
+                        lanProvider.texts('tabCockTail'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
-              const SizedBox(height: 20),
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
+                const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -901,7 +889,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "Hummus");
+                              _description.text, 'drinks', "natural drinks");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -920,15 +908,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tabHummus'),
+                        lanProvider.texts('tabNaturalDrinks'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'هون وبس')
-              const SizedBox(height: 20),
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
+                const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -941,7 +929,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "Chicken");
+                              _description.text, 'drinks', "special cocktail");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -960,15 +948,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tabChicken'),
+                        lanProvider.texts('tabSpecial'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
-              const SizedBox(height: 20),
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
+                const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -981,7 +969,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "Aldwairy");
+                              _description.text, 'drinks', "natural slush");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -1000,15 +988,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tabDwairy'),
+                        lanProvider.texts('tabSlushDrinks'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
-              const SizedBox(height: 20),
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
+                const SizedBox(height: 20),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -1021,7 +1009,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "BreakFast");
+                              _description.text, 'drinks', "fruits salads");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -1040,14 +1028,15 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tabBreakFast'),
+                        lanProvider.texts('tabSalads'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
               if (!Provider.of<MyProvider>(context).isLoading &&
-                  Provider.of<MyProvider>(context).authData['name'] == 'الدويري')
-              const SizedBox(height: 20),
-              if (!Provider.of<MyProvider>(context).isLoading)
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
+                const SizedBox(height: 20),
+              if (!Provider.of<MyProvider>(context).isLoading &&
+                  Provider.of<MyProvider>(context).authData['name'] == 'لبناني الشمال')
                 Container(
                   height: height * 0.055,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.2),
@@ -1060,7 +1049,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                             Provider.of<MyProvider>(context,listen: false).isLoading = true;
                           });
                           await Provider.of<MyProvider>(context,listen: false).addMeal(_mealName.text, _price.text,
-                              _description.text, 'shawarma', "others");
+                              _description.text, 'drinks', "waffle");
                           Navigator.of(context).pop();
                           setState(() {
                             Provider.of<MyProvider>(context,listen: false).isLoading = false;
@@ -1079,7 +1068,7 @@ class _AddMealShawarmaState extends State<AddMealShawarma> {
                         }
                       },
                       child: Text(
-                        lanProvider.texts('tab3'),
+                        lanProvider.texts('tabWaffles&Pancakes'),
                         style: TextStyle(fontSize: width * 0.05),
                       )),
                 ),
@@ -1101,10 +1090,10 @@ class _FirstAdminState extends State<FirstAdmin> {
 
   @override
   void initState() {
-      tab1sh = FirebaseFirestore.instance
-          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-          .authData['name']}/shawarma').orderBy('meal name')
-          .snapshots();
+    tab1p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/milk').orderBy('meal name')
+        .snapshots();
     super.initState();
   }
   @override
@@ -1143,7 +1132,7 @@ class _FirstAdminState extends State<FirstAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab1sh,
+        stream: tab1p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -1175,9 +1164,9 @@ class _FirstAdminState extends State<FirstAdmin> {
                                       imageUrl: resData[index]['imageUrl'],
                                       placeholder: (context, url) => const Center(
                                           child:
-                                              const CircularProgressIndicator()),
+                                          const CircularProgressIndicator()),
                                       errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
+                                      const Icon(Icons.error),
                                     ),
                                   ),
                                 ),
@@ -1244,7 +1233,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -1261,11 +1250,11 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                   ? TextAlign.start
                                                   : TextAlign.end,
                                               style:
-                                                  const TextStyle(fontSize: 23),
+                                              const TextStyle(fontSize: 23),
                                             ),
                                             contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 7),
+                                            EdgeInsets.symmetric(
+                                                vertical: 7),
                                             elevation: 24,
                                             content: Container(
                                               height: 30,
@@ -1276,7 +1265,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                               if (Provider.of<MyProvider>(context).isLoading)
                                                 Center(
                                                     child:
-                                                        const CircularProgressIndicator()),
+                                                    const CircularProgressIndicator()),
                                               if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                   child: Text(
@@ -1292,34 +1281,34 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                             resData[index].id;
                                                         if (resData[index]['imageUrl']!='')
                                                           Provider.of<MyProvider>(context,listen: false).tempFile =
-                                                            resData[index]
-                                                                ['imageUrl'];
+                                                          resData[index]
+                                                          ['imageUrl'];
                                                         else
                                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma",
-                                                          'shawarma');
+                                                          "drinks",
+                                                          'milk');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
                                                           toastLength: Toast
                                                               .LENGTH_SHORT,
                                                           backgroundColor:
-                                                              Colors.grey,
+                                                          Colors.grey,
                                                           textColor:
-                                                              Colors.white,
+                                                          Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
                                                         Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
+                                                        false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
                                                         Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
+                                                        false;
                                                       });
                                                       dialog(lanProvider.texts(
                                                           'Error occurred !'));
@@ -1327,7 +1316,7 @@ class _FirstAdminState extends State<FirstAdmin> {
                                                     } catch (e) {
                                                       setState(() {
                                                         Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
+                                                        false;
                                                       });
                                                       print(e);
                                                       dialog(lanProvider.texts(
@@ -1380,10 +1369,10 @@ class _SecondAdminState extends State<SecondAdmin> {
 
   @override
   void initState() {
-      tab2sh = FirebaseFirestore.instance
-          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-          .authData['name']}/snacks').orderBy('meal name')
-          .snapshots();
+    tab2p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/mixes').orderBy('meal name')
+        .snapshots();
     super.initState();
   }
   @override
@@ -1422,7 +1411,7 @@ class _SecondAdminState extends State<SecondAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab2sh,
+        stream: tab2p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -1454,9 +1443,9 @@ class _SecondAdminState extends State<SecondAdmin> {
                                       imageUrl: resData[index]['imageUrl'],
                                       placeholder: (context, url) => const Center(
                                           child:
-                                              const CircularProgressIndicator()),
+                                          const CircularProgressIndicator()),
                                       errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
+                                      const Icon(Icons.error),
                                     ),
                                   ),
                                 ),
@@ -1523,7 +1512,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -1540,11 +1529,11 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                   ? TextAlign.start
                                                   : TextAlign.end,
                                               style:
-                                                  const TextStyle(fontSize: 23),
+                                              const TextStyle(fontSize: 23),
                                             ),
                                             contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 7),
+                                            const EdgeInsets.symmetric(
+                                                vertical: 7),
                                             elevation: 24,
                                             content: Container(
                                               height: 30,
@@ -1555,7 +1544,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                               if (Provider.of<MyProvider>(context).isLoading)
                                                 Center(
                                                     child:
-                                                        const CircularProgressIndicator()),
+                                                    const CircularProgressIndicator()),
                                               if (!Provider.of<MyProvider>(context).isLoading)
                                                 InkWell(
                                                   child: Text(
@@ -1578,25 +1567,25 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'snacks');
+                                                          "drinks", 'mixes');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
                                                           toastLength: Toast
                                                               .LENGTH_SHORT,
                                                           backgroundColor:
-                                                              Colors.grey,
+                                                          Colors.grey,
                                                           textColor:
-                                                              Colors.white,
+                                                          Colors.white,
                                                           fontSize: 16.0);
                                                       setState(() {
                                                         Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
+                                                        false;
                                                       });
                                                     } on FirebaseException catch (e) {
                                                       setState(() {
                                                         Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
+                                                        false;
                                                       });
                                                       dialog(lanProvider.texts(
                                                           'Error occurred !'));
@@ -1604,7 +1593,7 @@ class _SecondAdminState extends State<SecondAdmin> {
                                                     } catch (e) {
                                                       setState(() {
                                                         Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
+                                                        false;
                                                       });
                                                       print(e);
                                                       dialog(lanProvider.texts(
@@ -1656,287 +1645,9 @@ class _ThirdAdminState extends State<ThirdAdmin> {
 
   @override
   void initState() {
-      tab3sh = FirebaseFirestore.instance
-          .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-          .authData['name']}/others').orderBy("meal name")
-          .snapshots();
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-    var lanProvider = Provider.of<LanProvider>(context);
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    dialog(title) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext ctx) {
-            return AlertDialog(
-              title: Text(
-                title,
-                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
-                style: const TextStyle(fontSize: 23),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 7),
-              elevation: 24,
-              content: Container(
-                height: 30,
-                child: const Divider(),
-                alignment: Alignment.topCenter,
-              ),
-              actions: [
-                const SizedBox(width: 11),
-                InkWell(
-                    child: Text(lanProvider.texts('ok'),
-                        style: const TextStyle(fontSize: 19)),
-                    onTap: () => Navigator.of(context).pop()),
-              ],
-            );
-          });
-    }
-
-    return Directionality(
-      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
-      child: StreamBuilder<QuerySnapshot>(
-        stream: tab3sh,
-        builder: (ctx, snapshot) {
-          if (snapshot.hasError)
-            return Center(child: Text(lanProvider.texts('something went wrong !')));
-          if (snapshot.connectionState==ConnectionState.waiting)
-            return const Center(child: const CircularProgressIndicator());
-          return Scrollbar(
-            child: ListView.builder(
-              itemCount: snapshot.data?.docs.length ?? 0,
-              itemBuilder: (context, int index) {
-                var resData = snapshot.data!.docs;
-                return Card(
-                  elevation: 2.5,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Row(
-                            children: [
-                              if (resData[index]['imageUrl'] != "")
-                                Container(
-                                  margin: const EdgeInsets.all(7),
-                                  width: width * 0.24,
-                                  height: height * 0.16,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.fill,
-                                      imageUrl: resData[index]['imageUrl'],
-                                      placeholder: (context, url) => const Center(
-                                          child:
-                                              const CircularProgressIndicator()),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(height: height * 0.02),
-                                  SizedBox(
-                                    width: width * 0.54,
-                                    child: AutoSizeText(
-                                      resData[index]['meal name'],
-                                      maxLines: 2,
-                                      minFontSize: 12,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                  ),
-                                  SizedBox(height: height * 0.01),
-                                  SizedBox(
-                                    width: width * 0.5,
-                                    child: AutoSizeText(
-                                      resData[index]['description'],
-                                      maxLines: 3,
-                                      minFontSize: 12,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.grey),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 10),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 7),
-                                      child: Text(
-                                        lanProvider.texts('price') +
-                                            " " +
-                                            resData[index]['meal price'] +
-                                            " " +
-                                            lanProvider.texts('jd'),
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.pink),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              Column(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        Provider.of<MyProvider>(context,listen: false).mealNameCont = resData[index]['meal name'];
-                                        Provider.of<MyProvider>(context,listen: false).mealPriceCont = resData[index]['meal price'];
-                                        Provider.of<MyProvider>(context,listen: false).mealDescCont = resData[index]['description']??'';
-                                        Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
-                                        if (resData[index]['imageUrl']!='')
-                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
-                                          ['imageUrl'];
-                                        else
-                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
-                                      });
-                                      Navigator.of(context)
-                                          .pushNamed('editShawarma');
-                                    },
-                                    icon: const Icon(Icons.edit),
-                                    color: Colors.blue,
-                                  ),
-                                  IconButton(
-                                    onPressed: () => showDialog(
-                                        context: context,
-                                        builder: (BuildContext ctx) {
-                                          return AlertDialog(
-                                            title: Text(
-                                              lanProvider
-                                                  .texts('delete this meal?'),
-                                              textAlign: lanProvider.isEn
-                                                  ? TextAlign.start
-                                                  : TextAlign.end,
-                                              style:
-                                                  const TextStyle(fontSize: 23),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 7),
-                                            elevation: 24,
-                                            content: Container(
-                                              height: 30,
-                                              child: const Divider(),
-                                              alignment: Alignment.topCenter,
-                                            ),
-                                            actions: [
-                                              if (Provider.of<MyProvider>(context).isLoading)
-                                                Center(
-                                                    child:
-                                                        const CircularProgressIndicator()),
-                                              if (!Provider.of<MyProvider>(context).isLoading)
-                                                InkWell(
-                                                  child: Text(
-                                                    lanProvider.texts('yes?'),
-                                                    style: const TextStyle(
-                                                        fontSize: 19,
-                                                        color: Colors.red),
-                                                  ),
-                                                  onTap: () async {
-                                                    try {
-                                                      setState(() {
-                                                        Provider.of<MyProvider>(context,listen: false).mealID =
-                                                            resData[index].id;
-                                                        if (resData[index]['imageUrl']!='')
-                                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
-                                                          ['imageUrl'];
-                                                        else
-                                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
-                                                      });
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'others');
-                                                      Fluttertoast.showToast(
-                                                          msg: lanProvider.texts(
-                                                              'Meal Deleted'),
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          backgroundColor:
-                                                              Colors.grey,
-                                                          textColor:
-                                                              Colors.white,
-                                                          fontSize: 16.0);
-                                                      setState(() {
-                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
-                                                      });
-                                                    } on FirebaseException catch (e) {
-                                                      setState(() {
-                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
-                                                      });
-                                                      dialog(lanProvider.texts(
-                                                          'Error occurred !'));
-                                                      print(e.message);
-                                                    } catch (e) {
-                                                      setState(() {
-                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
-                                                            false;
-                                                      });
-                                                      print(e);
-                                                      dialog(lanProvider.texts(
-                                                          'Error occurred !'));
-                                                    }
-                                                  },
-                                                ),
-                                              const SizedBox(width: 11),
-                                              if (!Provider.of<MyProvider>(context).isLoading)
-                                                InkWell(
-                                                    child: Text(
-                                                        lanProvider
-                                                            .texts('cancel?'),
-                                                        style: const TextStyle(
-                                                            fontSize: 19)),
-                                                    onTap: () =>
-                                                        Navigator.of(context)
-                                                            .pop()),
-                                            ],
-                                          );
-                                        }),
-                                    icon: const Icon(Icons.delete),
-                                    color: Colors.red,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-//-------------------------------------هون وبس------------------------------
-//-----------------------FalafelAdmin--------------------------------
-class FalafelAdmin extends StatefulWidget {
-  @override
-  _FalafelAdminState createState() => _FalafelAdminState();
-}
-
-class _FalafelAdminState extends State<FalafelAdmin> {
-
-  @override
-  void initState() {
-    tab4sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/Falafel').orderBy("meal name")
+    tab3p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/hot drinks').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -1976,7 +1687,7 @@ class _FalafelAdminState extends State<FalafelAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab4sh,
+        stream: tab3p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -2077,7 +1788,7 @@ class _FalafelAdminState extends State<FalafelAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -2132,7 +1843,7 @@ class _FalafelAdminState extends State<FalafelAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'Falafel');
+                                                          "drinks", 'hot drinks');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
@@ -2201,19 +1912,20 @@ class _FalafelAdminState extends State<FalafelAdmin> {
   }
 }
 
-//--------------------------------Mo3ajanatAdmin------------------------
-class Mo3ajanatAdmin extends StatefulWidget {
+//-------------------------------------لبناني الشمال------------------------------
+//-----------------------NaturalCocktailAdmin--------------------------------
+class NaturalCocktailAdmin extends StatefulWidget {
   @override
-  _Mo3ajanatAdminState createState() => _Mo3ajanatAdminState();
+  _NaturalCocktailAdminState createState() => _NaturalCocktailAdminState();
 }
 
-class _Mo3ajanatAdminState extends State<Mo3ajanatAdmin> {
+class _NaturalCocktailAdminState extends State<NaturalCocktailAdmin> {
 
   @override
   void initState() {
-    tab5sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/Mo3ajanat').orderBy("meal name")
+    tab4p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/natural cocktail').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -2253,7 +1965,7 @@ class _Mo3ajanatAdminState extends State<Mo3ajanatAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab5sh,
+        stream: tab4p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -2354,7 +2066,7 @@ class _Mo3ajanatAdminState extends State<Mo3ajanatAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -2409,7 +2121,7 @@ class _Mo3ajanatAdminState extends State<Mo3ajanatAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'Mo3ajanat');
+                                                          "drinks", 'natural cocktail');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
@@ -2478,19 +2190,19 @@ class _Mo3ajanatAdminState extends State<Mo3ajanatAdmin> {
   }
 }
 
-//--------------------------HummusAdmin--------------------------
-class HummusAdmin extends StatefulWidget {
+//--------------------------------NaturalDrinksAdmin------------------------
+class NaturalDrinksAdmin extends StatefulWidget {
   @override
-  _HummusAdminState createState() => _HummusAdminState();
+  _NaturalDrinksAdminState createState() => _NaturalDrinksAdminState();
 }
 
-class _HummusAdminState extends State<HummusAdmin> {
+class _NaturalDrinksAdminState extends State<NaturalDrinksAdmin> {
 
   @override
   void initState() {
-    tab6sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/Hummus').orderBy("meal name")
+    tab5p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/natural drinks').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -2530,7 +2242,7 @@ class _HummusAdminState extends State<HummusAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab6sh,
+        stream: tab5p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -2631,7 +2343,7 @@ class _HummusAdminState extends State<HummusAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -2686,7 +2398,7 @@ class _HummusAdminState extends State<HummusAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'Hummus');
+                                                          "drinks", 'natural drinks');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
@@ -2755,20 +2467,19 @@ class _HummusAdminState extends State<HummusAdmin> {
   }
 }
 
-//---------------------------الدويري-----------------------------
-//-------------------------ChickenAdmin------------------------
-class ChickenAdmin extends StatefulWidget {
+//--------------------------SpecialCocktailAdmin--------------------------
+class SpecialCocktailAdmin extends StatefulWidget {
   @override
-  _ChickenAdminState createState() => _ChickenAdminState();
+  _SpecialCocktailAdminState createState() => _SpecialCocktailAdminState();
 }
 
-class _ChickenAdminState extends State<ChickenAdmin> {
+class _SpecialCocktailAdminState extends State<SpecialCocktailAdmin> {
 
   @override
   void initState() {
-    tab7sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/Chicken').orderBy("meal name")
+    tab6p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/special cocktail').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -2808,7 +2519,7 @@ class _ChickenAdminState extends State<ChickenAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab7sh,
+        stream: tab6p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -2909,7 +2620,7 @@ class _ChickenAdminState extends State<ChickenAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -2964,7 +2675,7 @@ class _ChickenAdminState extends State<ChickenAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'Chicken');
+                                                          "drinks", 'special cocktail');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
@@ -3033,19 +2744,19 @@ class _ChickenAdminState extends State<ChickenAdmin> {
   }
 }
 
-//------------------------------AldwairyAdmin----------------------
-class AldwairyAdmin extends StatefulWidget {
+//-------------------------NaturalSlushAdmin------------------------
+class NaturalSlushAdmin extends StatefulWidget {
   @override
-  _AldwairyAdminState createState() => _AldwairyAdminState();
+  _NaturalSlushAdminState createState() => _NaturalSlushAdminState();
 }
 
-class _AldwairyAdminState extends State<AldwairyAdmin> {
+class _NaturalSlushAdminState extends State<NaturalSlushAdmin> {
 
   @override
   void initState() {
-    tab8sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/Aldwairy').orderBy("meal name")
+    tab7p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/natural slush').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -3085,7 +2796,7 @@ class _AldwairyAdminState extends State<AldwairyAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab8sh,
+        stream: tab7p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -3186,7 +2897,7 @@ class _AldwairyAdminState extends State<AldwairyAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -3241,7 +2952,7 @@ class _AldwairyAdminState extends State<AldwairyAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'Aldwairy');
+                                                          "drinks", 'natural slush');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),
@@ -3310,19 +3021,19 @@ class _AldwairyAdminState extends State<AldwairyAdmin> {
   }
 }
 
-//------------------------------BreakFastAdmin----------------------
-class BreakFastAdmin extends StatefulWidget {
+//------------------------------FruitsSaladsAdmin----------------------
+class FruitsSaladsAdmin extends StatefulWidget {
   @override
-  _BreakFastAdminState createState() => _BreakFastAdminState();
+  _FruitsSaladsAdminState createState() => _FruitsSaladsAdminState();
 }
 
-class _BreakFastAdminState extends State<BreakFastAdmin> {
+class _FruitsSaladsAdminState extends State<FruitsSaladsAdmin> {
 
   @override
   void initState() {
-    tab9sh = FirebaseFirestore.instance
-        .collection('/shawarma/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/BreakFast').orderBy("meal name")
+    tab8p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/fruits salads').orderBy("meal name")
         .snapshots();
     super.initState();
   }
@@ -3362,7 +3073,7 @@ class _BreakFastAdminState extends State<BreakFastAdmin> {
     return Directionality(
       textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: StreamBuilder<QuerySnapshot>(
-        stream: tab9sh,
+        stream: tab8p,
         builder: (ctx, snapshot) {
           if (snapshot.hasError)
             return Center(child: Text(lanProvider.texts('something went wrong !')));
@@ -3463,7 +3174,7 @@ class _BreakFastAdminState extends State<BreakFastAdmin> {
                                           Provider.of<MyProvider>(context,listen: false).tempFile = null;
                                       });
                                       Navigator.of(context)
-                                          .pushNamed('editShawarma');
+                                          .pushNamed('edit2Drinks');
                                     },
                                     icon: const Icon(Icons.edit),
                                     color: Colors.blue,
@@ -3518,7 +3229,284 @@ class _BreakFastAdminState extends State<BreakFastAdmin> {
                                                       Navigator.of(context)
                                                           .pop();
                                                       await Provider.of<MyProvider>(context,listen: false).deleteMeal(
-                                                          "shawarma", 'BreakFast');
+                                                          "drinks", 'fruits salads');
+                                                      Fluttertoast.showToast(
+                                                          msg: lanProvider.texts(
+                                                              'Meal Deleted'),
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          backgroundColor:
+                                                          Colors.grey,
+                                                          textColor:
+                                                          Colors.white,
+                                                          fontSize: 16.0);
+                                                      setState(() {
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
+                                                        false;
+                                                      });
+                                                    } on FirebaseException catch (e) {
+                                                      setState(() {
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
+                                                        false;
+                                                      });
+                                                      dialog(lanProvider.texts(
+                                                          'Error occurred !'));
+                                                      print(e.message);
+                                                    } catch (e) {
+                                                      setState(() {
+                                                        Provider.of<MyProvider>(context,listen: false).isLoading =
+                                                        false;
+                                                      });
+                                                      print(e);
+                                                      dialog(lanProvider.texts(
+                                                          'Error occurred !'));
+                                                    }
+                                                  },
+                                                ),
+                                              const SizedBox(width: 11),
+                                              if (!Provider.of<MyProvider>(context).isLoading)
+                                                InkWell(
+                                                    child: Text(
+                                                        lanProvider
+                                                            .texts('cancel?'),
+                                                        style: const TextStyle(
+                                                            fontSize: 19)),
+                                                    onTap: () =>
+                                                        Navigator.of(context)
+                                                            .pop()),
+                                            ],
+                                          );
+                                        }),
+                                    icon: const Icon(Icons.delete),
+                                    color: Colors.red,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+//------------------------------CrepeAndWafflsAdmin----------------------
+class CrepeAndWafflsAdmin extends StatefulWidget {
+  @override
+  _CrepeAndWafflsAdminState createState() => _CrepeAndWafflsAdminState();
+}
+
+class _CrepeAndWafflsAdminState extends State<CrepeAndWafflsAdmin> {
+
+  @override
+  void initState() {
+    tab9p = FirebaseFirestore.instance
+        .collection('/drinks/${Provider.of<MyProvider>(context, listen: false)
+        .authData['name']}/waffle').orderBy("meal name")
+        .snapshots();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    var lanProvider = Provider.of<LanProvider>(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    dialog(title) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                title,
+                textAlign: lanProvider.isEn ? TextAlign.start : TextAlign.end,
+                style: const TextStyle(fontSize: 23),
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 7),
+              elevation: 24,
+              content: Container(
+                height: 30,
+                child: const Divider(),
+                alignment: Alignment.topCenter,
+              ),
+              actions: [
+                const SizedBox(width: 11),
+                InkWell(
+                    child: Text(lanProvider.texts('ok'),
+                        style: const TextStyle(fontSize: 19)),
+                    onTap: () => Navigator.of(context).pop()),
+              ],
+            );
+          });
+    }
+
+    return Directionality(
+      textDirection: lanProvider.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: StreamBuilder<QuerySnapshot>(
+        stream: tab9p,
+        builder: (ctx, snapshot) {
+          if (snapshot.hasError)
+            return Center(child: Text(lanProvider.texts('something went wrong !')));
+          if (snapshot.connectionState==ConnectionState.waiting)
+            return const Center(child: const CircularProgressIndicator());
+          return Scrollbar(
+            child: ListView.builder(
+              itemCount: snapshot.data?.docs.length ?? 0,
+              itemBuilder: (context, int index) {
+                var resData = snapshot.data!.docs;
+                return Card(
+                  elevation: 2.5,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Row(
+                            children: [
+                              if (resData[index]['imageUrl'] != "")
+                                Container(
+                                  margin: const EdgeInsets.all(7),
+                                  width: width * 0.24,
+                                  height: height * 0.16,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.fill,
+                                      imageUrl: resData[index]['imageUrl'],
+                                      placeholder: (context, url) => const Center(
+                                          child:
+                                          const CircularProgressIndicator()),
+                                      errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                    ),
+                                  ),
+                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: height * 0.02),
+                                  SizedBox(
+                                    width: width * 0.54,
+                                    child: AutoSizeText(
+                                      resData[index]['meal name'],
+                                      maxLines: 2,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ),
+                                  SizedBox(height: height * 0.01),
+                                  SizedBox(
+                                    width: width * 0.5,
+                                    child: AutoSizeText(
+                                      resData[index]['description'],
+                                      maxLines: 3,
+                                      minFontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: 14, color: Colors.grey),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 10),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7),
+                                      child: Text(
+                                        lanProvider.texts('price') +
+                                            " " +
+                                            resData[index]['meal price'] +
+                                            " " +
+                                            lanProvider.texts('jd'),
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.pink),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        Provider.of<MyProvider>(context,listen: false).mealNameCont = resData[index]['meal name'];
+                                        Provider.of<MyProvider>(context,listen: false).mealPriceCont = resData[index]['meal price'];
+                                        Provider.of<MyProvider>(context,listen: false).mealDescCont = resData[index]['description']??'';
+                                        Provider.of<MyProvider>(context,listen: false).mealID = resData[index].id;
+                                        if (resData[index]['imageUrl']!='')
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
+                                          ['imageUrl'];
+                                        else
+                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
+                                      });
+                                      Navigator.of(context)
+                                          .pushNamed('edit2Drinks');
+                                    },
+                                    icon: const Icon(Icons.edit),
+                                    color: Colors.blue,
+                                  ),
+                                  IconButton(
+                                    onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (BuildContext ctx) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              lanProvider
+                                                  .texts('delete this meal?'),
+                                              textAlign: lanProvider.isEn
+                                                  ? TextAlign.start
+                                                  : TextAlign.end,
+                                              style:
+                                              const TextStyle(fontSize: 23),
+                                            ),
+                                            contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 7),
+                                            elevation: 24,
+                                            content: Container(
+                                              height: 30,
+                                              child: const Divider(),
+                                              alignment: Alignment.topCenter,
+                                            ),
+                                            actions: [
+                                              if (Provider.of<MyProvider>(context).isLoading)
+                                                Center(
+                                                    child:
+                                                    const CircularProgressIndicator()),
+                                              if (!Provider.of<MyProvider>(context).isLoading)
+                                                InkWell(
+                                                  child: Text(
+                                                    lanProvider.texts('yes?'),
+                                                    style: const TextStyle(
+                                                        fontSize: 19,
+                                                        color: Colors.red),
+                                                  ),
+                                                  onTap: () async {
+                                                    try {
+                                                      setState(() {
+                                                        Provider.of<MyProvider>(context,listen: false).mealID =
+                                                            resData[index].id;
+                                                        if (resData[index]['imageUrl']!='')
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = resData[index]
+                                                          ['imageUrl'];
+                                                        else
+                                                          Provider.of<MyProvider>(context,listen: false).tempFile = null;
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      await Provider.of<MyProvider>(context,listen: false).deleteMeal(
+                                                          "drinks", 'waffle');
                                                       Fluttertoast.showToast(
                                                           msg: lanProvider.texts(
                                                               'Meal Deleted'),

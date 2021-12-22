@@ -762,7 +762,7 @@ class _FirstAdminState extends State<FirstAdmin> {
   void initState() {
     tab1sh = FirebaseFirestore.instance
         .collection('/Pizza/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/Pizza')
+        .authData['name']}/Pizza').orderBy('meal name')
         .snapshots();
     super.initState();
   }
@@ -1041,7 +1041,7 @@ class _SecondAdminState extends State<SecondAdmin> {
   void initState() {
     tab2sh = FirebaseFirestore.instance
         .collection('/Pizza/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/broasted')
+        .authData['name']}/broasted').orderBy('meal name')
         .snapshots();
     super.initState();
   }
@@ -1318,7 +1318,7 @@ class _ThirdAdminState extends State<ThirdAdmin> {
   void initState() {
     tab3sh = FirebaseFirestore.instance
         .collection('/Pizza/${Provider.of<MyProvider>(context, listen: false)
-        .authData['name']}/others')
+        .authData['name']}/others').orderBy('meal name')
         .snapshots();
     super.initState();
   }
